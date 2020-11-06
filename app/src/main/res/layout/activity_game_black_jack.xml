@@ -9,49 +9,41 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="16dp"
-    tools:context=".MainActivity">
-
-    <!--
-         Linear layout is used to center buttons
-         with the parent relative layout.
-    -->
+    tools:context=".gameBlackJack">
 
     <ImageView
-        android:id="@+id/homeScreenLogo"
+        android:id="@+id/bJackLogoTemp"
         android:layout_width="match_parent"
         android:layout_height="302dp"
+        android:layout_alignParentTop="true"
         android:contentDescription="logo"
-        android:src="@drawable/rrcasinologo" />
-
+        app:srcCompat="@drawable/bjacklogo" />
 
     <LinearLayout
-        android:layout_width="161dp"
-        android:layout_height="212dp"
+        android:layout_width="178dp"
+        android:layout_height="106dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="0dp"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <Button
-            android:id="@+id/playButton"
+            android:id="@+id/hitButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Play" />
+            android:layout_gravity="center_vertical"
+            android:backgroundTint="@color/cardview_dark_background"
+            android:layout_marginRight="10dp"
+            android:text="Hit" />
 
         <Button
-            android:id="@+id/helpButton"
+            android:id="@+id/stayButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Help" />
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="Stay" />
 
-        <Button
-            android:id="@+id/settingsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Settings" />
     </LinearLayout>
 
 </RelativeLayout>
