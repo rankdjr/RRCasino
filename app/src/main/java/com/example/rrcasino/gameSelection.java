@@ -1,4 +1,4 @@
-package com.example.rrscasino;
+package com.example.rrcasino;
 
 import androidx.appcompat.app.AppCompatActivity;
 

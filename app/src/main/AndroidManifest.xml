@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.rrscasino">
+    package="com.example.rrcasino">
 
     <application
         android:allowBackup="true"
@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RRsCasino">
-        <activity android:name=".gameBlackJack"></activity>
-        <activity android:name=".gameSelection" />
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.rrcasino.gameBlackJack"></activity>
+        <activity android:name="com.example.rrcasino.gameSelection" />
+        <activity android:name="com.example.rrcasino.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
