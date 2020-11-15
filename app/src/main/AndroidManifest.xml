@@ -11,7 +11,8 @@
         android:theme="@style/Theme.RRsCasino">
         <activity android:name="com.example.rrcasino.gameBlackJack"></activity>
         <activity android:name="com.example.rrcasino.gameSelection" />
-        <activity android:name="com.example.rrcasino.MainActivity">
+        <activity android:name="com.example.rrcasino.MainActivity"></activity>
+        <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
