@@ -11,8 +11,7 @@
     android:paddingTop="16dp"
     tools:context=".gameBlackJack">
 
-    !--  -->
-
+    !-- Card Layouts -->
     <LinearLayout
         android:layout_width="395dp"
         android:layout_height="555dp"
@@ -78,7 +77,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:backgroundTint="@color/cardview_dark_background"
             android:layout_marginRight="10dp"
             android:text="Hit" />
 
