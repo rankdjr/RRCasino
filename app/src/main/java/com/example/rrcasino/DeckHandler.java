@@ -17,6 +17,10 @@ public class DeckHandler
     public class Card
     {
         /*
+        Would this create a random card??
+        I could see this causing issues in the scenario that we generate
+        a deck and we end up returning duplicates
+
         int suit, value, discarded;
 
         //If the card is discarded, discarded is 1 or greater.
@@ -29,19 +33,39 @@ public class DeckHandler
         */
 
         // *********** Doug's additions start here *********************
-        int suit;
-        int rank;
+        private int suit;
+        private int rank;
+        private int value;
         public Card(int suit, int rank)
         {
             this.suit = suit;
             this.rank = rank;
+            if (rank < 10)
+                this.value = rank;
+            else
+                value = 10;
         }
 
+        public int getSuit()
+        {
+            return suit;
+        }
 
+        public int getRank()
+        {
+            return rank;
+        }
+
+        public int getValue()
+        {
+            return value;
+        }
     }
     public class Deck
     {
         /*
+        // Commented this out to create a constructor that uses the different version of the card class
+
         Card deck[];
 
         public void create()
@@ -65,12 +89,14 @@ public class DeckHandler
 
         public void generateDeck()
         {
-            //while loop iterates 52 times, the iterator is incremented on the innermost for loop
-            //generating the deck creates and ordered deck in descending order from ace to 2
+            // While loop iterates 52 times, creating a new card for each rank of the current suit before moving on to the next
+            // suit; The loop iterator(i) is incremented on the innermost for loop
+            // The deck is generated with the intention of rank 1 being an Ace and each subsequent rank will follow from 2
+            // to K in ascending order
             int i = 0;
             while (i < 52) {
-                for (int suit = 0; suit < 4; suit++) {
-                    for (int rank = 0; rank < 13; rank++) {
+                for (int suit = 1; suit <= 4; suit++) {
+                    for (int rank = 1; rank <= 13; rank++) {
                         cards.add(new Card(suit, rank));
                         i++;
                     }
@@ -110,13 +136,15 @@ public class DeckHandler
 
         public void generateShoe()
         {
-            //while loop iterates 52 times with a repetition based on the number of decks wanted in the shoe
-            //the iterator is incremented on the innermost for loop
-            //generating the shoe creates an ordered stack of decks in descending order from ace to 2
+            // Same as deck generating function but with multiple decks
+            // While loop iterates 52 times, creating a new card for each rank of every suit before moving on to the next
+            // suit; The loop iterator(i) is incremented on the innermost for loop
+            // The deck is generated with the intention of rank 1 being an Ace and each subsequent rank will follow from 2
+            // to K in ascending order
             int i = 0;
             while (i < 52 * numOfDecks) {
-                for (int suit = 0; suit < 4; suit++) {
-                    for (int rank = 0; rank < 13; rank++) {
+                for (int suit = 1; suit <= 4; suit++) {
+                    for (int rank = 1; rank <= 13; rank++) {
                         shoe.add(new Card(suit, rank));
                         i++;
                     }
