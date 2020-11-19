@@ -5,24 +5,32 @@ package com.example.rrcasino;
  * intended to track current funds and cards held in player hand
  */
 public class Player {
+    private int balance;
+    private String playerName;
     private Hand hand;
-    private int funds;
 
-    public Player(Integer funds)
+    public Player()
     {
-        this.funds = funds;
+        /*
+            initialize all starting values
+         */
     }
 
+    public void setPlayerName(String name)
+    {
+        playerName = name;
+    }
+
+    public String getPlayerName()
+    {
+        return playerName;
+    }
     public Hand getHand() {
         return hand;
     }
 
-    public int getFunds() {
-        return funds;
-    }
-
-    public void setFunds(int funds) {
-        this.funds = funds;
+    public int getBalance() {
+        return balance;
     }
 
     public void addCardToHand(DeckHandler.Card card)

@@ -52,6 +52,13 @@ public class Hand {
     add function to remove selected card to make class work for poker game river functionality
      */
 
+    public boolean checkBust()
+    {
+        if (getHandValue() > 21)
+            return true;
+        return false;
+    }
+
     public void clearHand()
     {
         hand.clear();

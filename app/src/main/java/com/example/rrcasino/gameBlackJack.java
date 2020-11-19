@@ -7,12 +7,6 @@ import android.os.Bundle;
 import java.util.Random;
 
 public class gameBlackJack extends AppCompatActivity {
-    /*
-    Card[] shoe;
-    int numOfDecks = 1;
-    int k = 0;
-    */
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
