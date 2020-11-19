@@ -40,10 +40,10 @@ public class DeckHandler
         {
             this.suit = suit;
             this.rank = rank;
-            if (rank < 10)
-                value = rank;
-            else if (rank == 1)
+            if (rank == 1)
                 value = 11;
+            else if (rank < 10)
+                value = rank;
             else
                 value = 10;
         }
