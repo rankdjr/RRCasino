@@ -44,9 +44,16 @@ public class Hand {
     public void addCard(DeckHandler.Card card)
     {
         this.hand.add(card);
+        if (card.getRank() == 1)
+            acesInHand++;
     }
 
     /*
-    add function to remove selected card to make class work for poker game
+    add function to remove selected card to make class work for poker game river functionality
      */
+
+    public void clearHand()
+    {
+        hand.clear();
+    }
 }

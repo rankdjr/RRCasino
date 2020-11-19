@@ -41,7 +41,9 @@ public class DeckHandler
             this.suit = suit;
             this.rank = rank;
             if (rank < 10)
-                this.value = rank;
+                value = rank;
+            else if (rank == 1)
+                value = 11;
             else
                 value = 10;
         }
