@@ -1,20 +1,17 @@
 package com.example.rrcasino;
 
-import androidx.appcompat.app.AppCompatActivity;
+public class gameBlackJack {
+    private DeckHandler.Shoe shoe;
+    private Dealer dealer;
+    private Player player;
 
-import android.os.Bundle;
-
-import java.util.Random;
-
-public class gameBlackJack extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_black_jack);
+    public gameBlackJack(DeckHandler.Shoe shoe)
+    {
+        this.shoe = shoe;
+        this.dealer = new Dealer("DEALER", 0);
+        this.player = new Player("Player 1", 0);
 
     }
-
 
 
 }

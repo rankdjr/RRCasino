@@ -19,7 +19,7 @@ public class DeckHandler
         /*
         Would this create a random card??
         I could see this causing issues in the scenario that we generate
-        a deck and we end up returning duplicates
+        a deck and we end up creating duplicates
 
         int suit, value, discarded;
 
@@ -127,11 +127,10 @@ public class DeckHandler
     public class Shoe
     {
         private ArrayList<Card> shoe;
-        private int numOfDecks;
+        private int numOfDecks = 8;
 
         public Shoe()
         {
-            numOfDecks = 8;
             shoe = new ArrayList<>();
             generateShoe();
         }
@@ -152,6 +151,11 @@ public class DeckHandler
                     }
                 }
             }
+        }
+
+        public void setNumOfDecks(Integer num)
+        {
+            numOfDecks = num;
         }
 
         public void shuffle()

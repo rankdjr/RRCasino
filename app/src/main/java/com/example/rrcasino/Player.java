@@ -9,11 +9,11 @@ public class Player {
     private String playerName;
     private Hand hand;
 
-    public Player()
+    public Player(String name, Integer funds)
     {
-        /*
-            initialize all starting values
-         */
+        playerName = name;
+        this.hand = new Hand();
+        this.balance = funds;
     }
 
     public void setPlayerName(String name)
