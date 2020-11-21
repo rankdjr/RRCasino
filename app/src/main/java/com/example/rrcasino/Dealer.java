@@ -9,6 +9,7 @@ public class Dealer extends Player {
     public Dealer(String name, Integer funds) {
         super(name, funds);
     }
+
     public void dealCard(Player player, DeckHandler.Shoe shoe) {
         DeckHandler.Card dealtCard = shoe.getCard();
         player.addCardToHand(dealtCard);

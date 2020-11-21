@@ -9,7 +9,7 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="16dp"
-    tools:context=".activityBlackJack">
+    tools:context=".activityGameBlackJack">
 
     !-- Card Layouts -->
     <LinearLayout
@@ -60,6 +60,13 @@
                 app:srcCompat="@drawable/c14" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
     </LinearLayout>
 
     <!-- Button layout -->
@@ -89,4 +96,5 @@
             android:layout_marginLeft="10dp"
             android:text="Stay" />
     </LinearLayout>
+
 </RelativeLayout>

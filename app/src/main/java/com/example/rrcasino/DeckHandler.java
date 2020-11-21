@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class DeckHandler
 {
-    public class Card
+    public static class Card
     {
         /*
         Would this create a random card??
@@ -63,7 +63,7 @@ public class DeckHandler
             return value;
         }
     }
-    public class Deck
+    public static class  Deck
     {
         /*
         // Commented this out to create a constructor that uses the different version of the card class
@@ -124,7 +124,7 @@ public class DeckHandler
         */
     }
 
-    public class Shoe
+    public static class Shoe
     {
         private ArrayList<Card> shoe;
         private int numOfDecks = 8;
@@ -133,6 +133,7 @@ public class DeckHandler
         {
             shoe = new ArrayList<>();
             generateShoe();
+            shuffle();
         }
 
         public void generateShoe()
@@ -173,6 +174,4 @@ public class DeckHandler
             return shoe.size();
         }
     }
-
-
 }
