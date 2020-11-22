@@ -40,23 +40,20 @@ public class activityGameBlackJack extends AppCompatActivity {
     }
 
     private View.OnClickListener handleClick = new View.OnClickListener() {
-        int myScore = 1;
+        String temp;
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.hitButton:
-                    //dealer.dealCard(player,deck);
-                    /*player.getPlayerHandValue();
-                    score.setText(player.getPlayerHandValue());
-                    Toast.makeText(activityGameBlackJack.this, player.getPlayerHandValue(), Toast.LENGTH_SHORT).show();
-                    */
-                    myScore++;
-                    score.setText(myScore);
-                    Toast.makeText(activityGameBlackJack.this, myScore, Toast.LENGTH_SHORT).show();
+                    dealer.dealCard(player,deck);
+                    temp = Integer.toString(player.getPlayerHandValue());
+                    score.setText(temp);
                     break;
                 case R.id.stayButton:
                     player.returnCards();
                     dealer.returnCards();
+                    temp = Integer.toString(player.getPlayerHandValue());
+                    score.setText(temp);
                     break;
             }
         }
