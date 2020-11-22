@@ -51,6 +51,10 @@ public class Hand {
     /*
     add function to remove selected card to make class work for poker game river functionality
      */
+    public DeckHandler.Card getCard(Integer index)
+    {
+            return hand.get(index);
+    }
 
     public boolean checkBust()
     {
