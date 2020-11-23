@@ -68,7 +68,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         this.hitButton.setOnClickListener(handleClick);
         this.stayButton.setOnClickListener(handleClick);
 
-
+        // Start new game
         this.deck = new DeckHandler.Shoe();
         this.dealer = new Dealer("DEALER", 1000);
         this.player = new Player("Player 1", 100);
@@ -79,6 +79,10 @@ public class activityGameBlackJack extends AppCompatActivity {
     }
 
     private View.OnClickListener handleClick = new View.OnClickListener() {
+        /*
+         * Function is used to track when hit and stay buttons are pressed.
+         *
+         */
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
@@ -97,6 +101,16 @@ public class activityGameBlackJack extends AppCompatActivity {
     };
 
     private void setImageResource (char participant, int cardNum, DeckHandler.Card card) {
+        /*
+         * First parameter takes in a 'p' or 'd' character specifying whether a player or dealer card is
+         * being updated. Essentially this specifies the ImageView ID affix pcard or dcard.
+         * Second parameter specifies the ImageView ID suffix by card number, eg 1 or 2 for pcard1 or pcard2
+         * respectively.
+         * Third parameter takes in a Card object (usually the last dealt card) that holds the image source
+         * as a string
+         */
+
+
         String img = card.getImageSource();
         Resources resources = getResources();
         final int resourceId = resources.getIdentifier(card.getImageSource(),"drawable",getPackageName());
@@ -145,12 +159,16 @@ public class activityGameBlackJack extends AppCompatActivity {
     }
 
     private void endRound () {
-        // setup face down card object to reset images
-        DeckHandler.Card faceDown = new DeckHandler.Card(0,0, "b2fv");
+        // setup Card object with face down image resource to reset images
+        DeckHandler.Card nullCard = new DeckHandler.Card(0,0, "b2fv");
+
+        // loop through participant hands and set to all cards to null card
         for (int i = 0; i <= player.getHand().getNumOfCardsInHand(); i++)
-            setImageResource('p', i, faceDown);
+            setImageResource('p', i, nullCard);
         for (int i = 0; i <= dealer.getHand().getNumOfCardsInHand(); i++)
-            setImageResource('d', i, faceDown);
+            setImageResource('d', i, nullCard);
+
+        // empty participant hands
         player.returnCards();
         dealer.returnCards();
     }
