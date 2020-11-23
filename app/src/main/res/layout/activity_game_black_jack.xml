@@ -24,35 +24,35 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/dcard1"
+                android:id="@+id/dCard1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
             <ImageView
-                android:id="@+id/dcard2"
+                android:id="@+id/dCard2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
             <ImageView
-                android:id="@+id/dcard3"
+                android:id="@+id/dCard3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
             <ImageView
-                android:id="@+id/dcard4"
+                android:id="@+id/dCard4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
             <ImageView
-                android:id="@+id/dcard5"
+                android:id="@+id/dCard5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -68,35 +68,35 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/pcard1"
+                android:id="@+id/pCard1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
             <ImageView
-                android:id="@+id/pcard2"
+                android:id="@+id/pCard2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
             <ImageView
-                android:id="@+id/pcard3"
+                android:id="@+id/pCard3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
             <ImageView
-                android:id="@+id/pcard4"
+                android:id="@+id/pCard4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
             <ImageView
-                android:id="@+id/pcard5"
+                android:id="@+id/pCard5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

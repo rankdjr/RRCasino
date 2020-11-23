@@ -1,5 +1,10 @@
 package com.example.rrcasino;
 
+/**
+ * Created by Doug
+ *
+ */
+
 public class gameBlackJack {
     private DeckHandler.Shoe shoe;
     private Dealer dealer;

@@ -1,6 +1,6 @@
 package com.example.rrcasino;
 
-/*
+/**
  * Created by Doug
  *
  */
@@ -8,7 +8,6 @@ package com.example.rrcasino;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.res.Resources;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -25,16 +24,16 @@ public class activityGameBlackJack extends AppCompatActivity {
     private Button stayButton;
 
     // ImageViews
-    private ImageView pcard1;
-    private ImageView pcard2;
-    private ImageView pcard3;
-    private ImageView pcard4;
-    private ImageView pcard5;
-    private ImageView dcard1;
-    private ImageView dcard2;
-    private ImageView dcard3;
-    private ImageView dcard4;
-    private ImageView dcard5;
+    private ImageView pCard1;
+    private ImageView pCard2;
+    private ImageView pCard3;
+    private ImageView pCard4;
+    private ImageView pCard5;
+    private ImageView dCard1;
+    private ImageView dCard2;
+    private ImageView dCard3;
+    private ImageView dCard4;
+    private ImageView dCard5;
 
     // Game variables
     private DeckHandler.Shoe deck;
@@ -52,30 +51,28 @@ public class activityGameBlackJack extends AppCompatActivity {
         tvScore = (TextView)findViewById(R.id.score);
         tvLastCard = (TextView)findViewById(R.id.inHand); //debug only
         // Assign ImageView IDs from XML
-        this.pcard1 = (ImageView) findViewById(R.id.pcard1);
-        this.pcard2 = (ImageView) findViewById(R.id.pcard2);
-        this.pcard3 = (ImageView) findViewById(R.id.pcard3);
-        this.pcard4 = (ImageView) findViewById(R.id.pcard4);
-        this.pcard5 = (ImageView) findViewById(R.id.pcard5);
-        this.dcard1 = (ImageView) findViewById(R.id.dcard1);
-        this.dcard2 = (ImageView) findViewById(R.id.dcard2);
-        this.dcard3 = (ImageView) findViewById(R.id.dcard3);
-        this.dcard4 = (ImageView) findViewById(R.id.dcard4);
-        this.dcard5 = (ImageView) findViewById(R.id.dcard5);
+        this.pCard1 = (ImageView) findViewById(R.id.pCard1);
+        this.pCard2 = (ImageView) findViewById(R.id.pCard2);
+        this.pCard3 = (ImageView) findViewById(R.id.pCard3);
+        this.pCard4 = (ImageView) findViewById(R.id.pCard4);
+        this.pCard5 = (ImageView) findViewById(R.id.pCard5);
+        this.dCard1 = (ImageView) findViewById(R.id.dCard1);
+        this.dCard2 = (ImageView) findViewById(R.id.dCard2);
+        this.dCard3 = (ImageView) findViewById(R.id.dCard3);
+        this.dCard4 = (ImageView) findViewById(R.id.dCard4);
+        this.dCard5 = (ImageView) findViewById(R.id.dCard5);
         // Assign button IDs from XML and set onclick Listeners
         this.hitButton = (Button) findViewById(R.id.hitButton);
         this.stayButton = (Button) findViewById(R.id.stayButton);
         this.hitButton.setOnClickListener(handleClick);
         this.stayButton.setOnClickListener(handleClick);
 
-        // Start new game
+        // Initialize new game
         this.deck = new DeckHandler.Shoe();
         this.dealer = new Dealer("DEALER", 1000);
         this.player = new Player("Player 1", 100);
 
-        //startRound();
-        //updateScore();
-
+        startRound();
     }
 
     private View.OnClickListener handleClick = new View.OnClickListener() {
@@ -88,11 +85,12 @@ public class activityGameBlackJack extends AppCompatActivity {
             switch (view.getId()) {
                 case R.id.hitButton:
                     dealer.dealCard(player,deck);
-                    setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard());
-                    lastCard = "Last Card Info\n\n"; //debug purposes
+                    setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
                     updateScore();
+                    // /*TODO*/ check for bust and end round if player busts
                     break;
                 case R.id.stayButton:
+                    // /*TODO*/ add dealer behaviour
                     endRound();
                     updateScore();
                     break;
@@ -100,7 +98,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         }
     };
 
-    private void setImageResource (char participant, int cardNum, DeckHandler.Card card) {
+    private void setImageResource (char participant, int cardNum, String imageSource) {
         /*
          * First parameter takes in a 'p' or 'd' character specifying whether a player or dealer card is
          * being updated. Essentially this specifies the ImageView ID affix pcard or dcard.
@@ -111,66 +109,90 @@ public class activityGameBlackJack extends AppCompatActivity {
          */
 
 
-        String img = card.getImageSource();
         Resources resources = getResources();
-        final int resourceId = resources.getIdentifier(card.getImageSource(),"drawable",getPackageName());
+        final int resourceId = resources.getIdentifier(imageSource,"drawable",getPackageName());
         switch (participant) {
-            case 'p':
-            {
+            case 'p': {
                 switch (cardNum) {
-                case 1:
-                    pcard1.setImageResource(resourceId);
-                    break;
-                case 2:
-                    pcard2.setImageResource(resourceId);
-                    break;
-                case 3:
-                    pcard3.setImageResource(resourceId);
-                    break;
-                case 4:
-                    pcard4.setImageResource(resourceId);
-                    break;
-                case 5:
-                    pcard5.setImageResource(resourceId);
-                    break;
+                    case 1:
+                        pCard1.setImageResource(resourceId);
+                        break;
+                    case 2:
+                        pCard2.setImageResource(resourceId);
+                        break;
+                    case 3:
+                        pCard3.setImageResource(resourceId);
+                        break;
+                    case 4:
+                        pCard4.setImageResource(resourceId);
+                        break;
+                    case 5:
+                        pCard5.setImageResource(resourceId);
+                        break;
                 }
-            }
-            case 'd':
-
-            default:
                 break;
+            }
+            case 'd': {
+                switch (cardNum) {
+                    case 1:
+                        dCard1.setImageResource(resourceId);
+                        break;
+                    case 2:
+                        // /*TODO*/ Dealer card should be face down until player stays
+                        dCard2.setImageResource(resourceId);
+                        break;
+                    case 3:
+                        dCard3.setImageResource(resourceId);
+                        break;
+                    case 4:
+                        dCard4.setImageResource(resourceId);
+                        break;
+                    case 5:
+                        dCard5.setImageResource(resourceId);
+                        break;
+                }
+                break;
+            }
         }
-
     }
 
     private void startRound () {
+        // /*TODO*/ setBet: Set bet value for current round
+
         // deal first card
         dealer.dealCard(player, deck);
-        setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard());
+        setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         dealer.dealCard(dealer, deck);
-        setImageResource('p',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard());
+        setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+        updateScore();
 
         // deal second card
         dealer.dealCard(player,deck);
-        setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard());
+        setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         dealer.dealCard(dealer, deck);
-        setImageResource('p',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard());
+        setImageResource('d',dealer.getHand().getNumOfCardsInHand(), "b2fv");
+        updateScore();
+
+        // /*TODO*/ checkNatural: If Dealer's first card is face card, check for BlackJack and endRound if true
 
     }
 
     private void endRound () {
+        // /*TODO*/ checkWin: Check for player win/loss
+        // /*TODO*/ updateFunds: Update funds from checkWin
+
         // setup Card object with face down image resource to reset images
         DeckHandler.Card nullCard = new DeckHandler.Card(0,0, "b2fv");
-
         // loop through participant hands and set to all cards to null card
         for (int i = 0; i <= player.getHand().getNumOfCardsInHand(); i++)
-            setImageResource('p', i, nullCard);
+            setImageResource('p', i, nullCard.getImageSource());
         for (int i = 0; i <= dealer.getHand().getNumOfCardsInHand(); i++)
-            setImageResource('d', i, nullCard);
-
+            setImageResource('d', i, nullCard.getImageSource());
         // empty participant hands
         player.returnCards();
         dealer.returnCards();
+
+        startRound();
     }
 
     public void updateScore() {
@@ -178,11 +200,11 @@ public class activityGameBlackJack extends AppCompatActivity {
         tvScore.setText(handValue);
 
         //debug purposes
+        lastCard = "Last Card Info\n\n";
         lastCard += "Suit: " + dealer.getLastDealtCard().getSuit() + "\n";
         lastCard += "Rank: " + dealer.getLastDealtCard().getRank() + "\n";
         lastCard += "Val: " + dealer.getLastDealtCard().getValue() + "\n";
         lastCard += "Src: " + dealer.getLastDealtCard().getImageSource();
         tvLastCard.setText(lastCard);
-
     }
 }

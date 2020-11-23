@@ -7,6 +7,7 @@ import java.util.ArrayList;
  * Encompasses all data for cards held in any hand
  * Functions return values of cards held in hand, as well as add and remove cards from hand
  */
+
 public class Hand {
     // *** Class Variables ***
     private ArrayList<DeckHandler.Card> hand;
