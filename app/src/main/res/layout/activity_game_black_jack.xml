@@ -37,6 +37,28 @@
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
+            <ImageView
+                android:id="@+id/dcard3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/b2fv" />
+
+            <ImageView
+                android:id="@+id/dcard4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/b2fv" />
+
+            <ImageView
+                android:id="@+id/dcard5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/b2fv" />
+
+
         </LinearLayout>
 
         <!-- Player Cards -->
@@ -50,29 +72,60 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/c2" />
+                app:srcCompat="@drawable/b2fv" />
 
             <ImageView
                 android:id="@+id/pcard2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/c14" />
+                app:srcCompat="@drawable/b2fv" />
+
+            <ImageView
+                android:id="@+id/pcard3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/b2fv" />
+
+            <ImageView
+                android:id="@+id/pcard4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/b2fv" />
+
+            <ImageView
+                android:id="@+id/pcard5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/b2fv" />
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/score"
+        <!-- Score Textviews -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Score" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/inHand"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cards In Hand" />
+            <TextView
+                android:id="@+id/score"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_marginTop="15dp"
+                android:text="Score" />
 
+            <TextView
+                android:id="@+id/inHand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_marginTop="15dp"
+                android:text="LastCard" />
+        </LinearLayout>
     </LinearLayout>
 
     <!-- Button layout -->

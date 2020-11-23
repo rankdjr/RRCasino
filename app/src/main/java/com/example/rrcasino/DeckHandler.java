@@ -36,8 +36,10 @@ public class DeckHandler
         private int suit;
         private int rank;
         private int value;
-        public Card(int suit, int rank)
+        private String imageSource;
+        public Card(int suit, int rank, String cardImageSource)
         {
+            this.imageSource = cardImageSource;
             this.suit = suit;
             this.rank = rank;
             if (rank == 1)
@@ -61,6 +63,11 @@ public class DeckHandler
         public int getValue()
         {
             return value;
+        }
+
+        public String getImageSource()
+        {
+            return imageSource;
         }
     }
     public static class  Deck
@@ -96,10 +103,12 @@ public class DeckHandler
             // The deck is generated with the intention of rank 1 being an Ace and each subsequent rank will follow from 2
             // to K in ascending order
             int i = 0;
+            String cardImageSource;
             while (i < 52) {
                 for (int suit = 1; suit <= 4; suit++) {
                     for (int rank = 1; rank <= 13; rank++) {
-                        cards.add(new Card(suit, rank));
+                        cardImageSource = "c"+ suit + "_" + rank;
+                        cards.add(new Card(suit, rank, cardImageSource));
                         i++;
                     }
                 }
@@ -144,10 +153,12 @@ public class DeckHandler
             // The deck is generated with the intention of rank 1 being an Ace and each subsequent rank will follow from 2
             // to K in ascending order
             int i = 0;
+            String cardImageSource;
             while (i < 52 * numOfDecks) {
                 for (int suit = 1; suit <= 4; suit++) {
                     for (int rank = 1; rank <= 13; rank++) {
-                        shoe.add(new Card(suit, rank));
+                        cardImageSource = "c"+ suit + "_" + rank;
+                        shoe.add(new Card(suit, rank, cardImageSource));
                         i++;
                     }
                 }
@@ -164,14 +175,12 @@ public class DeckHandler
             Collections.shuffle(shoe);
         }
 
-        public Card getCard()
-        {
-            return shoe.remove(0);
-        }
+        public Card getCard() { return shoe.remove(0); }
 
         public int getNumOfCards()
         {
             return shoe.size();
         }
+
     }
 }

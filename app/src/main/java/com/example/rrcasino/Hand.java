@@ -53,7 +53,7 @@ public class Hand {
      */
     public DeckHandler.Card getCard(Integer index)
     {
-            return hand.get(index);
+        return hand.get(index);
     }
 
     public boolean checkBust()

@@ -5,14 +5,17 @@ package com.example.rrcasino;
  * intended to track current funds and cards held in player hand
  */
 public class Dealer extends Player {
+    private DeckHandler.Card lastDealtCard;
 
     public Dealer(String name, Integer funds) {
         super(name, funds);
     }
 
     public void dealCard(Player player, DeckHandler.Shoe shoe) {
-        DeckHandler.Card dealtCard = shoe.getCard();
-        player.addCardToHand(dealtCard);
+        lastDealtCard = shoe.getCard();
+        player.addCardToHand(lastDealtCard);
     }
+
+    public DeckHandler.Card getLastDealtCard() { return lastDealtCard; }
 
 }
