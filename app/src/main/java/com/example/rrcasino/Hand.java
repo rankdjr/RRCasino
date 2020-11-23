@@ -12,10 +12,12 @@ public class Hand {
     // *** Class Variables ***
     private ArrayList<DeckHandler.Card> hand;
     private int acesInHand;
+
     // *** Class Functions ***
     public Hand()
     {
         this.hand = new ArrayList<>();
+        acesInHand = 0;
     }
 
     public ArrayList<DeckHandler.Card> getHand()
@@ -30,10 +32,12 @@ public class Hand {
         for (DeckHandler.Card currCard : this.hand) {
             total += currCard.getValue();
         }
+
         while (tempAceCtr > 0 && total > 21) {
             total -= 10;
             tempAceCtr--;
         }
+
         return total;
     }
 
@@ -67,5 +71,6 @@ public class Hand {
     public void clearHand()
     {
         hand.clear();
+        acesInHand = 0;
     }
 }
