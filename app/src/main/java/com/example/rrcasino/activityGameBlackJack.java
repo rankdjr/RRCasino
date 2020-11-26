@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class activityGameBlackJack extends AppCompatActivity {
     // TextViews
@@ -227,7 +228,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         dealer.dealCard(dealer, deck);
         setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-        if (dealer.getLastDealtCard().getRank() > 9)
+        if (dealer.getHand().getHandValue() > 9)
             dealerCheckNatural = true;
 
         // Deal second card
@@ -240,13 +241,16 @@ public class activityGameBlackJack extends AppCompatActivity {
         // else peek card and continue play
         if (dealerCheckNatural && dealer.getHand().getHandValue() == 21) {
             setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+            Toast.makeText(activityGameBlackJack.this, "Dealer Natural", Toast.LENGTH_SHORT).show(); // debug - delete after
             endRound();
         } else {
             setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         }
         // Check player natural
-        if (player.getHand().getHandValue() == 21)
+        if (player.getHand().getHandValue() == 21) {
+            Toast.makeText(activityGameBlackJack.this, "Player Natural", Toast.LENGTH_SHORT).show(); // debug - delete after
             endRound();
+        }
 
         updateScore();
     }
