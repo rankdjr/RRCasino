@@ -41,10 +41,6 @@ public class Player {
         this.hand.addCard(card);
     }
 
-    public int getPlayerHandValue() {
-        return this.hand.getHandValue();
-    }
-
     public void returnCards(){
         this.hand.clearHand();
     }

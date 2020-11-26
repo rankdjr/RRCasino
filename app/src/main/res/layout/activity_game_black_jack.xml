@@ -18,6 +18,16 @@
         android:layout_height="480dp"
         android:orientation="vertical">
 
+        <!-- Dealer Score TextView -->
+        <TextView
+            android:id="@+id/dealerScore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@color/white"
+            android:layout_marginBottom="10dp"
+            android:text="Score" />
+
         <!-- Dealer Cards -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,6 +73,16 @@
 
         </LinearLayout>
 
+        <!-- Player Score TextView -->
+        <TextView
+            android:id="@+id/playerScore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@color/white"
+            android:layout_marginBottom="10dp"
+            android:text="Score" />
+
         <!-- Player Cards -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -106,32 +126,18 @@
 
         </LinearLayout>
 
-        <!-- Score Textviews -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/score"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:background="@color/white"
-                android:text="Score" />
-
+        <!-- Debug TextViews
             <TextView
                 android:id="@+id/inHand"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:background="@color/white"
-                android:text="LastCard" />
-        </LinearLayout>
+                android:text="LastCard" /> -->
 
     </LinearLayout>
 
-    <!-- Bet Button layout -->
+    <!-- Confirm Button layout -->
     <LinearLayout
         android:layout_width="178dp"
         android:layout_height="106dp"

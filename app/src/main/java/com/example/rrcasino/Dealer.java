@@ -22,8 +22,4 @@ public class Dealer extends Player {
 
     public DeckHandler.Card getLastDealtCard() { return lastDealtCard; }
 
-    public int getDealerHandValue() {
-        return hand.getHandValue();
-    }
-
 }

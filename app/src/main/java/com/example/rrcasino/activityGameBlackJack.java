@@ -16,8 +16,9 @@ import android.widget.TextView;
 
 public class activityGameBlackJack extends AppCompatActivity {
     // TextViews
-    private TextView tvScore;
-    private TextView tvLastCard; //debug only
+    private TextView tvPlayerScore;
+    private TextView tvDealerScore;
+    //private TextView tvLastCard; //debug only
 
     // Buttons
     private Button hitButton;
@@ -35,6 +36,8 @@ public class activityGameBlackJack extends AppCompatActivity {
     private ImageView dCard3;
     private ImageView dCard4;
     private ImageView dCard5;
+    private ImageView[] playerCardImages;
+    private ImageView[] dealerCardImages;
     private float transparent = 0;
     private float opaque = 1;
 
@@ -44,9 +47,9 @@ public class activityGameBlackJack extends AppCompatActivity {
     private Player player;
     private enum gameResult { WIN, LOSE, TIE }
     private boolean isRoundOver = false; // Needed in updateScore method
-    private String handValue = "";
-    ImageView[] playerCardImages;
-    ImageView[] dealerCardImages;
+    private String playerHandValue = "";
+    private String dealerHandValue = "";
+    private int maxCardsInHand = 5;
     String lastCard = "Last Card Info\n\n";  // var for debug purposes only; displays total value of cards in hand
 
     @Override
@@ -55,8 +58,10 @@ public class activityGameBlackJack extends AppCompatActivity {
         setContentView(R.layout.activity_game_black_jack);
 
         // Assign TextView IDs from XML
-        tvScore = (TextView)findViewById(R.id.score);
-        tvLastCard = (TextView)findViewById(R.id.inHand); //debug only
+        tvPlayerScore = (TextView)findViewById(R.id.playerScore);
+        tvDealerScore = (TextView)findViewById(R.id.dealerScore);
+        //tvLastCard = (TextView)findViewById(R.id.inHand); //debug only
+
         // Assign ImageView IDs from XML
         this.pCard1 = (ImageView) findViewById(R.id.pCard1);
         this.pCard2 = (ImageView) findViewById(R.id.pCard2);
@@ -99,12 +104,12 @@ public class activityGameBlackJack extends AppCompatActivity {
                     confirmButton.setEnabled(false); // Disable bet setter after play has started
                     dealer.dealCard(player,deck);
                     setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-                    if (player.getPlayerHandValue() > 21 || player.getHand().getNumOfCardsInHand() == 5)
+                    if (player.getHand().getHandValue() > 21 || player.getHand().getNumOfCardsInHand() == maxCardsInHand)
                         endRound();
                     updateScore();
                     break;
                 case R.id.stayButton:
-                    //TODO add dealer behaviour
+                    dealerPlay();
                     endRound();
                     updateScore();
                     break;
@@ -199,18 +204,18 @@ public class activityGameBlackJack extends AppCompatActivity {
         stayButton.setEnabled(true);
         confirmButton.setEnabled(false);
         // Loop through participant hands and set to all cards to null card
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= maxCardsInHand; i++) {
             setImageResource('p', i, "b2fv");
             playerCardImages[i-1].setAlpha(transparent);
         }
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= maxCardsInHand; i++) {
             setImageResource('d', i, "b2fv");
             dealerCardImages[i-1].setAlpha(transparent);
         }
         // Check that hands are empty
-        if (player.getPlayerHandValue()>0)
+        if (player.getHand().getHandValue()>0)
             player.returnCards();
-        if (dealer.getPlayerHandValue()>0)
+        if (dealer.getHand().getHandValue()>0)
             dealer.returnCards();
 
         //TODO setBet: Set bet value for current round (disable bet setter after hit button has been pressed)
@@ -221,7 +226,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         dealer.dealCard(dealer, deck);
         setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-        if (dealer.getDealerHandValue() > 9)
+        if (dealer.getLastDealtCard().getRank() > 9)
             dealerCheckNatural = true;
 
         // Deal second card
@@ -230,19 +235,17 @@ public class activityGameBlackJack extends AppCompatActivity {
         dealer.dealCard(dealer, deck);
         setImageResource('d',0, "b2fv");
 
-        // checkNatural: If Dealer's first card is face card, check for BlackJack and endRound if true
-        // else check for Player natural and endRound if true
-        // else continue play
-        if (dealerCheckNatural && dealer.getDealerHandValue() == 21) {
-            // Peek dealer's second card and end round; Dealer win
+        // CheckNatural: If Dealer's first card is face card, check for BlackJack and endRound if true
+        // else peek card and continue play
+        if (dealerCheckNatural && dealer.getHand().getHandValue() == 21) {
             setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-            endRound();
-        } else if (player.getPlayerHandValue() == 21) {
             endRound();
         } else {
-            // Peek dealer's second card and continue play
             setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         }
+        // Check player natural
+        if (player.getHand().getHandValue() == 21)
+            endRound();
 
         updateScore();
     }
@@ -254,23 +257,23 @@ public class activityGameBlackJack extends AppCompatActivity {
         stayButton.setEnabled(false);
         confirmButton.setEnabled(true);
         updateScore();
-        /*
-        // loop through participant hands and set to all cards to null card
-        for (int i = 1; i <= player.getHand().getNumOfCardsInHand(); i++)
-            setImageResource('p', i, "b2fv");
-        for (int i = 1; i <= dealer.getHand().getNumOfCardsInHand(); i++)
-            setImageResource('d', i, "b2fv");
-        // empty participant hands
-        player.returnCards();
-        dealer.returnCards();
-        */
-        //startRound();
+    }
+
+    public void dealerPlay() {
+        setImageResource('d', 2, dealer.getHand().getCard(1).getImageSource());
+        while (dealer.getHand().getHandValue() < 16 && dealer.getHand().getNumOfCardsInHand() < maxCardsInHand) {
+            dealer.dealCard(dealer, deck);
+            setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+        }
     }
 
     public void updateScore() {
-        handValue = "Player Score: " + player.getPlayerHandValue();
-        tvScore.setText(handValue);
+        dealerHandValue = "Dealer Score: " + dealer.getHand().getHandValue();
+        tvDealerScore.setText(dealerHandValue);
+        playerHandValue = "Player Score: " + player.getHand().getHandValue();
+        tvPlayerScore.setText(playerHandValue);
 
+        /*
         //debug purposes
         lastCard = "Last Card Info\n\n";
         lastCard += "Suit: " + dealer.getLastDealtCard().getSuit() + "\n";
@@ -278,5 +281,6 @@ public class activityGameBlackJack extends AppCompatActivity {
         lastCard += "Val: " + dealer.getLastDealtCard().getValue() + "\n";
         lastCard += "Src: " + dealer.getLastDealtCard().getImageSource();
         tvLastCard.setText(lastCard);
+         */
     }
 }
