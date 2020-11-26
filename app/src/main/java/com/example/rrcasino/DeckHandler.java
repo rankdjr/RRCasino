@@ -68,6 +68,7 @@ public class DeckHandler
             return imageSource;
         }
     }
+
     public static class  Deck
     {
         /*
@@ -123,12 +124,10 @@ public class DeckHandler
             return cards.remove(0);
         }
 
-        /*
         public int getNumberOfCards()
         {
             return cards.size();
         }
-        */
     }
 
     public static class Shoe
@@ -146,7 +145,7 @@ public class DeckHandler
         public void generateShoe()
         {
             // Same as deck generating function but with multiple decks
-            // While loop iterates 52 times, creating a new card for each rank of every suit before moving on to the next
+            // While-loop iterates 52 times, creating a new card for each rank of every suit before moving on to the next
             // suit; The loop iterator(i) is incremented on the innermost for loop
             // The deck is generated with the intention of rank 1 being an Ace and each subsequent rank will follow from 2
             // to K in ascending order
@@ -179,6 +178,5 @@ public class DeckHandler
         {
             return shoe.size();
         }
-
     }
 }

@@ -27,6 +27,10 @@ public class Hand {
 
     public int getHandValue()
     {
+        /*Calculates values of cards in hand:
+         * Sums up values of all cards and reduces values
+         * of aces in hand if the total is greater than 21
+         */
         int total = 0;
         int tempAceCtr = acesInHand;
         for (DeckHandler.Card currCard : this.hand) {
@@ -53,9 +57,6 @@ public class Hand {
             acesInHand++;
     }
 
-    /*
-    add function to remove selected card to make class work for poker game river functionality
-     */
     public DeckHandler.Card getCard(Integer index)
     {
         return hand.get(index);

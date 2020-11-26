@@ -47,6 +47,7 @@ public class activityGameBlackJack extends AppCompatActivity {
     private Player player;
     private enum gameResult { WIN, LOSE, TIE }
     private boolean isRoundOver = false; // Needed in updateScore method
+    private String cardFaceDown = "b2fv";
     private String playerHandValue = "";
     private String dealerHandValue = "";
     private int maxCardsInHand = 5;
@@ -86,7 +87,7 @@ public class activityGameBlackJack extends AppCompatActivity {
 
         // Initialize new game
         this.deck = new DeckHandler.Shoe();
-        this.dealer = new Dealer("DEALER", 1000);
+        this.dealer = new Dealer("DEALER", 0);
         this.player = new Player("Player 1", 100);
 
         startRound();
@@ -123,8 +124,8 @@ public class activityGameBlackJack extends AppCompatActivity {
     private void setImageResource (char participant, int cardNum, String imageSource) {
         /*
          * First parameter takes in a 'p' or 'd' character specifying whether a player or dealer card is
-         * being updated. Essentially this specifies the ImageView ID affix pcard or dcard.
-         * Second parameter specifies the ImageView ID suffix by card number, eg 1 or 2 for pcard1 or pcard2
+         * being updated. Essentially this specifies the ImageView ID affix pCard or dCard.
+         * Second parameter specifies the ImageView ID suffix by card number, eg 1 or 2 for pCard1 or pCard2
          * respectively.
          * Third parameter takes in a Card object (usually the last dealt card) that holds the image source
          * as a string
@@ -195,7 +196,7 @@ public class activityGameBlackJack extends AppCompatActivity {
          * 1. Disable/Enable buttons
          * 2. Check that players hands are empty
          * 3. Update card images to face down, and make non-dealt cards transparent
-         * 4. Enable functionality to set new bet amount
+         * 4. Enable SeekBar to set new bet amount
          * 5. Deal cards, and check for natural win
          */
 
@@ -205,11 +206,11 @@ public class activityGameBlackJack extends AppCompatActivity {
         confirmButton.setEnabled(false);
         // Loop through participant hands and set to all cards to null card
         for (int i = 1; i <= maxCardsInHand; i++) {
-            setImageResource('p', i, "b2fv");
+            setImageResource('p', i, cardFaceDown);
             playerCardImages[i-1].setAlpha(transparent);
         }
         for (int i = 1; i <= maxCardsInHand; i++) {
-            setImageResource('d', i, "b2fv");
+            setImageResource('d', i, cardFaceDown);
             dealerCardImages[i-1].setAlpha(transparent);
         }
         // Check that hands are empty
@@ -233,7 +234,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         dealer.dealCard(player,deck);
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         dealer.dealCard(dealer, deck);
-        setImageResource('d',0, "b2fv");
+        setImageResource('d',0, cardFaceDown);
 
         // CheckNatural: If Dealer's first card is face card, check for BlackJack and endRound if true
         // else peek card and continue play
@@ -260,7 +261,14 @@ public class activityGameBlackJack extends AppCompatActivity {
     }
 
     public void dealerPlay() {
+        // Reveal second card
         setImageResource('d', 2, dealer.getHand().getCard(1).getImageSource());
+        // If soft 16 then hit
+        if (dealer.getHand().getHandValue() == 16 && dealer.getHand().getNumOfCardsInHand() == 2) {
+            dealer.dealCard(dealer, deck);
+            setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+        }
+        // Dealer hits if below 16
         while (dealer.getHand().getHandValue() < 16 && dealer.getHand().getNumOfCardsInHand() < maxCardsInHand) {
             dealer.dealCard(dealer, deck);
             setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
