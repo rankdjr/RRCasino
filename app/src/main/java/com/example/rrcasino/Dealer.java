@@ -8,9 +8,11 @@ package com.example.rrcasino;
 
 public class Dealer extends Player {
     private DeckHandler.Card lastDealtCard;
+    private Hand hand;
 
     public Dealer(String name, Integer funds) {
         super(name, funds);
+        this.hand = new Hand();
     }
 
     public void dealCard(Player player, DeckHandler.Shoe shoe) {
@@ -19,5 +21,9 @@ public class Dealer extends Player {
     }
 
     public DeckHandler.Card getLastDealtCard() { return lastDealtCard; }
+
+    public int getDealerHandValue() {
+        return hand.getHandValue();
+    }
 
 }

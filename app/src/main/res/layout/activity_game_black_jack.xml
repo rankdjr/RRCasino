@@ -12,15 +12,17 @@
     tools:context=".activityGameBlackJack">
 
     !-- Card Layouts -->
+
     <LinearLayout
         android:layout_width="395dp"
-        android:layout_height="555dp"
+        android:layout_height="480dp"
         android:orientation="vertical">
 
         <!-- Dealer Cards -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -114,21 +116,42 @@
                 android:id="@+id/score"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:layout_marginTop="15dp"
+                android:background="@color/white"
                 android:text="Score" />
 
             <TextView
                 android:id="@+id/inHand"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:layout_marginTop="15dp"
+                android:background="@color/white"
                 android:text="LastCard" />
         </LinearLayout>
+
     </LinearLayout>
 
-    <!-- Button layout -->
+    <!-- Bet Button layout -->
+    <LinearLayout
+        android:layout_width="178dp"
+        android:layout_height="106dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/confirmButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_centerHorizontal = "true"
+            android:layout_marginRight="10dp"
+            android:text="New Round" />
+    </LinearLayout>
+
+    <!-- Hit/Stay Button layout -->
     <LinearLayout
         android:layout_width="178dp"
         android:layout_height="106dp"
@@ -155,5 +178,4 @@
             android:layout_marginLeft="10dp"
             android:text="Stay" />
     </LinearLayout>
-
 </RelativeLayout>

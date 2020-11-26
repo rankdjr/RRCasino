@@ -22,6 +22,7 @@ public class activityGameBlackJack extends AppCompatActivity {
     // Buttons
     private Button hitButton;
     private Button stayButton;
+    private Button confirmButton;
 
     // ImageViews
     private ImageView pCard1;
@@ -34,13 +35,19 @@ public class activityGameBlackJack extends AppCompatActivity {
     private ImageView dCard3;
     private ImageView dCard4;
     private ImageView dCard5;
+    private float transparent = 0;
+    private float opaque = 1;
 
     // Game variables
     private DeckHandler.Shoe deck;
     private Dealer dealer;
     private Player player;
-    String handValue = "";  // var for debug purposes; displays total value of cards in hand
-    String lastCard = "Last Card Info\n\n";  // var for debug purposes; displays total value of cards in hand
+    private enum gameResult { WIN, LOSE, TIE }
+    private boolean isRoundOver = false; // Needed in updateScore method
+    private String handValue = "";
+    ImageView[] playerCardImages;
+    ImageView[] dealerCardImages;
+    String lastCard = "Last Card Info\n\n";  // var for debug purposes only; displays total value of cards in hand
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,16 +63,21 @@ public class activityGameBlackJack extends AppCompatActivity {
         this.pCard3 = (ImageView) findViewById(R.id.pCard3);
         this.pCard4 = (ImageView) findViewById(R.id.pCard4);
         this.pCard5 = (ImageView) findViewById(R.id.pCard5);
+        playerCardImages = new ImageView[] {pCard1, pCard2, pCard3, pCard4, pCard5};
         this.dCard1 = (ImageView) findViewById(R.id.dCard1);
         this.dCard2 = (ImageView) findViewById(R.id.dCard2);
         this.dCard3 = (ImageView) findViewById(R.id.dCard3);
         this.dCard4 = (ImageView) findViewById(R.id.dCard4);
         this.dCard5 = (ImageView) findViewById(R.id.dCard5);
+        dealerCardImages = new ImageView[] {dCard1, dCard2, dCard3, dCard4, dCard5};
         // Assign button IDs from XML and set onclick Listeners
         this.hitButton = (Button) findViewById(R.id.hitButton);
         this.stayButton = (Button) findViewById(R.id.stayButton);
+        this.confirmButton = (Button) findViewById(R.id.confirmButton);
         this.hitButton.setOnClickListener(handleClick);
         this.stayButton.setOnClickListener(handleClick);
+        this.confirmButton.setOnClickListener(handleClick);
+
 
         // Initialize new game
         this.deck = new DeckHandler.Shoe();
@@ -77,22 +89,27 @@ public class activityGameBlackJack extends AppCompatActivity {
 
     private View.OnClickListener handleClick = new View.OnClickListener() {
         /*
-         * Function is used to track when hit and stay buttons are pressed.
+         * Onclick listener for buttons
          *
          */
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.hitButton:
+                    confirmButton.setEnabled(false); // Disable bet setter after play has started
                     dealer.dealCard(player,deck);
                     setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+                    if (player.getPlayerHandValue() > 21 || player.getHand().getNumOfCardsInHand() == 5)
+                        endRound();
                     updateScore();
-                    // /*TODO*/ check for bust and end round if player busts
                     break;
                 case R.id.stayButton:
-                    // /*TODO*/ add dealer behaviour
+                    //TODO add dealer behaviour
                     endRound();
                     updateScore();
+                    break;
+                case R.id.confirmButton:
+                    startRound();
                     break;
             }
         }
@@ -108,25 +125,29 @@ public class activityGameBlackJack extends AppCompatActivity {
          * as a string
          */
 
-
         Resources resources = getResources();
         final int resourceId = resources.getIdentifier(imageSource,"drawable",getPackageName());
         switch (participant) {
             case 'p': {
                 switch (cardNum) {
                     case 1:
+                        playerCardImages[cardNum-1].setAlpha(opaque);
                         pCard1.setImageResource(resourceId);
                         break;
                     case 2:
+                        playerCardImages[cardNum-1].setAlpha(opaque);
                         pCard2.setImageResource(resourceId);
                         break;
                     case 3:
+                        playerCardImages[cardNum-1].setAlpha(opaque);
                         pCard3.setImageResource(resourceId);
                         break;
                     case 4:
+                        playerCardImages[cardNum-1].setAlpha(opaque);
                         pCard4.setImageResource(resourceId);
                         break;
                     case 5:
+                        playerCardImages[cardNum-1].setAlpha(opaque);
                         pCard5.setImageResource(resourceId);
                         break;
                 }
@@ -134,20 +155,28 @@ public class activityGameBlackJack extends AppCompatActivity {
             }
             case 'd': {
                 switch (cardNum) {
+                    case 0:
+                        dealerCardImages[1].setAlpha(opaque);
+                        dCard2.setImageResource(resourceId);
+                        break;
                     case 1:
+                        dealerCardImages[cardNum-1].setAlpha(opaque);
                         dCard1.setImageResource(resourceId);
                         break;
                     case 2:
-                        // /*TODO*/ Dealer card should be face down until player stays
+                        dealerCardImages[cardNum-1].setAlpha(opaque);
                         dCard2.setImageResource(resourceId);
                         break;
                     case 3:
+                        dealerCardImages[cardNum-1].setAlpha(opaque);
                         dCard3.setImageResource(resourceId);
                         break;
                     case 4:
+                        dealerCardImages[cardNum-1].setAlpha(opaque);
                         dCard4.setImageResource(resourceId);
                         break;
                     case 5:
+                        dealerCardImages[cardNum-1].setAlpha(opaque);
                         dCard5.setImageResource(resourceId);
                         break;
                 }
@@ -157,42 +186,85 @@ public class activityGameBlackJack extends AppCompatActivity {
     }
 
     private void startRound () {
-        // /*TODO*/ setBet: Set bet value for current round
+        /* Create clean round
+         * 1. Disable/Enable buttons
+         * 2. Check that players hands are empty
+         * 3. Update card images to face down, and make non-dealt cards transparent
+         * 4. Enable functionality to set new bet amount
+         * 5. Deal cards, and check for natural win
+         */
 
-        // deal first card
+        // Update usable buttons
+        hitButton.setEnabled(true);
+        stayButton.setEnabled(true);
+        confirmButton.setEnabled(false);
+        // Loop through participant hands and set to all cards to null card
+        for (int i = 1; i <= 5; i++) {
+            setImageResource('p', i, "b2fv");
+            playerCardImages[i-1].setAlpha(transparent);
+        }
+        for (int i = 1; i <= 5; i++) {
+            setImageResource('d', i, "b2fv");
+            dealerCardImages[i-1].setAlpha(transparent);
+        }
+        // Check that hands are empty
+        if (player.getPlayerHandValue()>0)
+            player.returnCards();
+        if (dealer.getPlayerHandValue()>0)
+            dealer.returnCards();
+
+        //TODO setBet: Set bet value for current round (disable bet setter after hit button has been pressed)
+
+        // Deal first card
+        boolean dealerCheckNatural = false;
         dealer.dealCard(player, deck);
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         dealer.dealCard(dealer, deck);
         setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-        updateScore();
+        if (dealer.getDealerHandValue() > 9)
+            dealerCheckNatural = true;
 
-        // deal second card
+        // Deal second card
         dealer.dealCard(player,deck);
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         dealer.dealCard(dealer, deck);
-        setImageResource('d',dealer.getHand().getNumOfCardsInHand(), "b2fv");
+        setImageResource('d',0, "b2fv");
+
+        // checkNatural: If Dealer's first card is face card, check for BlackJack and endRound if true
+        // else check for Player natural and endRound if true
+        // else continue play
+        if (dealerCheckNatural && dealer.getDealerHandValue() == 21) {
+            // Peek dealer's second card and end round; Dealer win
+            setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+            endRound();
+        } else if (player.getPlayerHandValue() == 21) {
+            endRound();
+        } else {
+            // Peek dealer's second card and continue play
+            setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+        }
+
         updateScore();
-
-        // /*TODO*/ checkNatural: If Dealer's first card is face card, check for BlackJack and endRound if true
-
     }
 
     private void endRound () {
-        // /*TODO*/ checkWin: Check for player win/loss
-        // /*TODO*/ updateFunds: Update funds from checkWin
-
-        // setup Card object with face down image resource to reset images
-        DeckHandler.Card nullCard = new DeckHandler.Card(0,0, "b2fv");
+        //TODO checkWin: Check for player win/loss
+        //TODO updateFunds: Update funds from checkWin
+        hitButton.setEnabled(false);
+        stayButton.setEnabled(false);
+        confirmButton.setEnabled(true);
+        updateScore();
+        /*
         // loop through participant hands and set to all cards to null card
-        for (int i = 0; i <= player.getHand().getNumOfCardsInHand(); i++)
-            setImageResource('p', i, nullCard.getImageSource());
-        for (int i = 0; i <= dealer.getHand().getNumOfCardsInHand(); i++)
-            setImageResource('d', i, nullCard.getImageSource());
+        for (int i = 1; i <= player.getHand().getNumOfCardsInHand(); i++)
+            setImageResource('p', i, "b2fv");
+        for (int i = 1; i <= dealer.getHand().getNumOfCardsInHand(); i++)
+            setImageResource('d', i, "b2fv");
         // empty participant hands
         player.returnCards();
         dealer.returnCards();
-
-        startRound();
+        */
+        //startRound();
     }
 
     public void updateScore() {
