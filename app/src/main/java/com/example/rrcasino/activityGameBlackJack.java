@@ -19,12 +19,15 @@ public class activityGameBlackJack extends AppCompatActivity {
     // TextViews
     private TextView tvPlayerScore;
     private TextView tvDealerScore;
+    private TextView tvBet;
     //private TextView tvLastCard; //debug only
 
     // Buttons
     private Button hitButton;
     private Button stayButton;
     private Button confirmButton;
+    private Button doubleButton;
+    private Button splitButton;
 
     // ImageViews
     private ImageView pCard1;
@@ -46,6 +49,9 @@ public class activityGameBlackJack extends AppCompatActivity {
     private DeckHandler.Shoe deck;
     private Dealer dealer;
     private Player player;
+    private int betAmount;
+    private int minBet = 10;
+    private int maxBet = 10000;
     private enum gameResult { BLACKJACK, WIN, LOSE, TIE }
     private boolean isRoundOver = false; // Needed in updateScore method
     private String cardFaceDown = "b2fv";
@@ -62,6 +68,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         // Assign TextView IDs from XML
         tvPlayerScore = findViewById(R.id.playerScore);
         tvDealerScore = findViewById(R.id.dealerScore);
+        tvBet = findViewById(R.id.tvBet);
         //tvLastCard = findViewById(R.id.inHand); //debug only
 
         // Assign ImageView IDs from XML
@@ -81,9 +88,13 @@ public class activityGameBlackJack extends AppCompatActivity {
         this.hitButton = findViewById(R.id.hitButton);
         this.stayButton = findViewById(R.id.stayButton);
         this.confirmButton = findViewById(R.id.confirmButton);
+        this.doubleButton = findViewById(R.id.doubleButton);
+        this.splitButton = findViewById(R.id.splitButton);
         this.hitButton.setOnClickListener(handleClick);
         this.stayButton.setOnClickListener(handleClick);
         this.confirmButton.setOnClickListener(handleClick);
+        this.doubleButton.setOnClickListener(handleClick);
+        this.splitButton.setOnClickListener(handleClick);
 
 
         // Initialize new game
@@ -117,6 +128,14 @@ public class activityGameBlackJack extends AppCompatActivity {
                 case R.id.confirmButton:
                     confirmButton.setEnabled(false); // Disable bet setter after play has started
                     startRound();
+                    break;
+                case R.id.doubleButton:
+                    doubleButton.setEnabled(false); // Disable after initial click
+                    //TODO: update player bet to x2
+                    break;
+                case R.id.splitButton:
+                    splitButton.setEnabled(false); // Disable after initial click
+                    //TODO: split player hand to two hands
                     break;
             }
         }
@@ -201,6 +220,8 @@ public class activityGameBlackJack extends AppCompatActivity {
         hitButton.setEnabled(true);
         stayButton.setEnabled(true);
         confirmButton.setEnabled(false);
+        doubleButton.setEnabled(false);
+        splitButton.setEnabled(false);
         // Loop through participant hands and set to all cards to null card
         for (int i = 1; i <= maxCardsInHand; i++) {
             setImageResource('p', i, cardFaceDown);
@@ -241,11 +262,17 @@ public class activityGameBlackJack extends AppCompatActivity {
             setImageResource('d', dealer.getHand().getNumOfCardsInHand(), cardFaceDown);
         }
 
+        // Enable split button if player has cards of same rank
+        if (player.getHand().getCard(0).getRank() == player.getHand().getCard(1).getRank())
+            splitButton.setEnabled(true);
+        // Enable double button if player score <= 11
+        if (player.getHand().getHandValue() < 12)
+            doubleButton.setEnabled(true);
+
         updateScore();
     }
 
     private void endRound () {
-        //TODO checkWin: Check for player win/loss
         //TODO updateFunds: Update funds from checkWin
         hitButton.setEnabled(false);
         stayButton.setEnabled(false);
@@ -296,7 +323,7 @@ public class activityGameBlackJack extends AppCompatActivity {
          * Returns LOSE if all above cases are false (eg player hand < dealer hand)
          */
 
-        gameResult result = null;
+        gameResult result;
 
         int playerHandValue = player.getHand().getHandValue();
         int dealerHandValue = dealer.getHand().getHandValue();

@@ -12,7 +12,6 @@
     tools:context=".activityGameBlackJack">
 
     !-- Card Layouts -->
-
     <LinearLayout
         android:layout_width="395dp"
         android:layout_height="480dp"
@@ -21,10 +20,11 @@
         <!-- Dealer Score TextView -->
         <TextView
             android:id="@+id/dealerScore"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="15dp"
-            android:background="@color/white"
+            android:textColor="@color/white"
             android:layout_marginBottom="10dp"
             android:text="Score" />
 
@@ -76,10 +76,11 @@
         <!-- Player Score TextView -->
         <TextView
             android:id="@+id/playerScore"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="15dp"
-            android:background="@color/white"
+            android:textColor="@color/white"
             android:layout_marginBottom="10dp"
             android:text="Score" />
 
@@ -137,69 +138,91 @@
 
     </LinearLayout>
 
-    <!-- Confirm Button layout -->
-    <LinearLayout
-        android:layout_width="178dp"
-        android:layout_height="106dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/confirmButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:layout_centerHorizontal = "true"
-            android:layout_marginRight="10dp"
-            android:text="New Round" />
-    </LinearLayout>
-
-    <!-- Hit/Stay Button layout -->
-    <LinearLayout
-        android:layout_width="178dp"
-        android:layout_height="106dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="0dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/hitButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="10dp"
-            android:text="Hit" />
-
-        <Button
-            android:id="@+id/stayButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:text="Stay" />
-    </LinearLayout>
-
-    <!-- Set player bet layout -->
+    <!-- Button and Bet Layout-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true" >
-        <ProgressBar
+        android:layout_marginTop="15dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <!-- Confirm Button -->
+        <Button
+            android:id="@+id/confirmButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerHorizontal = "true"
+            android:text="Deal" />
+
+        <!-- Hit/Stay Button layout -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="?android:attr/progressBarStyleHorizontal" />
-        <SeekBar
-            android:id="@+id/seekBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/doubleButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:text="Double" />
+
+            <Button
+                android:id="@+id/hitButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:text="Hit" />
+
+            <Button
+                android:id="@+id/stayButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:text="Stay" />
+
+            <Button
+                android:id="@+id/splitButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:text="Split" />
+        </LinearLayout>
+
+        <!-- Set player bet layout -->
+            <TextView
+                android:id="@+id/betBanner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:text="Bet" />
+            <TextView
+                android:id="@+id/tvBet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:text="Current Bet" />
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_alignParentBottom="true"/>
     </LinearLayout>
 
 </RelativeLayout>
