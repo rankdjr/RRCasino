@@ -46,7 +46,7 @@ public class activityGameBlackJack extends AppCompatActivity {
     private DeckHandler.Shoe deck;
     private Dealer dealer;
     private Player player;
-    private enum gameResult { WIN, LOSE, TIE }
+    private enum gameResult { BLACKJACK, WIN, LOSE, TIE }
     private boolean isRoundOver = false; // Needed in updateScore method
     private String cardFaceDown = "b2fv";
     private String playerHandValue = "";
@@ -251,6 +251,20 @@ public class activityGameBlackJack extends AppCompatActivity {
         stayButton.setEnabled(false);
         confirmButton.setEnabled(true);
         updateScore();
+        switch (checkWin()) {
+            case BLACKJACK:
+                Toast.makeText(activityGameBlackJack.this, "Player BlackJack", Toast.LENGTH_SHORT).show();
+                break;
+            case WIN:
+                Toast.makeText(activityGameBlackJack.this, "Player Win", Toast.LENGTH_SHORT).show();
+                break;
+            case TIE:
+                Toast.makeText(activityGameBlackJack.this, "Push", Toast.LENGTH_SHORT).show();
+                break;
+            case LOSE:
+                Toast.makeText(activityGameBlackJack.this, "Dealer Win", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     public void dealerPlay() {
@@ -274,21 +288,40 @@ public class activityGameBlackJack extends AppCompatActivity {
     }
 
     public gameResult checkWin() {
-        gameResult result= null;
-        //Toast.makeText(activityGameBlackJack.this, "Player Natural", Toast.LENGTH_SHORT).show(); // debug - delete after
-        //Toast.makeText(activityGameBlackJack.this, "Dealer Natural", Toast.LENGTH_SHORT).show(); // debug - delete after
+        /* Function checks for win conditions on current hand values
+         * Checks for Player BlackJack and pays 1.5x bet amount, returns BLACKJACK
+         * If player busts, returns LOSE
+         * Assuming player did not bust and either 1)Dealer busted or 2)Player has higher hand value, returns WIN
+         * Returns TIE in the case of a push
+         * Returns LOSE if all above cases are false (eg player hand < dealer hand)
+         */
+
+        gameResult result = null;
 
         int playerHandValue = player.getHand().getHandValue();
         int dealerHandValue = dealer.getHand().getHandValue();
+
+        if (playerHandValue == 21 && dealer.getHand().getNumOfCardsInHand() == 1)
+            result = gameResult.BLACKJACK;
+        else if (player.getHand().checkBust())
+            result = gameResult.LOSE;
+        else if (playerHandValue > dealerHandValue || dealer.getHand().checkBust())
+            result = gameResult.WIN;
+        else if (playerHandValue == dealerHandValue)
+            result = gameResult.TIE;
+        else
+            result = gameResult.LOSE;
 
         return result;
     }
 
     public void updateScore() {
-        dealerHandValue = "Dealer Score: " + dealer.getHand().getHandValue();
-        tvDealerScore.setText(dealerHandValue);
         playerHandValue = "Player Score: " + player.getHand().getHandValue();
         tvPlayerScore.setText(playerHandValue);
+        if (dealer.getHand().getNumOfCardsInHand() > 2) {
+            dealerHandValue = "Dealer Score: " + dealer.getHand().getHandValue();
+            tvDealerScore.setText(dealerHandValue);
+        }
 
         /*
         //debug purposes
