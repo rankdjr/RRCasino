@@ -162,10 +162,6 @@ public class activityGameBlackJack extends AppCompatActivity {
             }
             case 'd': {
                 switch (cardNum) {
-                    case 0:
-                        dealerCardImages[1].setAlpha(opaque);
-                        dCard2.setImageResource(resourceId);
-                        break;
                     case 1:
                         dealerCardImages[cardNum-1].setAlpha(opaque);
                         dCard1.setImageResource(resourceId);
@@ -222,30 +218,27 @@ public class activityGameBlackJack extends AppCompatActivity {
 
         //TODO setBet: Set bet value for current round (disable bet setter after hit button has been pressed)
 
-        // Deal first card
-        boolean dealerCheckNatural = false;
+        // Deal first cards
         dealer.dealCard(player, deck);
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         dealer.dealCard(dealer, deck);
         setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-        if (dealer.getHand().getHandValue() > 9) // Update flag to check dealer natural
-            dealerCheckNatural = true;
 
-        // Deal second card
+        // Deal second Player card
         dealer.dealCard(player,deck);
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-        dealer.dealCard(dealer, deck);
-        setImageResource('d',0, cardFaceDown);
+        // Check for Player BlackJack
+        if (player.getHand().getHandValue() == 21)
+            endRound();
 
-        // CheckNatural: If Dealer's first card is face card, check for BlackJack and endRound if true, else continue play
-        if (dealerCheckNatural && dealer.getHand().getHandValue() == 21) {
-            setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-            Toast.makeText(activityGameBlackJack.this, "Dealer Natural", Toast.LENGTH_SHORT).show(); // debug - delete after
+        // Deal second Dealer card
+        dealer.dealCard(dealer, deck);
+        // Check for Dealer BlackJack and show card if true
+        if (dealer.getHand().getHandValue() == 21) {
+            setImageResource('d', dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
             endRound();
-        } else if (player.getHand().getHandValue() == 21) {
-            // Check player natural
-            Toast.makeText(activityGameBlackJack.this, "Player Natural", Toast.LENGTH_SHORT).show(); // debug - delete after
-            endRound();
+        } else {
+            setImageResource('d', dealer.getHand().getNumOfCardsInHand(), cardFaceDown);
         }
 
         updateScore();
@@ -282,6 +275,11 @@ public class activityGameBlackJack extends AppCompatActivity {
 
     public gameResult checkWin() {
         gameResult result= null;
+        //Toast.makeText(activityGameBlackJack.this, "Player Natural", Toast.LENGTH_SHORT).show(); // debug - delete after
+        //Toast.makeText(activityGameBlackJack.this, "Dealer Natural", Toast.LENGTH_SHORT).show(); // debug - delete after
+
+        int playerHandValue = player.getHand().getHandValue();
+        int dealerHandValue = dealer.getHand().getHandValue();
 
         return result;
     }
