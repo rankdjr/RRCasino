@@ -10,6 +10,7 @@ public class Player {
     private int balance;
     private String playerName;
     private Hand hand;
+    private Hand splitHand;
 
     public Player(String name, Integer funds)
     {
@@ -32,6 +33,8 @@ public class Player {
         return hand;
     }
 
+    public Hand getSplitHand() { return splitHand; }
+
     public int getBalance() {
         return balance;
     }
@@ -47,5 +50,13 @@ public class Player {
 
     public void returnCards(){
         this.hand.clearHand();
+    }
+
+    public void splitHand(Hand hand) {
+        //DeckHandler.Card nullCard = new DeckHandler.Card(0,0,"b2fv");
+        DeckHandler.Card splitCard = hand.getHand().get(0);
+        splitHand = new Hand();
+        splitHand.addCard(splitCard);
+        hand.getHand().remove(1);
     }
 }

@@ -43,12 +43,18 @@ public class activityGameBlackJack extends AppCompatActivity {
     private ImageView pCard3;
     private ImageView pCard4;
     private ImageView pCard5;
+    private ImageView sCard1;
+    private ImageView sCard2;
+    private ImageView sCard3;
+    private ImageView sCard4;
+    private ImageView sCard5;
     private ImageView dCard1;
     private ImageView dCard2;
     private ImageView dCard3;
     private ImageView dCard4;
     private ImageView dCard5;
     private ImageView[] playerCardImages;
+    private ImageView[] playerSplitCardImages;
     private ImageView[] dealerCardImages;
     private float transparent = 0;
     private float opaque = 1;
@@ -88,6 +94,12 @@ public class activityGameBlackJack extends AppCompatActivity {
         this.pCard4 = findViewById(R.id.pCard4);
         this.pCard5 = findViewById(R.id.pCard5);
         playerCardImages = new ImageView[] {pCard1, pCard2, pCard3, pCard4, pCard5};
+        this.sCard1 = findViewById(R.id.sCard1);
+        this.sCard2 = findViewById(R.id.sCard2);
+        this.sCard3 = findViewById(R.id.sCard3);
+        this.sCard4 = findViewById(R.id.sCard4);
+        this.sCard5 = findViewById(R.id.sCard5);
+        playerSplitCardImages = new ImageView[] {sCard1, sCard2, sCard3, sCard4, sCard5};
         this.dCard1 = findViewById(R.id.dCard1);
         this.dCard2 = findViewById(R.id.dCard2);
         this.dCard3 = findViewById(R.id.dCard3);
@@ -164,6 +176,7 @@ public class activityGameBlackJack extends AppCompatActivity {
                     updateScore();
                     break;
                 case R.id.stayButton:
+                    splitButton.setEnabled(false); // Disable after initial click
                     dealerPlay();
                     endRound();
                     updateScore();
@@ -182,6 +195,7 @@ public class activityGameBlackJack extends AppCompatActivity {
                 case R.id.splitButton:
                     splitButton.setEnabled(false); // Disable after initial click
                     //TODO: split player hand to two hands
+                    splitHand();
                     break;
             }
         }
@@ -250,6 +264,31 @@ public class activityGameBlackJack extends AppCompatActivity {
                 }
                 break;
             }
+            case 's': {
+                switch (cardNum) {
+                    case 1:
+                        playerSplitCardImages[cardNum-1].setAlpha(opaque);
+                        sCard1.setImageResource(resourceId);
+                        break;
+                    case 2:
+                        playerSplitCardImages[cardNum-1].setAlpha(opaque);
+                        sCard2.setImageResource(resourceId);
+                        break;
+                    case 3:
+                        playerSplitCardImages[cardNum-1].setAlpha(opaque);
+                        sCard3.setImageResource(resourceId);
+                        break;
+                    case 4:
+                        playerSplitCardImages[cardNum-1].setAlpha(opaque);
+                        sCard4.setImageResource(resourceId);
+                        break;
+                    case 5:
+                        playerSplitCardImages[cardNum-1].setAlpha(opaque);
+                        sCard5.setImageResource(resourceId);
+                        break;
+                }
+                break;
+            }
         }
     }
 
@@ -272,10 +311,10 @@ public class activityGameBlackJack extends AppCompatActivity {
         for (int i = 1; i <= maxCardsInHand; i++) {
             setImageResource('p', i, cardFaceDown);
             playerCardImages[i-1].setAlpha(transparent);
-        }
-        for (int i = 1; i <= maxCardsInHand; i++) {
             setImageResource('d', i, cardFaceDown);
             dealerCardImages[i-1].setAlpha(transparent);
+            setImageResource('s', i, cardFaceDown);
+            playerSplitCardImages[i-1].setAlpha(transparent);
         }
         // Check that hands are empty
         if (player.getHand().getHandValue()>0)
@@ -324,6 +363,8 @@ public class activityGameBlackJack extends AppCompatActivity {
     private void endRound () {
         hitButton.setEnabled(false);
         stayButton.setEnabled(false);
+        doubleButton.setEnabled(false);
+        splitButton.setEnabled(false);
         confirmButton.setEnabled(true);
         updateScore();
 
@@ -361,9 +402,10 @@ public class activityGameBlackJack extends AppCompatActivity {
         // Set mew maximum bet; Player cannot bet more than available funds
         sbBet.setMax(player.getBalance());
         tvBalance.setText("Balance: $"+player.getBalance()); // Update player balance TextView
+        sbBet.setEnabled(true);
     }
 
-    public void dealerPlay() {
+    private void dealerPlay() {
         /* Dealer flips second card.
          * Dealer hits on soft 17 (Ace and 6 in hand)
          * Dealer hits if hand value is below 17.
@@ -383,7 +425,17 @@ public class activityGameBlackJack extends AppCompatActivity {
         }
     }
 
-    public gameResult checkWin() {
+    private void splitHand() {
+        //split current hand
+        player.splitHand(player.getHand());
+        setImageResource('p',2, cardFaceDown);
+        playerCardImages[1].setAlpha(transparent);
+        setImageResource('s',player.getSplitHand().getNumOfCardsInHand(), player.getSplitHand().getCard(0).getImageSource());
+
+
+    }
+
+    private gameResult checkWin() {
         /* Function checks for win conditions on current hand values
          * Checks for Player BlackJack and pays 1.5x bet amount, returns BLACKJACK
          * If player busts, returns LOSE
@@ -411,16 +463,15 @@ public class activityGameBlackJack extends AppCompatActivity {
         return result;
     }
 
-    public void updateScore() {
+    private void updateScore() {
         playerHandValue = "Player Score: " + player.getHand().getHandValue();
         tvPlayerScore.setText(playerHandValue);
         if (dealer.getHand().getNumOfCardsInHand() > 2) {
             dealerHandValue = "Dealer Score: " + dealer.getHand().getHandValue();
-            tvDealerScore.setText(dealerHandValue);
         } else {
             dealerHandValue = "Dealer Score: " + dealer.getHand().getCard(0).getValue();
-            tvDealerScore.setText(dealerHandValue);
         }
+        tvDealerScore.setText(dealerHandValue);
 
         /*
         //debug purposes
