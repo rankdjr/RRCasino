@@ -5,13 +5,17 @@ package com.example.rrcasino;
  * Main activity file
  */
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +24,11 @@ public class activityGameBlackJack extends AppCompatActivity {
     private TextView tvPlayerScore;
     private TextView tvDealerScore;
     private TextView tvBet;
+    private TextView tvBalance;
     //private TextView tvLastCard; //debug only
+
+    // SeekBar
+    private SeekBar sbBet;
 
     // Buttons
     private Button hitButton;
@@ -49,7 +57,7 @@ public class activityGameBlackJack extends AppCompatActivity {
     private DeckHandler.Shoe deck;
     private Dealer dealer;
     private Player player;
-    private int betAmount;
+    private int currentBet;
     private int minBet = 10;
     private int maxBet = 10000;
     private enum gameResult { BLACKJACK, WIN, LOSE, TIE }
@@ -60,6 +68,7 @@ public class activityGameBlackJack extends AppCompatActivity {
     private int maxCardsInHand = 5;
     String lastCard = "Last Card Info\n\n";  // var for debug purposes only; displays total value of cards in hand
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,9 +78,10 @@ public class activityGameBlackJack extends AppCompatActivity {
         tvPlayerScore = findViewById(R.id.playerScore);
         tvDealerScore = findViewById(R.id.dealerScore);
         tvBet = findViewById(R.id.tvBet);
+        tvBalance = findViewById(R.id.tvBalance);
         //tvLastCard = findViewById(R.id.inHand); //debug only
 
-        // Assign ImageView IDs from XML
+        // Initialize ImageView IDs
         this.pCard1 = findViewById(R.id.pCard1);
         this.pCard2 = findViewById(R.id.pCard2);
         this.pCard3 = findViewById(R.id.pCard3);
@@ -84,7 +94,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         this.dCard4 = findViewById(R.id.dCard4);
         this.dCard5 = findViewById(R.id.dCard5);
         dealerCardImages = new ImageView[] {dCard1, dCard2, dCard3, dCard4, dCard5};
-        // Assign button IDs from XML and set onclick Listeners
+        // Initialize button IDs and set onclick Listeners
         this.hitButton = findViewById(R.id.hitButton);
         this.stayButton = findViewById(R.id.stayButton);
         this.confirmButton = findViewById(R.id.confirmButton);
@@ -95,15 +105,47 @@ public class activityGameBlackJack extends AppCompatActivity {
         this.confirmButton.setOnClickListener(handleClick);
         this.doubleButton.setOnClickListener(handleClick);
         this.splitButton.setOnClickListener(handleClick);
+        hitButton.setEnabled(false);
+        stayButton.setEnabled(false);
+        confirmButton.setEnabled(false);
+        doubleButton.setEnabled(false);
+        splitButton.setEnabled(false);
 
+        // Initialize SeekBar
+        this.sbBet = findViewById(R.id.sbBet);
+        sbBet.setMin(minBet); //$10
+        sbBet.setMax(100); // Place holder until player has initiated starting funds
+        sbBet.setProgress(minBet); //Default starting value of SeekBar to minimum bet
+
+        sbBet.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChangedValue = 0;
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChangedValue = progress;
+                tvBet.setText("$"+progressChangedValue);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                currentBet = progressChangedValue;
+            }
+        });
 
         // Initialize new game
         this.deck = new DeckHandler.Shoe();
         this.dealer = new Dealer("DEALER", 0);
         this.player = new Player("Player 1", 100);
-
-        startRound();
+        tvBalance.setText("Balance: $"+player.getBalance());
+        currentBet = sbBet.getProgress(); //Set starting bet to default SeekBar value ($10)
+        tvBet.setText("$"+currentBet);
+        confirmButton.setEnabled(true);
     }
+
 
     private View.OnClickListener handleClick = new View.OnClickListener() {
         /*
@@ -114,6 +156,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.hitButton:
+                    splitButton.setEnabled(false); // Disable in case of player choosing not to split off deal
                     dealer.dealCard(player,deck);
                     setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
                     if (player.getHand().getHandValue() > 21 || player.getHand().getNumOfCardsInHand() == maxCardsInHand)
@@ -126,12 +169,15 @@ public class activityGameBlackJack extends AppCompatActivity {
                     updateScore();
                     break;
                 case R.id.confirmButton:
-                    confirmButton.setEnabled(false); // Disable bet setter after play has started
+                    confirmButton.setEnabled(false); // Disable after initial click
+                    sbBet.setEnabled(false); // Disable changes to betting after deal
                     startRound();
                     break;
                 case R.id.doubleButton:
                     doubleButton.setEnabled(false); // Disable after initial click
-                    //TODO: update player bet to x2
+                    sbBet.setEnabled(false);
+                    currentBet = currentBet+sbBet.getProgress();
+                    tvBet.setText("$"+currentBet);
                     break;
                 case R.id.splitButton:
                     splitButton.setEnabled(false); // Disable after initial click
@@ -237,8 +283,11 @@ public class activityGameBlackJack extends AppCompatActivity {
         if (dealer.getHand().getHandValue()>0)
             dealer.returnCards();
 
-        //TODO setBet: Set bet value for current round (disable bet setter after hit button has been pressed)
+        newDeal();
+        updateScore();
+    }
 
+    private void newDeal() {
         // Deal first cards
         dealer.dealCard(player, deck);
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
@@ -266,32 +315,52 @@ public class activityGameBlackJack extends AppCompatActivity {
         if (player.getHand().getCard(0).getRank() == player.getHand().getCard(1).getRank())
             splitButton.setEnabled(true);
         // Enable double button if player score <= 11
-        if (player.getHand().getHandValue() < 12)
+        if (player.getHand().getHandValue() < 12) {
+            sbBet.setEnabled(true);
             doubleButton.setEnabled(true);
-
-        updateScore();
+        }
     }
 
     private void endRound () {
-        //TODO updateFunds: Update funds from checkWin
         hitButton.setEnabled(false);
         stayButton.setEnabled(false);
         confirmButton.setEnabled(true);
         updateScore();
+
+        float cash = 0;
+        Toast gameMsg;
         switch (checkWin()) {
             case BLACKJACK:
-                Toast.makeText(activityGameBlackJack.this, "Player BlackJack", Toast.LENGTH_SHORT).show();
+                cash += currentBet*1.5;
+                player.addToBalance(cash);
+                gameMsg = Toast.makeText(activityGameBlackJack.this, "Player BlackJack", Toast.LENGTH_SHORT);
+                gameMsg.setGravity(Gravity.CENTER,0,0);
+                gameMsg.show();
                 break;
             case WIN:
-                Toast.makeText(activityGameBlackJack.this, "Player Win", Toast.LENGTH_SHORT).show();
+                cash += currentBet;
+                player.addToBalance(cash);
+                gameMsg = Toast.makeText(activityGameBlackJack.this, "Player Win", Toast.LENGTH_SHORT);
+                gameMsg.setGravity(Gravity.CENTER,0,0);
+                gameMsg.show();
                 break;
             case TIE:
-                Toast.makeText(activityGameBlackJack.this, "Push", Toast.LENGTH_SHORT).show();
+                gameMsg = Toast.makeText(activityGameBlackJack.this, "Tie", Toast.LENGTH_SHORT);
+                gameMsg.setGravity(Gravity.CENTER,0,0);
+                gameMsg.show();
                 break;
             case LOSE:
-                Toast.makeText(activityGameBlackJack.this, "Dealer Win", Toast.LENGTH_SHORT).show();
+                cash -= currentBet;
+                player.addToBalance(cash);
+                gameMsg = Toast.makeText(activityGameBlackJack.this, "Dealer Win", Toast.LENGTH_SHORT);
+                gameMsg.setGravity(Gravity.CENTER,0,0);
+                gameMsg.show();
                 break;
         }
+
+        // Set mew maximum bet; Player cannot bet more than available funds
+        sbBet.setMax(player.getBalance());
+        tvBalance.setText("Balance: $"+player.getBalance()); // Update player balance TextView
     }
 
     public void dealerPlay() {
@@ -347,6 +416,9 @@ public class activityGameBlackJack extends AppCompatActivity {
         tvPlayerScore.setText(playerHandValue);
         if (dealer.getHand().getNumOfCardsInHand() > 2) {
             dealerHandValue = "Dealer Score: " + dealer.getHand().getHandValue();
+            tvDealerScore.setText(dealerHandValue);
+        } else {
+            dealerHandValue = "Dealer Score: " + dealer.getHand().getCard(0).getValue();
             tvDealerScore.setText(dealerHandValue);
         }
 

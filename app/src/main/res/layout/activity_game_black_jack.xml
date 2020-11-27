@@ -217,12 +217,22 @@
                 android:layout_gravity="center"
                 android:textColor="@color/white"
                 android:text="Current Bet" />
+
             <SeekBar
-                android:id="@+id/seekBar"
+                android:id="@+id/sbBet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_alignParentBottom="true"/>
+
+            <TextView
+                android:id="@+id/tvBalance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:text="Balance: " />
+
     </LinearLayout>
 
 </RelativeLayout>

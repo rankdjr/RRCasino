@@ -36,6 +36,10 @@ public class Player {
         return balance;
     }
 
+    public void addToBalance(float cash) {
+        balance += cash;
+    }
+
     public void addCardToHand(DeckHandler.Card card)
     {
         this.hand.addCard(card);
