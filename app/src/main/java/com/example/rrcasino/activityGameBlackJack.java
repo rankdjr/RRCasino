@@ -2,7 +2,7 @@ package com.example.rrcasino;
 
 /**
  * Created by Doug
- *
+ * Main activity file
  */
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -60,27 +60,27 @@ public class activityGameBlackJack extends AppCompatActivity {
         setContentView(R.layout.activity_game_black_jack);
 
         // Assign TextView IDs from XML
-        tvPlayerScore = (TextView)findViewById(R.id.playerScore);
-        tvDealerScore = (TextView)findViewById(R.id.dealerScore);
-        //tvLastCard = (TextView)findViewById(R.id.inHand); //debug only
+        tvPlayerScore = findViewById(R.id.playerScore);
+        tvDealerScore = findViewById(R.id.dealerScore);
+        //tvLastCard = findViewById(R.id.inHand); //debug only
 
         // Assign ImageView IDs from XML
-        this.pCard1 = (ImageView) findViewById(R.id.pCard1);
-        this.pCard2 = (ImageView) findViewById(R.id.pCard2);
-        this.pCard3 = (ImageView) findViewById(R.id.pCard3);
-        this.pCard4 = (ImageView) findViewById(R.id.pCard4);
-        this.pCard5 = (ImageView) findViewById(R.id.pCard5);
+        this.pCard1 = findViewById(R.id.pCard1);
+        this.pCard2 = findViewById(R.id.pCard2);
+        this.pCard3 = findViewById(R.id.pCard3);
+        this.pCard4 = findViewById(R.id.pCard4);
+        this.pCard5 = findViewById(R.id.pCard5);
         playerCardImages = new ImageView[] {pCard1, pCard2, pCard3, pCard4, pCard5};
-        this.dCard1 = (ImageView) findViewById(R.id.dCard1);
-        this.dCard2 = (ImageView) findViewById(R.id.dCard2);
-        this.dCard3 = (ImageView) findViewById(R.id.dCard3);
-        this.dCard4 = (ImageView) findViewById(R.id.dCard4);
-        this.dCard5 = (ImageView) findViewById(R.id.dCard5);
+        this.dCard1 = findViewById(R.id.dCard1);
+        this.dCard2 = findViewById(R.id.dCard2);
+        this.dCard3 = findViewById(R.id.dCard3);
+        this.dCard4 = findViewById(R.id.dCard4);
+        this.dCard5 = findViewById(R.id.dCard5);
         dealerCardImages = new ImageView[] {dCard1, dCard2, dCard3, dCard4, dCard5};
         // Assign button IDs from XML and set onclick Listeners
-        this.hitButton = (Button) findViewById(R.id.hitButton);
-        this.stayButton = (Button) findViewById(R.id.stayButton);
-        this.confirmButton = (Button) findViewById(R.id.confirmButton);
+        this.hitButton = findViewById(R.id.hitButton);
+        this.stayButton = findViewById(R.id.stayButton);
+        this.confirmButton = findViewById(R.id.confirmButton);
         this.hitButton.setOnClickListener(handleClick);
         this.stayButton.setOnClickListener(handleClick);
         this.confirmButton.setOnClickListener(handleClick);
@@ -103,7 +103,6 @@ public class activityGameBlackJack extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.hitButton:
-                    confirmButton.setEnabled(false); // Disable bet setter after play has started
                     dealer.dealCard(player,deck);
                     setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
                     if (player.getHand().getHandValue() > 21 || player.getHand().getNumOfCardsInHand() == maxCardsInHand)
@@ -116,6 +115,7 @@ public class activityGameBlackJack extends AppCompatActivity {
                     updateScore();
                     break;
                 case R.id.confirmButton:
+                    confirmButton.setEnabled(false); // Disable bet setter after play has started
                     startRound();
                     break;
             }
@@ -228,7 +228,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         dealer.dealCard(dealer, deck);
         setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-        if (dealer.getHand().getHandValue() > 9)
+        if (dealer.getHand().getHandValue() > 9) // Update flag to check dealer natural
             dealerCheckNatural = true;
 
         // Deal second card
@@ -237,17 +237,13 @@ public class activityGameBlackJack extends AppCompatActivity {
         dealer.dealCard(dealer, deck);
         setImageResource('d',0, cardFaceDown);
 
-        // CheckNatural: If Dealer's first card is face card, check for BlackJack and endRound if true
-        // else peek card and continue play
+        // CheckNatural: If Dealer's first card is face card, check for BlackJack and endRound if true, else continue play
         if (dealerCheckNatural && dealer.getHand().getHandValue() == 21) {
             setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
             Toast.makeText(activityGameBlackJack.this, "Dealer Natural", Toast.LENGTH_SHORT).show(); // debug - delete after
             endRound();
-        } else {
-            setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-        }
-        // Check player natural
-        if (player.getHand().getHandValue() == 21) {
+        } else if (player.getHand().getHandValue() == 21) {
+            // Check player natural
             Toast.makeText(activityGameBlackJack.this, "Player Natural", Toast.LENGTH_SHORT).show(); // debug - delete after
             endRound();
         }
@@ -265,18 +261,29 @@ public class activityGameBlackJack extends AppCompatActivity {
     }
 
     public void dealerPlay() {
+        /* Dealer flips second card.
+         * Dealer hits on soft 17 (Ace and 6 in hand)
+         * Dealer hits if hand value is below 17.
+         */
+
         // Reveal second card
         setImageResource('d', 2, dealer.getHand().getCard(1).getImageSource());
-        // If soft 16 then hit
-        if (dealer.getHand().getHandValue() == 16 && dealer.getHand().getNumOfCardsInHand() == 2) {
+        // Hit on soft 17
+        if (dealer.getHand().getHandValue() == 17 && dealer.getHand().getAcesInHand() == 1) {
             dealer.dealCard(dealer, deck);
             setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         }
         // Dealer hits if below 16
-        while (dealer.getHand().getHandValue() < 16 && dealer.getHand().getNumOfCardsInHand() < maxCardsInHand) {
+        while (dealer.getHand().getHandValue() < 17 && dealer.getHand().getNumOfCardsInHand() < maxCardsInHand) {
             dealer.dealCard(dealer, deck);
             setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         }
+    }
+
+    public gameResult checkWin() {
+        gameResult result= null;
+
+        return result;
     }
 
     public void updateScore() {

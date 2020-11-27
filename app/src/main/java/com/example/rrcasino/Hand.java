@@ -50,6 +50,11 @@ public class Hand {
         return this.hand.size();
     }
 
+    public int getAcesInHand()
+    {
+        return acesInHand;
+    }
+
     public void addCard(DeckHandler.Card card)
     {
         this.hand.add(card);
