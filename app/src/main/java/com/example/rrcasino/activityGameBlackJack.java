@@ -63,9 +63,9 @@ public class activityGameBlackJack extends AppCompatActivity {
     private DeckHandler.Shoe deck;
     private Dealer dealer;
     private Player player;
+    private boolean dealerPlayed;
     private int currentBet;
     private int minBet = 10;
-    private int maxBet = 10000;
     private enum gameResult { BLACKJACK, WIN, LOSE, TIE }
     private boolean isRoundOver = false; // Needed in updateScore method
     private String cardFaceDown = "b2fv";
@@ -301,6 +301,7 @@ public class activityGameBlackJack extends AppCompatActivity {
          * 5. Deal cards, and check for natural win
          */
 
+        dealerPlayed = false;
         // Update usable buttons
         hitButton.setEnabled(true);
         stayButton.setEnabled(true);
@@ -366,7 +367,6 @@ public class activityGameBlackJack extends AppCompatActivity {
         doubleButton.setEnabled(false);
         splitButton.setEnabled(false);
         confirmButton.setEnabled(true);
-        updateScore();
 
         float cash = 0;
         Toast gameMsg;
@@ -403,6 +403,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         sbBet.setMax(player.getBalance());
         tvBalance.setText("Balance: $"+player.getBalance()); // Update player balance TextView
         sbBet.setEnabled(true);
+        updateScore();
     }
 
     private void dealerPlay() {
@@ -423,6 +424,7 @@ public class activityGameBlackJack extends AppCompatActivity {
             dealer.dealCard(dealer, deck);
             setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         }
+        dealerPlayed = true;
     }
 
     private void splitHand() {
@@ -466,11 +468,11 @@ public class activityGameBlackJack extends AppCompatActivity {
     private void updateScore() {
         playerHandValue = "Player Score: " + player.getHand().getHandValue();
         tvPlayerScore.setText(playerHandValue);
-        if (dealer.getHand().getNumOfCardsInHand() > 2) {
+
+        if (dealer.getHand().getNumOfCardsInHand() > 2 || dealerPlayed)
             dealerHandValue = "Dealer Score: " + dealer.getHand().getHandValue();
-        } else {
+        else
             dealerHandValue = "Dealer Score: " + dealer.getHand().getCard(0).getValue();
-        }
         tvDealerScore.setText(dealerHandValue);
 
         /*
