@@ -9,14 +9,24 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="16dp"
-    tools:context=".gameBlackJack">
+    tools:context=".activityGameBlackJack">
 
-    !--  -->
-
+    !-- Card Layouts -->
     <LinearLayout
-        android:layout_width="395dp"
-        android:layout_height="555dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <!-- Dealer Score TextView -->
+        <TextView
+            android:id="@+id/dealerScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="10dp"
+            android:text="Score" />
 
         <!-- Dealer Cards -->
         <LinearLayout
@@ -25,14 +35,35 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/dcard1"
+                android:id="@+id/dCard1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
             <ImageView
-                android:id="@+id/dcard2"
+                android:id="@+id/dCard2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/b2fv" />
+
+            <ImageView
+                android:id="@+id/dCard3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/b2fv" />
+
+            <ImageView
+                android:id="@+id/dCard4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/b2fv" />
+
+            <ImageView
+                android:id="@+id/dCard5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -40,55 +71,226 @@
 
         </LinearLayout>
 
-        <!-- Player Cards -->
+        <!-- Player Split Hand Score TextView -->
+        <TextView
+            android:id="@+id/playerSplitScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="10dp"
+            android:alpha="0"
+            android:text="Score" />
+
+        <!-- Player Split Hand -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/pcard1"
+                android:id="@+id/sCard1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/c2" />
+                android:alpha="0"
+                app:srcCompat="@drawable/b2fv" />
 
             <ImageView
-                android:id="@+id/pcard2"
+                android:id="@+id/sCard2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/c14" />
+                android:alpha="0"
+                app:srcCompat="@drawable/b2fv" />
+
+            <ImageView
+                android:id="@+id/sCard3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:alpha="0"
+                app:srcCompat="@drawable/b2fv" />
+
+            <ImageView
+                android:id="@+id/sCard4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:alpha="0"
+                app:srcCompat="@drawable/b2fv" />
+
+            <ImageView
+                android:id="@+id/sCard5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:alpha="0"
+                app:srcCompat="@drawable/b2fv" />
 
         </LinearLayout>
+
+        <!-- Player Main Hand Score TextView -->
+        <TextView
+            android:id="@+id/playerScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="10dp"
+            android:text="Score" />
+
+        <!-- Player Main Hand -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/pCard1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/b2fv" />
+
+            <ImageView
+                android:id="@+id/pCard2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/b2fv" />
+
+            <ImageView
+                android:id="@+id/pCard3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/b2fv" />
+
+            <ImageView
+                android:id="@+id/pCard4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/b2fv" />
+
+            <ImageView
+                android:id="@+id/pCard5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/b2fv" />
+
+        </LinearLayout>
+
+        <!-- Debug TextViews
+            <TextView
+                android:id="@+id/inHand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@color/white"
+                android:text="LastCard" /> -->
+
     </LinearLayout>
 
-    <!-- Button layout -->
+    <!-- Button and Bet Layout-->
     <LinearLayout
-        android:layout_width="178dp"
-        android:layout_height="106dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="0dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
+        <!-- Confirm Button -->
         <Button
-            android:id="@+id/hitButton"
+            android:id="@+id/confirmButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerHorizontal = "true"
+            android:text="Deal" />
+
+        <!-- Hit/Stay Button layout -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:backgroundTint="@color/cardview_dark_background"
-            android:layout_marginRight="10dp"
-            android:text="Hit" />
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/stayButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:text="Stay" />
+            <Button
+                android:id="@+id/doubleButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:text="Double" />
+
+            <Button
+                android:id="@+id/hitButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:text="Hit" />
+
+            <Button
+                android:id="@+id/stayButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:text="Stay" />
+
+            <Button
+                android:id="@+id/splitButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:text="Split" />
+        </LinearLayout>
+
+        <!-- Set player bet layout -->
+            <TextView
+                android:id="@+id/betBanner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:text="Bet" />
+            <TextView
+                android:id="@+id/tvBet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:text="Current Bet" />
+
+            <SeekBar
+                android:id="@+id/sbBet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_alignParentBottom="true"/>
+
+            <TextView
+                android:id="@+id/tvBalance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:text="Balance: " />
+
     </LinearLayout>
+
 </RelativeLayout>

@@ -20,7 +20,7 @@ public class gameSelection extends AppCompatActivity {
         bJackImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentLoadGameBJack = new Intent (gameSelection.this, gameBlackJack.class);
+                Intent intentLoadGameBJack = new Intent (gameSelection.this, activityGameBlackJack.class);
                 startActivity(intentLoadGameBJack);
             }
         });
