@@ -202,12 +202,14 @@ public class activityGameBlackJack extends AppCompatActivity {
                     else
                         setImageResource('s',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
 
-                    // Check for bust and max card limit
-                    if ((player.getHand().getHandValue() > 21 || player.getHand().getNumOfCardsInHand() == maxCardsInHand) && player.getNumOfHandsInPlay() == 1) {
-                        // Display toast message for player bust
-                        Toast gameMsg = Toast.makeText(activityGameBlackJack.this, "Bust", Toast.LENGTH_SHORT);
-                        gameMsg.setGravity(Gravity.CENTER,0,0);
-                        gameMsg.show();
+                    // Check for BJ or bust and max card limit
+                    if ((player.getHand().getHandValue() >= 21 || player.getHand().getNumOfCardsInHand() == maxCardsInHand) && player.getNumOfHandsInPlay() == 1) {
+                        if (player.getHand().checkBust()) {
+                            // Display toast message if player bust
+                            Toast gameMsg = Toast.makeText(activityGameBlackJack.this, "Bust", Toast.LENGTH_SHORT);
+                            gameMsg.setGravity(Gravity.CENTER, 0, 0);
+                            gameMsg.show();
+                        }
 
                         // Player busted and this is the only hand in play --> end round
                         currRoundData.setHandTotal(player.getHand().getHandValue());
@@ -215,11 +217,13 @@ public class activityGameBlackJack extends AppCompatActivity {
                         roundDataArrayList.add(currRoundData);
                         endRound();
                     }
-                    else if ((player.getHand().getHandValue() > 21 || player.getHand().getNumOfCardsInHand() == maxCardsInHand) && player.getNumOfHandsInPlay() > 1){
-                        // Display toast message for player bust
-                        Toast gameMsg = Toast.makeText(activityGameBlackJack.this, "Bust", Toast.LENGTH_SHORT);
-                        gameMsg.setGravity(Gravity.CENTER,0,0);
-                        gameMsg.show();
+                    else if ((player.getHand().getHandValue() >= 21 || player.getHand().getNumOfCardsInHand() == maxCardsInHand) && player.getNumOfHandsInPlay() > 1){
+                        if (player.getHand().checkBust()) {
+                            // Display toast message if player bust
+                            Toast gameMsg = Toast.makeText(activityGameBlackJack.this, "Bust", Toast.LENGTH_SHORT);
+                            gameMsg.setGravity(Gravity.CENTER, 0, 0);
+                            gameMsg.show();
+                        }
 
                         // Player busted but hand is split --> save round data, retrieve next hand, and deal first card to next hand
                         currRoundData.setHandTotal(player.getHand().getHandValue());
