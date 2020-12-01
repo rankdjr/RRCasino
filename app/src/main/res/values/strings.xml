@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RRsCasino</string>
+    <string name="helpTitle">Help Menu</string>
+    <string name="helpDescription">What would you like to know about?</string>
 </resources>

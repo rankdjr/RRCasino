@@ -9,8 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RRsCasino">
-        <activity android:name=".activityGameBlackJack"></activity>
-        <activity android:name=".activityGameBlackJack" />
+        <activity android:name=".activityGameBlackJack"/>
         <activity android:name=".gameSelection" />
         <activity android:name=".MainActivity" />
         <activity android:name=".Splash">
