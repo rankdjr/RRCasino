@@ -1,6 +1,6 @@
 package com.example.rrcasino;
 
-/**
+/*
  * Created by Doug
  * Main activity file
  */
@@ -19,9 +19,45 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class activityGameBlackJack extends AppCompatActivity {
+    // Game Variables
+    enum gameResult {BLACKJACK, WIN, LOSE, TIE}
+    DeckHandler.Shoe deck;
+    Dealer dealer;
+    Player player;
+    ArrayList<roundData> roundDataArrayList;
+    roundData currRoundData;
+    boolean dealerPlayed;
+    boolean playingSplit = false;
+    int currentBet;
+    final int minBet = 10;
+    final String cardFaceDown = "b2fv";
+    final int maxCardsInHand = 5;
+    String lastCard = "Last Card Info\n\n";  // var for debug purposes only; displays total value of cards in hand
+    // Round Data
+    static class roundData {
+        private Integer handTotal;
+        private Integer bet;
+
+        // constructor
+        public roundData(Integer bet, Integer handTotal) {
+            this.bet = bet;
+            this.handTotal = handTotal;
+        }
+
+        // getter
+        public int getBet() { return bet; }
+        public int getHandTotal() { return handTotal; }
+        // setter
+        public void setBet(int bet) { this.bet = bet; }
+        public void setHandTotal(int handTotal) { this.handTotal = handTotal; }
+    }
+
     // TextViews
     private TextView tvPlayerScore;
+    private TextView tvPlayerSplitScore;
     private TextView tvDealerScore;
     private TextView tvBet;
     private TextView tvBalance;
@@ -56,23 +92,8 @@ public class activityGameBlackJack extends AppCompatActivity {
     private ImageView[] playerCardImages;
     private ImageView[] playerSplitCardImages;
     private ImageView[] dealerCardImages;
-    private float transparent = 0;
-    private float opaque = 1;
-
-    // Game variables
-    private DeckHandler.Shoe deck;
-    private Dealer dealer;
-    private Player player;
-    private boolean dealerPlayed;
-    private int currentBet;
-    private int minBet = 10;
-    private enum gameResult { BLACKJACK, WIN, LOSE, TIE }
-    private boolean isRoundOver = false; // Needed in updateScore method
-    private String cardFaceDown = "b2fv";
-    private String playerHandValue = "";
-    private String dealerHandValue = "";
-    private int maxCardsInHand = 5;
-    String lastCard = "Last Card Info\n\n";  // var for debug purposes only; displays total value of cards in hand
+    private final float transparent = 0;
+    private final float opaque = 1;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -81,8 +102,9 @@ public class activityGameBlackJack extends AppCompatActivity {
         setContentView(R.layout.activity_game_black_jack);
 
         // Assign TextView IDs from XML
-        tvPlayerScore = findViewById(R.id.playerScore);
-        tvDealerScore = findViewById(R.id.dealerScore);
+        tvPlayerScore = findViewById(R.id.tvPlayerScore);
+        tvPlayerSplitScore = findViewById(R.id.tvPlayerSplitScore);
+        tvDealerScore = findViewById(R.id.tvDealerScore);
         tvBet = findViewById(R.id.tvBet);
         tvBalance = findViewById(R.id.tvBalance);
         //tvLastCard = findViewById(R.id.inHand); //debug only
@@ -128,7 +150,6 @@ public class activityGameBlackJack extends AppCompatActivity {
         sbBet.setMin(minBet); //$10
         sbBet.setMax(100); // Place holder until player has initiated starting funds
         sbBet.setProgress(minBet); //Default starting value of SeekBar to minimum bet
-
         sbBet.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChangedValue = 0;
             @Override
@@ -151,7 +172,8 @@ public class activityGameBlackJack extends AppCompatActivity {
         // Initialize new game
         this.deck = new DeckHandler.Shoe();
         this.dealer = new Dealer("DEALER", 0);
-        this.player = new Player("Player 1", 100);
+        this.player = new Player("Player 1", 500);
+        this.roundDataArrayList = new ArrayList<>();
         tvBalance.setText("Balance: $"+player.getBalance());
         currentBet = sbBet.getProgress(); //Set starting bet to default SeekBar value ($10)
         tvBet.setText("$"+currentBet);
@@ -168,33 +190,86 @@ public class activityGameBlackJack extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.hitButton:
-                    splitButton.setEnabled(false); // Disable in case of player choosing not to split off deal
-                    dealer.dealCard(player,deck);
-                    setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-                    if (player.getHand().getHandValue() > 21 || player.getHand().getNumOfCardsInHand() == maxCardsInHand)
-                        endRound();
+                    // Update usable buttons
+                    splitButton.setEnabled(false); // Disable split button while playing
+                    doubleButton.setEnabled(false); // Disable split button while playing
+
+                    // Deal card, update game display and current round data
+                    dealer.dealCard(player, deck);
                     updateScore();
+                    if (!playingSplit)
+                        setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+                    else
+                        setImageResource('s',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+
+                    // Check for bust and max card limit
+                    if ((player.getHand().getHandValue() > 21 || player.getHand().getNumOfCardsInHand() == maxCardsInHand) && player.getNumOfHandsInPlay() == 1) {
+                        // Display toast message for player bust
+                        Toast gameMsg = Toast.makeText(activityGameBlackJack.this, "Bust", Toast.LENGTH_SHORT);
+                        gameMsg.setGravity(Gravity.CENTER,0,0);
+                        gameMsg.show();
+
+                        // Player busted and this is the only hand in play --> end round
+                        currRoundData.setHandTotal(player.getHand().getHandValue());
+                        currRoundData.setBet(currentBet);
+                        roundDataArrayList.add(currRoundData);
+                        endRound();
+                    }
+                    else if ((player.getHand().getHandValue() > 21 || player.getHand().getNumOfCardsInHand() == maxCardsInHand) && player.getNumOfHandsInPlay() > 1){
+                        // Display toast message for player bust
+                        Toast gameMsg = Toast.makeText(activityGameBlackJack.this, "Bust", Toast.LENGTH_SHORT);
+                        gameMsg.setGravity(Gravity.CENTER,0,0);
+                        gameMsg.show();
+
+                        // Player busted but hand is split --> save round data, retrieve next hand, and deal first card to next hand
+                        currRoundData.setHandTotal(player.getHand().getHandValue());
+                        currRoundData.setBet(currentBet);
+                        roundDataArrayList.add(currRoundData);
+                        player.getHand().clearHand();
+                        player.setHand(player.getNextHand());
+                        playingSplit = true;
+                        dealer.dealCard(player, deck);
+                        setImageResource('s',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+                        updateScore();
+                    }
                     break;
                 case R.id.stayButton:
-                    splitButton.setEnabled(false); // Disable after initial click
-                    dealerPlay();
-                    endRound();
-                    updateScore();
+                    // Update usable buttons
+                    splitButton.setEnabled(false); // Disable if player does not split
+
+                    currRoundData.setHandTotal(player.getHand().getHandValue());
+                    currRoundData.setBet(currentBet);
+                    roundDataArrayList.add(currRoundData);
+                    if (player.getNumOfHandsInPlay() == 1) {
+                        // Player stayed with on final in hand in round --> pass game logic to dealer and end round
+                        dealerPlay();
+                        endRound();
+                    } else {
+                        // Player has more than one hand in play --> retrieve next hand
+                        player.getHand().clearHand();
+                        player.setHand(player.getNextHand());
+                        dealer.dealCard(player, deck);
+                        setImageResource('s',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+                        playingSplit = true;
+                        updateScore();
+                    }
                     break;
                 case R.id.confirmButton:
+                    // Deal new round
                     confirmButton.setEnabled(false); // Disable after initial click
                     sbBet.setEnabled(false); // Disable changes to betting after deal
                     startRound();
                     break;
                 case R.id.doubleButton:
+                    // Double bet amount and save current bet to round data
                     doubleButton.setEnabled(false); // Disable after initial click
-                    sbBet.setEnabled(false);
-                    currentBet = currentBet+sbBet.getProgress();
+                    sbBet.setEnabled(false); // Disable changes to betting after deal
+                    currentBet = currentBet*2;
                     tvBet.setText("$"+currentBet);
+                    currRoundData.setBet(currentBet);
                     break;
                 case R.id.splitButton:
                     splitButton.setEnabled(false); // Disable after initial click
-                    //TODO: split player hand to two hands
                     splitHand();
                     break;
             }
@@ -308,6 +383,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         confirmButton.setEnabled(false);
         doubleButton.setEnabled(false);
         splitButton.setEnabled(false);
+        tvPlayerSplitScore.setAlpha(transparent);
         // Loop through participant hands and set to all cards to null card
         for (int i = 1; i <= maxCardsInHand; i++) {
             setImageResource('p', i, cardFaceDown);
@@ -323,7 +399,11 @@ public class activityGameBlackJack extends AppCompatActivity {
         if (dealer.getHand().getHandValue()>0)
             dealer.returnCards();
 
+        currentBet = sbBet.getProgress();
+
+        //Deal cards, update score, and save current round data
         newDeal();
+        currRoundData = new roundData(currentBet, player.getHand().getHandValue());
         updateScore();
     }
 
@@ -338,18 +418,37 @@ public class activityGameBlackJack extends AppCompatActivity {
         dealer.dealCard(player,deck);
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         // Check for Player BlackJack
-        if (player.getHand().getHandValue() == 21)
+        if (player.getHand().getHandValue() == 21) {
+            currRoundData.setHandTotal(player.getHand().getHandValue());
+            currRoundData.setBet(currentBet);
+            roundDataArrayList.add(currRoundData);
             endRound();
+        }
 
         // Deal second Dealer card
         dealer.dealCard(dealer, deck);
         // Check for Dealer BlackJack and show card if true
         if (dealer.getHand().getHandValue() == 21) {
             setImageResource('d', dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+            currRoundData.setHandTotal(player.getHand().getHandValue());
+            currRoundData.setBet(currentBet);
+            roundDataArrayList.add(currRoundData);
             endRound();
         } else {
             setImageResource('d', dealer.getHand().getNumOfCardsInHand(), cardFaceDown);
         }
+/**
+        //Remove below code after done debugging split hand functionality
+        DeckHandler.Card card1 = new DeckHandler.Card(1,2, "c1_2");
+        DeckHandler.Card card2 = new DeckHandler.Card(3,2, "c3_2");
+        player.getHand().clearHand();
+        player.getHand().addCard(card1);
+        player.getHand().addCard(card2);
+        setImageResource('p', 1, card1.getImageSource());
+        setImageResource('p', 2, card2.getImageSource());
+        //End of debug
+ */
+
 
         // Enable split button if player has cards of same rank
         if (player.getHand().getCard(0).getRank() == player.getHand().getCard(1).getRank())
@@ -367,43 +466,61 @@ public class activityGameBlackJack extends AppCompatActivity {
         doubleButton.setEnabled(false);
         splitButton.setEnabled(false);
         confirmButton.setEnabled(true);
+        playingSplit = false;
 
-        float cash = 0;
+
+        // TODO: Set messages to display in center of screen
         Toast gameMsg;
-        switch (checkWin()) {
-            case BLACKJACK:
-                cash += currentBet*1.5;
-                player.addToBalance(cash);
-                gameMsg = Toast.makeText(activityGameBlackJack.this, "Player BlackJack", Toast.LENGTH_SHORT);
-                gameMsg.setGravity(Gravity.CENTER,0,0);
-                gameMsg.show();
-                break;
-            case WIN:
-                cash += currentBet;
-                player.addToBalance(cash);
-                gameMsg = Toast.makeText(activityGameBlackJack.this, "Player Win", Toast.LENGTH_SHORT);
-                gameMsg.setGravity(Gravity.CENTER,0,0);
-                gameMsg.show();
-                break;
-            case TIE:
-                gameMsg = Toast.makeText(activityGameBlackJack.this, "Tie", Toast.LENGTH_SHORT);
-                gameMsg.setGravity(Gravity.CENTER,0,0);
-                gameMsg.show();
-                break;
-            case LOSE:
-                cash -= currentBet;
-                player.addToBalance(cash);
-                gameMsg = Toast.makeText(activityGameBlackJack.this, "Dealer Win", Toast.LENGTH_SHORT);
-                gameMsg.setGravity(Gravity.CENTER,0,0);
-                gameMsg.show();
-                break;
+        while (roundDataArrayList.size() > 0) {
+            /**
+            //Remove toast debugs
+            gameMsg = Toast.makeText(activityGameBlackJack.this, "Round: "+roundDataArrayList.size(), Toast.LENGTH_SHORT);
+            gameMsg.setGravity(Gravity.CENTER, 0, 0);
+            gameMsg.show();
+            //end of above debug
+             */
+
+            double cash = 0;
+            roundData thisRound = roundDataArrayList.remove(0);
+            gameResult roundResult = checkWin(thisRound.getHandTotal());
+            switch (roundResult) {
+                case BLACKJACK:
+                    cash = thisRound.getBet() * 1.5;
+                    player.addToBalance(cash);
+                    gameMsg = Toast.makeText(activityGameBlackJack.this, "Player BlackJack", Toast.LENGTH_SHORT);
+                    gameMsg.setGravity(Gravity.CENTER, 0, 0);
+                    gameMsg.show();
+                    break;
+                case WIN:
+                    cash = thisRound.getBet();
+                    player.addToBalance(cash);
+                    gameMsg = Toast.makeText(activityGameBlackJack.this, "Player Win", Toast.LENGTH_SHORT);
+                    gameMsg.setGravity(Gravity.CENTER, 0, 0);
+                    gameMsg.show();
+                    break;
+                case TIE:
+                    gameMsg = Toast.makeText(activityGameBlackJack.this, "Tie", Toast.LENGTH_SHORT);
+                    gameMsg.setGravity(Gravity.CENTER, 0, 0);
+                    gameMsg.show();
+                    break;
+                case LOSE:
+                    cash = thisRound.getBet()*-1;
+                    player.addToBalance(cash);
+                    gameMsg = Toast.makeText(activityGameBlackJack.this, "Dealer Win", Toast.LENGTH_SHORT);
+                    gameMsg.setGravity(Gravity.CENTER, 0, 0);
+                    gameMsg.show();
+                    break;
+            }
+            sbBet.setMax((int) player.getBalance());
+            tvBalance.setText("Balance: $"+player.getBalance()); // Update player balance TextView
         }
 
-        // Set mew maximum bet; Player cannot bet more than available funds
-        sbBet.setMax(player.getBalance());
-        tvBalance.setText("Balance: $"+player.getBalance()); // Update player balance TextView
         sbBet.setEnabled(true);
         updateScore();
+
+        // TODO: Game over if player balance is less than minimum bet
+        //if (player.getBalance() < minBet)
+            //gameOver();
     }
 
     private void dealerPlay() {
@@ -428,16 +545,23 @@ public class activityGameBlackJack extends AppCompatActivity {
     }
 
     private void splitHand() {
-        //split current hand
-        player.splitHand(player.getHand());
-        setImageResource('p',2, cardFaceDown);
+        /* Splits current hand:
+         * Calls player.splitHand() which removes the second card in the player current hand
+         * and adds it to a new hand, and updates game display.
+         * Note that player.splitHand() returns the card that was split
+         * A new card is dealt to the current hand at the close of the function
+         */
+        DeckHandler.Card splitCard;
+        splitCard = player.splitHand();
         playerCardImages[1].setAlpha(transparent);
-        setImageResource('s',player.getSplitHand().getNumOfCardsInHand(), player.getSplitHand().getCard(0).getImageSource());
-
-
+        setImageResource('s',1, splitCard.getImageSource());
+        // Deal to current hand after split
+        dealer.dealCard(player, deck);
+        setImageResource('p', player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+        updateScore();
     }
 
-    private gameResult checkWin() {
+    private gameResult checkWin(int playerHandTotal) {
         /* Function checks for win conditions on current hand values
          * Checks for Player BlackJack and pays 1.5x bet amount, returns BLACKJACK
          * If player busts, returns LOSE
@@ -448,7 +572,7 @@ public class activityGameBlackJack extends AppCompatActivity {
 
         gameResult result;
 
-        int playerHandValue = player.getHand().getHandValue();
+        int playerHandValue = playerHandTotal;
         int dealerHandValue = dealer.getHand().getHandValue();
 
         if (playerHandValue == 21 && dealer.getHand().getNumOfCardsInHand() == 1)
@@ -466,10 +590,16 @@ public class activityGameBlackJack extends AppCompatActivity {
     }
 
     private void updateScore() {
+        String playerHandValue = "";
+        String dealerHandValue = "";
         playerHandValue = "Player Score: " + player.getHand().getHandValue();
-        tvPlayerScore.setText(playerHandValue);
-
-        if (dealer.getHand().getNumOfCardsInHand() > 2 || dealerPlayed)
+        if (!playingSplit) {
+            tvPlayerScore.setText(playerHandValue);
+        } else {
+            tvPlayerSplitScore.setAlpha(opaque);
+            tvPlayerSplitScore.setText(playerHandValue);
+        }
+        if (dealer.getHand().getNumOfCardsInHand() > 2 || dealerPlayed || dealer.getHand().getHandValue() == 21)
             dealerHandValue = "Dealer Score: " + dealer.getHand().getHandValue();
         else
             dealerHandValue = "Dealer Score: " + dealer.getHand().getCard(0).getValue();
@@ -485,4 +615,19 @@ public class activityGameBlackJack extends AppCompatActivity {
         tvLastCard.setText(lastCard);
          */
     }
+
+    private void gameOver() {
+        /*
+        // TODO: Game over if player balance is less than minimum bet
+        Toast gameMsg;
+        gameMsg = Toast.makeText(activityGameBlackJack.this, "GAME OVER", Toast.LENGTH_LONG);
+        gameMsg.setGravity(Gravity.CENTER,0,0);
+        gameMsg.show();
+
+        //Reset player balance to 100
+        player.addToBalance(100 + player.getBalance()*-1);
+        startRound();
+        */
+    }
+
 }
