@@ -35,7 +35,6 @@ public class activityGameBlackJack extends AppCompatActivity {
     final int minBet = 10;
     final String cardFaceDown = "b2fv";
     final int maxCardsInHand = 5;
-    String lastCard = "Last Card Info\n\n";  // var for debug purposes only; displays total value of cards in hand
 
     static class roundData {
         private Integer handTotal;
@@ -458,7 +457,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         if (player.getHand().getCard(0).getRank() == player.getHand().getCard(1).getRank())
             splitButton.setEnabled(true);
         // Enable double button if player score <= 11
-        if (player.getHand().getHandValue() < 12 && currentBet*2 > player.getBalance())
+        if (player.getHand().getHandValue() < 12 && player.getBalance() > currentBet*2)
             doubleButton.setEnabled(true);
 
     }
@@ -606,16 +605,6 @@ public class activityGameBlackJack extends AppCompatActivity {
         else
             dealerHandValue = "Dealer Score: " + dealer.getHand().getCard(0).getValue();
         tvDealerScore.setText(dealerHandValue);
-
-        /*
-        //debug purposes
-        lastCard = "Last Card Info\n\n";
-        lastCard += "Suit: " + dealer.getLastDealtCard().getSuit() + "\n";
-        lastCard += "Rank: " + dealer.getLastDealtCard().getRank() + "\n";
-        lastCard += "Val: " + dealer.getLastDealtCard().getValue() + "\n";
-        lastCard += "Src: " + dealer.getLastDealtCard().getImageSource();
-        tvLastCard.setText(lastCard);
-         */
     }
 
     private void gameOver() {
