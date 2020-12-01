@@ -36,7 +36,7 @@ public class activityGameBlackJack extends AppCompatActivity {
     final String cardFaceDown = "b2fv";
     final int maxCardsInHand = 5;
     String lastCard = "Last Card Info\n\n";  // var for debug purposes only; displays total value of cards in hand
-    // Round Data
+
     static class roundData {
         private Integer handTotal;
         private Integer bet;
@@ -172,7 +172,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         // Initialize new game
         this.deck = new DeckHandler.Shoe();
         this.dealer = new Dealer("DEALER", 0);
-        this.player = new Player("Player 1", 20);
+        this.player = new Player("Player 1", 500);
         this.roundDataArrayList = new ArrayList<>();
         tvBalance.setText("Balance: $"+player.getBalance());
         currentBet = sbBet.getProgress(); //Set starting bet to default SeekBar value ($10)
