@@ -172,7 +172,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         // Initialize new game
         this.deck = new DeckHandler.Shoe();
         this.dealer = new Dealer("DEALER", 0);
-        this.player = new Player("Player 1", 500);
+        this.player = new Player("Player 1", 20);
         this.roundDataArrayList = new ArrayList<>();
         tvBalance.setText("Balance: $"+player.getBalance());
         currentBet = sbBet.getProgress(); //Set starting bet to default SeekBar value ($10)
@@ -454,10 +454,9 @@ public class activityGameBlackJack extends AppCompatActivity {
         if (player.getHand().getCard(0).getRank() == player.getHand().getCard(1).getRank())
             splitButton.setEnabled(true);
         // Enable double button if player score <= 11
-        if (player.getHand().getHandValue() < 12) {
-            sbBet.setEnabled(true);
+        if (player.getHand().getHandValue() < 12 && currentBet*2 > player.getBalance())
             doubleButton.setEnabled(true);
-        }
+
     }
 
     private void endRound () {
@@ -518,9 +517,8 @@ public class activityGameBlackJack extends AppCompatActivity {
         sbBet.setEnabled(true);
         updateScore();
 
-        // TODO: Game over if player balance is less than minimum bet
-        //if (player.getBalance() < minBet)
-            //gameOver();
+        if (player.getBalance() < minBet)
+            gameOver();
     }
 
     private void dealerPlay() {
@@ -617,17 +615,19 @@ public class activityGameBlackJack extends AppCompatActivity {
     }
 
     private void gameOver() {
-        /*
-        // TODO: Game over if player balance is less than minimum bet
         Toast gameMsg;
         gameMsg = Toast.makeText(activityGameBlackJack.this, "GAME OVER", Toast.LENGTH_LONG);
-        gameMsg.setGravity(Gravity.CENTER,0,0);
+        gameMsg.setGravity(Gravity.TOP,0,0);
         gameMsg.show();
 
-        //Reset player balance to 100
-        player.addToBalance(100 + player.getBalance()*-1);
-        startRound();
-        */
+        String gameOverMsg = "Insufficient Funds";
+        tvPlayerScore.setText(gameOverMsg);
+
+        hitButton.setEnabled(false);
+        stayButton.setEnabled(false);
+        doubleButton.setEnabled(false);
+        splitButton.setEnabled(false);
+        confirmButton.setEnabled(false);
     }
 
 }
