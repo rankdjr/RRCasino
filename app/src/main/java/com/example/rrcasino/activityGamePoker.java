@@ -1,5 +1,6 @@
 package com.example.rrcasino;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -63,6 +64,7 @@ public class activityGamePoker extends AppCompatActivity {
     private String cardFaceDown = "b2fv";
 
 
+    @SuppressLint("WrongViewCast")
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,13 +155,14 @@ public class activityGamePoker extends AppCompatActivity {
                 case R.id.bet:
                     betAmount.setVisibility(View.VISIBLE);
                     playerBet.setVisibility(View.VISIBLE);
+
             }
 
         }
     };
     //show popup
     public void ShowPopup(View v) {
-        Button closepopup;
+        FloatingActionButton closepopup;
         myDialog.setContentView(R.layout.custompopup);
         closepopup = myDialog.findViewById(R.id.closepopup);
         closepopup.setOnClickListener(new View.OnClickListener() {
