@@ -1,6 +1,6 @@
 package com.example.rrcasino;
 
-/**
+/*
  * Created by Doug
  * Main activity file
  */
@@ -79,6 +79,7 @@ public class activityGameBlackJack extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_black_jack);
+        this.getSupportActionBar().hide();
 
         // Assign TextView IDs from XML
         tvPlayerScore = findViewById(R.id.playerScore);

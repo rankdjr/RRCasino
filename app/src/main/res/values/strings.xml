@@ -3,6 +3,13 @@
     <string name="app_name">RRsCasino</string>
     <string name="helpTitle">Help Menu</string>
     <string name="helpDescription">What would you like to know about?</string>
+    <string name="topics">Topics</string>
+    <string name="pokerHelpDescription">Learn the basics of our Poker App</string>
+    <string name="bjackHelpDescription">Learn the basics of our Blackjack App</string>
+    <string name="Overview">UI Overview</string>
+    <string name="HowToWin">How To Win</string>
+    <string name="Actions">Actions</string>
+
 
     <!--Interior XML Used Titles-->
     <string name="pokerImgButtonDesc">pokerButton</string>
