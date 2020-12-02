@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.32999998">
+        app:layout_constraintVertical_bias="0.49">
 
         <!-- Community Cards -->
         <LinearLayout
@@ -29,6 +29,7 @@
                 android:id="@+id/theflop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
@@ -36,6 +37,7 @@
                 android:id="@+id/theflopone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
@@ -43,6 +45,7 @@
                 android:id="@+id/thefloptwo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
@@ -50,6 +53,7 @@
                 android:id="@+id/theturn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
@@ -57,6 +61,7 @@
                 android:id="@+id/theriver"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
@@ -84,6 +89,7 @@
                 android:id="@+id/pcard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
@@ -91,6 +97,7 @@
                 android:id="@+id/pcardone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/b2fv" />
 
@@ -173,6 +180,7 @@
                 android:id="@+id/ccard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginRight="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/linearLayout"
                 app:layout_constraintStart_toStartOf="parent"
@@ -183,6 +191,7 @@
                 android:id="@+id/ccard1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginRight="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/linearLayout"
                 app:layout_constraintStart_toStartOf="parent"
@@ -221,6 +230,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -233,7 +243,6 @@
 
         <TextView
             android:id="@+id/betAmount"
-            android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:bufferType="spannable"
@@ -241,9 +250,10 @@
             android:soundEffectsEnabled="false"
             android:text="$"
             android:textColor="@color/white"
-            android:textSize="26sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:typeface="serif" />
+            android:typeface="serif"
+            android:visibility="invisible" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -265,6 +275,52 @@
             android:text="Deal Cards" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.110000014">
+
+        <TextView
+            android:id="@+id/pot"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:text="POT"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:typeface="serif" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.27"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout5"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9">
+
+        <TextView
+            android:id="@+id/playerBalance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:text="Balance"
+            android:textColor="#FF0000"
+            android:textColorHighlight="#0C0C0C"
+            android:textColorLink="#050505"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:typeface="serif" />
+    </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

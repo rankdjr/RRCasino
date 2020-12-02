@@ -31,6 +31,8 @@ public class activityGamePoker extends AppCompatActivity {
 
     //Text
     private TextView betAmount;
+    private TextView pot;
+    private TextView playerBalance;
 
     //Buttons
     private Button check;
@@ -59,8 +61,9 @@ public class activityGamePoker extends AppCompatActivity {
     private PokerDealer dealer;
     private Player player;
     private int currentBet;
-    private int minBet = 25;
-    private int startingFunds = 100;
+    private int buyIn = 50;
+    private int minBet = buyIn;
+    private int startingFunds = 10000;
     private String cardFaceDown = "b2fv";
 
 
@@ -77,11 +80,13 @@ public class activityGamePoker extends AppCompatActivity {
         //Initialize Seekbar
         this.playerBet = findViewById(R.id.playerBet);
         playerBet.setMin(minBet);
-        playerBet.setMax(150);
+        playerBet.setMax(100);
         playerBet.setProgress(minBet);
 
         //Text initialized
         this.betAmount = findViewById(R.id.betAmount);
+        this.pot = findViewById(R.id.pot);
+        this.playerBalance = findViewById(R.id.playerBalance);
 
         //Image views initialized
         this.theflop = findViewById(R.id.theflop);
@@ -113,12 +118,28 @@ public class activityGamePoker extends AppCompatActivity {
         bet.setOnClickListener(clicked);
         deal.setOnClickListener(clicked);
 
+
+        //Initialize New Game
+        this.deck = new DeckHandler.Deck();
+        this.dealer = new PokerDealer("dealer", 0);
+        this.player = new Player("player", startingFunds);
+        playerBalance.setText("Balance: $" + player.getBalance());
+        playerBet.setMax(player.getBalance());
+
+
+        //Handle All Listeners
+
         playerBet.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChangedValue = 0;
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
                 betAmount.setText("$"+progressChangedValue);
+                bet.setText("BET");
+                if(progressChangedValue == player.getBalance()){
+                    bet.setText("ALL IN");
+                }
+
                 //System.out.println(progressChangedValue);
 
             }
@@ -131,13 +152,9 @@ public class activityGamePoker extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 currentBet = progressChangedValue;
+
             }
         });
-
-        //Initialize New Game
-        this.deck = new DeckHandler.Deck();
-        this.dealer = new PokerDealer("dealer", 0);
-        this.player = new Player("player", 5000);
 
     }
     private View.OnClickListener clicked = new View.OnClickListener() {
@@ -151,16 +168,21 @@ public class activityGamePoker extends AppCompatActivity {
                 case R.id.deal:
                     //Disable the deal cards button
                     deal.setEnabled(false);
+                    startGame();
 
                 case R.id.bet:
                     betAmount.setVisibility(View.VISIBLE);
                     playerBet.setVisibility(View.VISIBLE);
+                    pot.setText("$"+currentBet);
+                    dealTheFlop();
+                    dealTheTurn();
 
             }
 
         }
     };
-    //show popup
+
+    //Show Help Popup
     public void ShowPopup(View v) {
         FloatingActionButton closepopup;
         myDialog.setContentView(R.layout.custompopup);
@@ -244,13 +266,17 @@ public class activityGamePoker extends AppCompatActivity {
         fold.setEnabled(true);
         check.setEnabled(true);
         call.setEnabled(true);
+        pot.setVisibility(View.VISIBLE);
         // Loop through participant hands and set to all cards to null card
         for (int i = 1; i <= 2; i++) {
             setImageResource('p', i, cardFaceDown);
             playerCardImages[i-1].setAlpha(transparent);
+
+        }
+        //Loop through community table cards and set to NUll
+        for(int i = 1; i <= 5; i++) {
             setImageResource('c', i, cardFaceDown);
             communityCardImages[i-1].setAlpha(transparent);
-
         }
         // Check that hands are empty
         if (player.getHand().getHandValue()>0)
@@ -269,6 +295,64 @@ public class activityGamePoker extends AppCompatActivity {
         // Deal Player Second card
         dealer.dealCard(player,deck);
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+
+    }
+
+    //Functions to deal out cards. The flop initial deal of three cards, the turn deals one card, and the river deals the last card
+    //Total of 5 cards laid out on the table
+
+    private void dealTheFlop() {
+        //First Flop Card
+        dealer.dealCard(dealer, deck);
+        setImageResource('c', 1,dealer.getLastDealtCard().getImageSource());
+        //Second Flop Card
+        dealer.dealCard(dealer, deck);
+        setImageResource('c', 2,dealer.getLastDealtCard().getImageSource());
+        //Third Flop Card
+        dealer.dealCard(dealer, deck);
+        setImageResource('c', 3,dealer.getLastDealtCard().getImageSource());
+    }
+
+    private void dealTheTurn() {
+        //Deal turn card
+        dealer.dealCard(dealer, deck);
+        setImageResource('c', 4, dealer.getLastDealtCard().getImageSource());
+    }
+    /*
+    private void dealTheRiver() {
+        //Deal the river card
+        dealer.dealCard(dealer,deck);
+        setImageResource('c', dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+
+    }
+
+    */
+    private void checkInitialBuyIn() {
+        /*
+            *Start with user player for initial buy in
+            * if fold - end round(remove player from players array)
+            * if check- go to next player for evaluating(will actually be disabled here)
+            * if call - update pot with initial buy and also player balance
+            * if bet on initial - min bet is inital buy in, update pot and next player call
+            * is inital buy in + previousBet
+            * once complete - deal the flop cards
+            *
+            * Next check again
+            * then deal the turn once complete
+            *
+            * Check again
+            * and finally deal the river card once complete
+            *
+            * Finally check for final bets,calls,folds,and checks
+            * Reveal the winner by checking the hand
+            * with community cards for best hand
+            *
+
+         */
+        //Used to see if players bought in or not
+        int previousBet = 0;
+        boolean done = false;
+        previousBet = currentBet;
 
     }
 }
