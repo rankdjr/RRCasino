@@ -12,25 +12,59 @@
     android:visibility="visible"
     tools:context=".helpMenu">
 
-    <TextView
-        android:id="@+id/helpMain"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/helpTextMain"
+        android:layout_width="389dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/helpTitle"
-        android:textSize="40sp"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        android:gravity="center_horizontal"/>
+        android:orientation="vertical">
 
-    <TextView
+        <TextView
+            android:id="@+id/helpMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:text="@string/helpTitle"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="40sp" />
+
+        <TextView
+            style="@style/DescriptionHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/helpDescription"
+            android:textAlignment="center" />
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/helpMain"
-        android:layout_marginTop="16dp"
-        android:text="@string/helpDescription"
-        style="@style/DescriptionHeader"
-        android:gravity="center"
-        android:textAlignment="center"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/helpTextMain"
+        android:paddingTop="20dp"
+        android:paddingBottom="16dp">
+
+        <ImageButton
+            android:id="@+id/poker"
+            android:contentDescription="@string/pokerImgButtonDesc"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:src="@drawable/pokerlogo"/>
+
+        <ImageButton
+            android:id="@+id/blackjack"
+            android:contentDescription="@string/bjackImgButtonDesc"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="40dp"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/bjacklogo"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

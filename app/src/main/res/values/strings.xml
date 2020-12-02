@@ -1,5 +1,10 @@
 <resources>
+    <!--User Visible Titles-->
     <string name="app_name">RRsCasino</string>
     <string name="helpTitle">Help Menu</string>
     <string name="helpDescription">What would you like to know about?</string>
+
+    <!--Interior XML Used Titles-->
+    <string name="pokerImgButtonDesc">pokerButton</string>
+    <string name="bjackImgButtonDesc">bjackButton</string>
 </resources>
