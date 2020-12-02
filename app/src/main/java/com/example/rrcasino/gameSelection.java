@@ -24,5 +24,13 @@ public class gameSelection extends AppCompatActivity {
                 startActivity(intentLoadGameBJack);
             }
         });
+        pokerImageButton = (ImageButton) findViewById(R.id.pokerImageButton);
+        pokerImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentLoadGamePoker = new Intent (gameSelection.this, activityGamePoker.class);
+                startActivity(intentLoadGamePoker);
+            }
+        });
     }
 }
