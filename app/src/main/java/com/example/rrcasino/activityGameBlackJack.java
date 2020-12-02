@@ -31,6 +31,7 @@ public class activityGameBlackJack extends AppCompatActivity {
     roundData currRoundData;
     boolean dealerPlayed;
     boolean playingSplit = false;
+    boolean betDouble = false;
     int currentBet;
     final int minBet = 10;
     final String cardFaceDown = "b2fv";
@@ -179,11 +180,9 @@ public class activityGameBlackJack extends AppCompatActivity {
         confirmButton.setEnabled(true);
     }
 
-
     private View.OnClickListener handleClick = new View.OnClickListener() {
         /*
          * Onclick listener for buttons
-         *
          */
         @Override
         public void onClick(View view) {
@@ -268,12 +267,46 @@ public class activityGameBlackJack extends AppCompatActivity {
                     doubleButton.setEnabled(false); // Disable after initial click
                     sbBet.setEnabled(false); // Disable changes to betting after deal
                     currentBet = currentBet*2;
+
                     tvBet.setText("$"+currentBet);
                     currRoundData.setBet(currentBet);
+
+                    // Deal card
+                    dealer.dealCard(player, deck);
+                    updateScore();
+                    if (!playingSplit)
+                        setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+                    else
+                        setImageResource('s',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+
+                    if (player.getNumOfHandsInPlay() == 1) {
+                        // Player busted and this is the only hand in play --> end round
+                        currRoundData.setHandTotal(player.getHand().getHandValue());
+                        currRoundData.setBet(currentBet);
+                        roundDataArrayList.add(currRoundData);
+                        dealerPlay();
+                        endRound();
+                    } else {
+                        // Player bet double but hand is split --> save round data, retrieve next hand, and deal first card to next hand
+                        currRoundData.setHandTotal(player.getHand().getHandValue());
+                        currRoundData.setBet(currentBet);
+                        roundDataArrayList.add(currRoundData);
+                        player.getHand().clearHand();
+                        player.setHand(player.getNextHand());
+                        playingSplit = true;
+                        dealer.dealCard(player, deck);
+                        setImageResource('s',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+                        if (player.getHand().getHandValue() < 12)
+                            doubleButton.setEnabled(true);
+                        updateScore();
+                        break;
+                    }
                     break;
                 case R.id.splitButton:
                     splitButton.setEnabled(false); // Disable after initial click
                     splitHand();
+                    if (player.getHand().getHandValue() > 11)
+                        doubleButton.setEnabled(false);
                     break;
             }
         }
@@ -403,7 +436,6 @@ public class activityGameBlackJack extends AppCompatActivity {
             dealer.returnCards();
 
         currentBet = sbBet.getProgress();
-
         //Deal cards, update score, and save current round data
         newDeal();
         currRoundData = new roundData(currentBet, player.getHand().getHandValue());
@@ -440,7 +472,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         } else {
             setImageResource('d', dealer.getHand().getNumOfCardsInHand(), cardFaceDown);
         }
-/**
+/*
         //Remove below code after done debugging split hand functionality
         DeckHandler.Card card1 = new DeckHandler.Card(1,2, "c1_2");
         DeckHandler.Card card2 = new DeckHandler.Card(3,2, "c3_2");
@@ -450,16 +482,13 @@ public class activityGameBlackJack extends AppCompatActivity {
         setImageResource('p', 1, card1.getImageSource());
         setImageResource('p', 2, card2.getImageSource());
         //End of debug
- */
-
-
+*/
         // Enable split button if player has cards of same rank
         if (player.getHand().getCard(0).getRank() == player.getHand().getCard(1).getRank())
             splitButton.setEnabled(true);
         // Enable double button if player score <= 11
         if (player.getHand().getHandValue() < 12 && player.getBalance() > currentBet*2)
             doubleButton.setEnabled(true);
-
     }
 
     private void endRound () {
@@ -518,7 +547,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         }
 
         sbBet.setEnabled(true);
-        updateScore();
+        //updateScore();
 
         if (player.getBalance() < minBet)
             gameOver();
@@ -593,6 +622,7 @@ public class activityGameBlackJack extends AppCompatActivity {
     private void updateScore() {
         String playerHandValue = "";
         String dealerHandValue = "";
+        // Update player Score
         playerHandValue = "Player Score: " + player.getHand().getHandValue();
         if (!playingSplit) {
             tvPlayerScore.setText(playerHandValue);
@@ -600,6 +630,7 @@ public class activityGameBlackJack extends AppCompatActivity {
             tvPlayerSplitScore.setAlpha(opaque);
             tvPlayerSplitScore.setText(playerHandValue);
         }
+        // Update dealer score
         if (dealer.getHand().getNumOfCardsInHand() > 2 || dealerPlayed || dealer.getHand().getHandValue() == 21)
             dealerHandValue = "Dealer Score: " + dealer.getHand().getHandValue();
         else
