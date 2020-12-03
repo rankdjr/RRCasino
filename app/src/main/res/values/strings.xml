@@ -14,4 +14,47 @@
     <!--Interior XML Used Titles-->
     <string name="pokerImgButtonDesc">pokerButton</string>
     <string name="bjackImgButtonDesc">bjackButton</string>
+
+    <!--Dialog Text-->
+    <string name="bjOverviewDescription">
+        To start playing Blackjack, navigate to the main menu, click play, then the
+        Blackjack icon. The layout simulates a casino table.
+            The cards at the top of the screen are the <b>dealer\'s hand</b>. The cards
+            on the bottom is <b>your hand</b>.
+            Above each player\'s hands are their current hand\'s <b>score.</b>
+            Below the hands there are your <b>action buttons.</b>
+        At the bottom is the <b>betting slider</b> and current <b>balance.</b>
+    </string>
+    <string name="bjActionsDescription">Blackjack allows for 6 different actions.
+            <b>Deal</b> will start the game. It will deal two cards to both players.
+                One card will be face-up from the dealer\'s hand and both your cards will be
+                visible to you.
+            <b>Double</b> will double your current bet. It is a double edged sword, almost literally.
+                This button is only available when you have 11 or less in your hand.
+            <b>Hit</b> informs the dealer to deal one more card to you. Be careful, only <b>Hit</b>
+                when safe.
+            <b>Stay</b> ends your turn and allows the dealer to deal cards to self-deal.
+            <b>Split</b> when you have two of the same value cards in your hand you\'re able to
+        <b>split</b>
+                your hand in two.
+    </string>
+
+    <string name="bjWinningDescription">
+        The goal of the game is to achieve a hand score of 21, or at least a score better than the
+        dealer. All <b>numerical cards</b> values are equal to their actual worth in-game.
+        All <b>face cards</b> are worth 10. The odd card out is the <b>Ace</b>, it has a value of
+        both 1 and 11. It\'s value is automatically adjusted during the game. That means if you have
+        two face cards in hand and pull an ace, you would have a score of 21, not 31.
+        <b>Blackjack</b> is ultimately a game of chance but with a bit of luck on your side
+        victories will be normal place.
+    </string>
+    <string name="pOverviewDescription">
+        Clicking on the poker app shows the main poker screen.
+    </string>
+    <string name="pActionsDescription">
+
+    </string>
+    <string name="pWinningDescription">
+
+    </string>
 </resources>

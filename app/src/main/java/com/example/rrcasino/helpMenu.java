@@ -18,8 +18,8 @@ public class helpMenu extends AppCompatActivity {
         setContentView(R.layout.activity_help_menu);
         this.getSupportActionBar().hide();
 
-        pokerIMGButton = findViewById(R.id.poker);
-        bjackIMGButton = findViewById(R.id.blackjack);
+        pokerIMGButton = findViewById(R.id.pokerHelp);
+        bjackIMGButton = findViewById(R.id.blackjackHelp);
         pokerIMGButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
