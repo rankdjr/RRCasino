@@ -35,7 +35,7 @@ public class activityGameBlackJack extends AppCompatActivity {
     int currentBet;
     final int minBet = 10;
     final String cardFaceDown = "b2fv";
-    final int maxCardsInHand = 5;
+    final int maxCardsInHand = 11;
 
     static class roundData {
         private Integer handTotal;
@@ -79,16 +79,34 @@ public class activityGameBlackJack extends AppCompatActivity {
     private ImageView pCard3;
     private ImageView pCard4;
     private ImageView pCard5;
+    private ImageView pCard6;
+    private ImageView pCard7;
+    private ImageView pCard8;
+    private ImageView pCard9;
+    private ImageView pCard10;
+    private ImageView pCard11;
     private ImageView sCard1;
     private ImageView sCard2;
     private ImageView sCard3;
     private ImageView sCard4;
     private ImageView sCard5;
+    private ImageView sCard6;
+    private ImageView sCard7;
+    private ImageView sCard8;
+    private ImageView sCard9;
+    private ImageView sCard10;
+    private ImageView sCard11;
     private ImageView dCard1;
     private ImageView dCard2;
     private ImageView dCard3;
     private ImageView dCard4;
     private ImageView dCard5;
+    private ImageView dCard6;
+    private ImageView dCard7;
+    private ImageView dCard8;
+    private ImageView dCard9;
+    private ImageView dCard10;
+    private ImageView dCard11;
     private ImageView[] playerCardImages;
     private ImageView[] playerSplitCardImages;
     private ImageView[] dealerCardImages;
@@ -115,19 +133,40 @@ public class activityGameBlackJack extends AppCompatActivity {
         this.pCard3 = findViewById(R.id.pCard3);
         this.pCard4 = findViewById(R.id.pCard4);
         this.pCard5 = findViewById(R.id.pCard5);
-        playerCardImages = new ImageView[] {pCard1, pCard2, pCard3, pCard4, pCard5};
+        this.pCard6 = findViewById(R.id.pCard6);
+        this.pCard7 = findViewById(R.id.pCard7);
+        this.pCard8 = findViewById(R.id.pCard8);
+        this.pCard9 = findViewById(R.id.pCard9);
+        this.pCard10 = findViewById(R.id.pCard10);
+        this.pCard11 = findViewById(R.id.pCard11);
+        playerCardImages = new ImageView[] { pCard1, pCard2, pCard3, pCard4, pCard5, pCard6,
+                pCard7, pCard8, pCard9, pCard10, pCard11 };
         this.sCard1 = findViewById(R.id.sCard1);
         this.sCard2 = findViewById(R.id.sCard2);
         this.sCard3 = findViewById(R.id.sCard3);
         this.sCard4 = findViewById(R.id.sCard4);
         this.sCard5 = findViewById(R.id.sCard5);
-        playerSplitCardImages = new ImageView[] {sCard1, sCard2, sCard3, sCard4, sCard5};
+        this.sCard6 = findViewById(R.id.sCard6);
+        this.sCard7 = findViewById(R.id.sCard7);
+        this.sCard8 = findViewById(R.id.sCard8);
+        this.sCard9 = findViewById(R.id.sCard9);
+        this.sCard10 = findViewById(R.id.sCard10);
+        this.sCard11 = findViewById(R.id.sCard11);
+        playerSplitCardImages = new ImageView[] {sCard1, sCard2, sCard3, sCard4, sCard5, sCard6,
+                sCard7, sCard8, sCard9, sCard10, sCard11 };
         this.dCard1 = findViewById(R.id.dCard1);
         this.dCard2 = findViewById(R.id.dCard2);
         this.dCard3 = findViewById(R.id.dCard3);
         this.dCard4 = findViewById(R.id.dCard4);
         this.dCard5 = findViewById(R.id.dCard5);
-        dealerCardImages = new ImageView[] {dCard1, dCard2, dCard3, dCard4, dCard5};
+        this.dCard6 = findViewById(R.id.dCard6);
+        this.dCard7 = findViewById(R.id.dCard7);
+        this.dCard8 = findViewById(R.id.dCard8);
+        this.dCard9 = findViewById(R.id.dCard9);
+        this.dCard10 = findViewById(R.id.dCard10);
+        this.dCard11 = findViewById(R.id.dCard11);
+        dealerCardImages = new ImageView[] {dCard1, dCard2, dCard3, dCard4, dCard5, dCard6,
+                dCard7, dCard8, dCard9, dCard10, dCard11 };
         // Initialize button IDs and set onclick Listeners
         this.hitButton = findViewById(R.id.hitButton);
         this.stayButton = findViewById(R.id.stayButton);
@@ -187,61 +226,34 @@ public class activityGameBlackJack extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                case R.id.hitButton:
+                case R.id.hitButton: {
                     // Update usable buttons
                     splitButton.setEnabled(false); // Disable split button while playing
                     doubleButton.setEnabled(false); // Disable split button while playing
+                    hit(); // Deal card, update game display and current round data
 
-                    // Deal card, update game display and current round data
-                    dealer.dealCard(player, deck);
-                    updateScore();
-                    if (!playingSplit)
-                        setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-                    else
-                        setImageResource('s',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-
-                    // Check for BJ or bust and max card limit
-                    if ((player.getHand().getHandValue() >= 21 || player.getHand().getNumOfCardsInHand() == maxCardsInHand) && player.getNumOfHandsInPlay() == 1) {
-                        if (player.getHand().checkBust()) {
-                            // Display toast message if player bust
-                            Toast gameMsg = Toast.makeText(activityGameBlackJack.this, "Bust", Toast.LENGTH_SHORT);
-                            gameMsg.setGravity(Gravity.CENTER, 0, 0);
-                            gameMsg.show();
+                    // Check for bust or autostay after verifying number of hands in play
+                    if (player.getNumOfHandsInPlay() == 1) {
+                        if (player.getHand().getHandValue() >= 21) {
+                            saveRound();
+                            endRound();
                         }
-
-                        // Player busted and this is the only hand in play --> end round
-                        currRoundData.setHandTotal(player.getHand().getHandValue());
-                        currRoundData.setBet(currentBet);
-                        roundDataArrayList.add(currRoundData);
-                        endRound();
-                    }
-                    else if ((player.getHand().getHandValue() >= 21 || player.getHand().getNumOfCardsInHand() == maxCardsInHand) && player.getNumOfHandsInPlay() > 1){
-                        if (player.getHand().checkBust()) {
-                            // Display toast message if player bust
-                            Toast gameMsg = Toast.makeText(activityGameBlackJack.this, "Bust", Toast.LENGTH_SHORT);
-                            gameMsg.setGravity(Gravity.CENTER, 0, 0);
-                            gameMsg.show();
+                    } else {
+                        if (player.getHand().getHandValue() >= 21) {
+                            // save round data, retrieve next hand, and deal first card to next hand
+                            saveRound();
+                            player.getHand().clearHand();
+                            player.setHand(player.getNextHand());
+                            playingSplit = true;
+                            hit();
                         }
-
-                        // Player busted but hand is split --> save round data, retrieve next hand, and deal first card to next hand
-                        currRoundData.setHandTotal(player.getHand().getHandValue());
-                        currRoundData.setBet(currentBet);
-                        roundDataArrayList.add(currRoundData);
-                        player.getHand().clearHand();
-                        player.setHand(player.getNextHand());
-                        playingSplit = true;
-                        dealer.dealCard(player, deck);
-                        setImageResource('s',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-                        updateScore();
                     }
                     break;
+                }
                 case R.id.stayButton:
                     // Update usable buttons
                     splitButton.setEnabled(false); // Disable if player does not split
-
-                    currRoundData.setHandTotal(player.getHand().getHandValue());
-                    currRoundData.setBet(currentBet);
-                    roundDataArrayList.add(currRoundData);
+                    saveRound();
                     if (player.getNumOfHandsInPlay() == 1) {
                         // Player stayed with on final in hand in round --> pass game logic to dealer and end round
                         dealerPlay();
@@ -250,16 +262,15 @@ public class activityGameBlackJack extends AppCompatActivity {
                         // Player has more than one hand in play --> retrieve next hand
                         player.getHand().clearHand();
                         player.setHand(player.getNextHand());
-                        dealer.dealCard(player, deck);
-                        setImageResource('s',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
                         playingSplit = true;
-                        updateScore();
+                        hit();
                     }
                     break;
                 case R.id.confirmButton:
                     // Deal new round
                     confirmButton.setEnabled(false); // Disable after initial click
                     sbBet.setEnabled(false); // Disable changes to betting after deal
+                    currentBet = sbBet.getProgress(); // save current bet
                     startRound();
                     break;
                 case R.id.doubleButton:
@@ -267,39 +278,23 @@ public class activityGameBlackJack extends AppCompatActivity {
                     doubleButton.setEnabled(false); // Disable after initial click
                     sbBet.setEnabled(false); // Disable changes to betting after deal
                     currentBet = currentBet*2;
-
                     tvBet.setText("$"+currentBet);
                     currRoundData.setBet(currentBet);
-
-                    // Deal card
-                    dealer.dealCard(player, deck);
-                    updateScore();
-                    if (!playingSplit)
-                        setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-                    else
-                        setImageResource('s',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-
+                    hit();
                     if (player.getNumOfHandsInPlay() == 1) {
                         // Player busted and this is the only hand in play --> end round
-                        currRoundData.setHandTotal(player.getHand().getHandValue());
-                        currRoundData.setBet(currentBet);
-                        roundDataArrayList.add(currRoundData);
+                        saveRound();
                         dealerPlay();
                         endRound();
                     } else {
                         // Player bet double but hand is split --> save round data, retrieve next hand, and deal first card to next hand
-                        currRoundData.setHandTotal(player.getHand().getHandValue());
-                        currRoundData.setBet(currentBet);
-                        roundDataArrayList.add(currRoundData);
+                        saveRound();
                         player.getHand().clearHand();
                         player.setHand(player.getNextHand());
                         playingSplit = true;
-                        dealer.dealCard(player, deck);
-                        setImageResource('s',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+                        hit();
                         if (player.getHand().getHandValue() < 12)
                             doubleButton.setEnabled(true);
-                        updateScore();
-                        break;
                     }
                     break;
                 case R.id.splitButton:
@@ -347,6 +342,30 @@ public class activityGameBlackJack extends AppCompatActivity {
                         playerCardImages[cardNum-1].setAlpha(opaque);
                         pCard5.setImageResource(resourceId);
                         break;
+                    case 6:
+                        playerCardImages[cardNum-1].setAlpha(opaque);
+                        pCard6.setImageResource(resourceId);
+                        break;
+                    case 7:
+                        playerCardImages[cardNum-1].setAlpha(opaque);
+                        pCard7.setImageResource(resourceId);
+                        break;
+                    case 8:
+                        playerCardImages[cardNum-1].setAlpha(opaque);
+                        pCard8.setImageResource(resourceId);
+                        break;
+                    case 9:
+                        playerCardImages[cardNum-1].setAlpha(opaque);
+                        pCard9.setImageResource(resourceId);
+                        break;
+                    case 10:
+                        playerCardImages[cardNum-1].setAlpha(opaque);
+                        pCard10.setImageResource(resourceId);
+                        break;
+                    case 11:
+                        playerCardImages[cardNum-1].setAlpha(opaque);
+                        pCard11.setImageResource(resourceId);
+                        break;
                 }
                 break;
             }
@@ -371,6 +390,30 @@ public class activityGameBlackJack extends AppCompatActivity {
                     case 5:
                         dealerCardImages[cardNum-1].setAlpha(opaque);
                         dCard5.setImageResource(resourceId);
+                        break;
+                    case 6:
+                        dealerCardImages[cardNum-1].setAlpha(opaque);
+                        dCard6.setImageResource(resourceId);
+                        break;
+                    case 7:
+                        dealerCardImages[cardNum-1].setAlpha(opaque);
+                        dCard7.setImageResource(resourceId);
+                        break;
+                    case 8:
+                        dealerCardImages[cardNum-1].setAlpha(opaque);
+                        dCard8.setImageResource(resourceId);
+                        break;
+                    case 9:
+                        dealerCardImages[cardNum-1].setAlpha(opaque);
+                        dCard9.setImageResource(resourceId);
+                        break;
+                    case 10:
+                        dealerCardImages[cardNum-1].setAlpha(opaque);
+                        dCard10.setImageResource(resourceId);
+                        break;
+                    case 11:
+                        dealerCardImages[cardNum-1].setAlpha(opaque);
+                        dCard11.setImageResource(resourceId);
                         break;
                 }
                 break;
@@ -397,6 +440,30 @@ public class activityGameBlackJack extends AppCompatActivity {
                         playerSplitCardImages[cardNum-1].setAlpha(opaque);
                         sCard5.setImageResource(resourceId);
                         break;
+                    case 6:
+                        playerSplitCardImages[cardNum-1].setAlpha(opaque);
+                        sCard6.setImageResource(resourceId);
+                        break;
+                    case 7:
+                        playerSplitCardImages[cardNum-1].setAlpha(opaque);
+                        sCard7.setImageResource(resourceId);
+                        break;
+                    case 8:
+                        playerSplitCardImages[cardNum-1].setAlpha(opaque);
+                        sCard8.setImageResource(resourceId);
+                        break;
+                    case 9:
+                        playerSplitCardImages[cardNum-1].setAlpha(opaque);
+                        sCard9.setImageResource(resourceId);
+                        break;
+                    case 10:
+                        playerSplitCardImages[cardNum-1].setAlpha(opaque);
+                        sCard10.setImageResource(resourceId);
+                        break;
+                    case 11:
+                        playerSplitCardImages[cardNum-1].setAlpha(opaque);
+                        sCard11.setImageResource(resourceId);
+                        break;
                 }
                 break;
             }
@@ -411,23 +478,22 @@ public class activityGameBlackJack extends AppCompatActivity {
          * 4. Enable SeekBar to set new bet amount
          * 5. Deal cards, and check for natural win
          */
-
-        dealerPlayed = false;
-        // Update usable buttons
+        // Update usable buttons and booleans
         hitButton.setEnabled(true);
         stayButton.setEnabled(true);
         confirmButton.setEnabled(false);
         doubleButton.setEnabled(false);
         splitButton.setEnabled(false);
         tvPlayerSplitScore.setAlpha(transparent);
+        dealerPlayed = false;
         // Loop through participant hands and set to all cards to null card
         for (int i = 1; i <= maxCardsInHand; i++) {
             setImageResource('p', i, cardFaceDown);
             playerCardImages[i-1].setAlpha(transparent);
             setImageResource('d', i, cardFaceDown);
-            dealerCardImages[i-1].setAlpha(transparent);
+            dealerCardImages[i - 1].setAlpha(transparent);
             setImageResource('s', i, cardFaceDown);
-            playerSplitCardImages[i-1].setAlpha(transparent);
+            playerSplitCardImages[i - 1].setAlpha(transparent);
         }
         // Check that hands are empty
         if (player.getHand().getHandValue()>0)
@@ -435,11 +501,10 @@ public class activityGameBlackJack extends AppCompatActivity {
         if (dealer.getHand().getHandValue()>0)
             dealer.returnCards();
 
-        currentBet = sbBet.getProgress();
-        //Deal cards, update score, and save current round data
+        // Deal cards, update score, and create instance for current round data
         newDeal();
-        currRoundData = new roundData(currentBet, player.getHand().getHandValue());
         updateScore();
+        currRoundData = new roundData(currentBet, player.getHand().getHandValue());
     }
 
     private void newDeal() {
@@ -454,20 +519,15 @@ public class activityGameBlackJack extends AppCompatActivity {
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         // Check for Player BlackJack
         if (player.getHand().getHandValue() == 21) {
-            currRoundData.setHandTotal(player.getHand().getHandValue());
-            currRoundData.setBet(currentBet);
-            roundDataArrayList.add(currRoundData);
+            saveRound();
             endRound();
         }
-
         // Deal second Dealer card
         dealer.dealCard(dealer, deck);
         // Check for Dealer BlackJack and show card if true
         if (dealer.getHand().getHandValue() == 21) {
             setImageResource('d', dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-            currRoundData.setHandTotal(player.getHand().getHandValue());
-            currRoundData.setBet(currentBet);
-            roundDataArrayList.add(currRoundData);
+            saveRound();
             endRound();
         } else {
             setImageResource('d', dealer.getHand().getNumOfCardsInHand(), cardFaceDown);
@@ -499,21 +559,14 @@ public class activityGameBlackJack extends AppCompatActivity {
         confirmButton.setEnabled(true);
         playingSplit = false;
 
-
         // TODO: Set messages to display in center of screen
         Toast gameMsg;
+        roundData thisRound;
+        gameResult roundResult;
         while (roundDataArrayList.size() > 0) {
-            /**
-            //Remove toast debugs
-            gameMsg = Toast.makeText(activityGameBlackJack.this, "Round: "+roundDataArrayList.size(), Toast.LENGTH_SHORT);
-            gameMsg.setGravity(Gravity.CENTER, 0, 0);
-            gameMsg.show();
-            //end of above debug
-             */
-
             double cash = 0;
-            roundData thisRound = roundDataArrayList.remove(0);
-            gameResult roundResult = checkWin(thisRound.getHandTotal());
+            thisRound = roundDataArrayList.remove(0);
+            roundResult = checkWin(thisRound.getHandTotal());
             switch (roundResult) {
                 case BLACKJACK:
                     cash = thisRound.getBet() * 1.5;
@@ -553,6 +606,12 @@ public class activityGameBlackJack extends AppCompatActivity {
             gameOver();
     }
 
+    private void saveRound() {
+        currRoundData.setHandTotal(player.getHand().getHandValue());
+        currRoundData.setBet(currentBet);
+        roundDataArrayList.add(currRoundData);
+    }
+
     private void dealerPlay() {
         /* Dealer flips second card.
          * Dealer hits on soft 17 (Ace and 6 in hand)
@@ -572,6 +631,16 @@ public class activityGameBlackJack extends AppCompatActivity {
             setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         }
         dealerPlayed = true;
+    }
+
+    private void hit() {
+        // Deal card
+        dealer.dealCard(player, deck);
+        updateScore();
+        if (!playingSplit)
+            setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+        else
+            setImageResource('s',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
     }
 
     private void splitHand() {
