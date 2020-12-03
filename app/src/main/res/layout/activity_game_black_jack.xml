@@ -19,7 +19,7 @@
 
         <!-- Dealer Score TextView -->
         <TextView
-            android:id="@+id/dealerScore"
+            android:id="@+id/tvDealerScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -73,7 +73,7 @@
 
         <!-- Player Split Hand Score TextView -->
         <TextView
-            android:id="@+id/playerSplitScore"
+            android:id="@+id/tvPlayerSplitScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -133,7 +133,7 @@
 
         <!-- Player Main Hand Score TextView -->
         <TextView
-            android:id="@+id/playerScore"
+            android:id="@+id/tvPlayerScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
