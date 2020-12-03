@@ -508,47 +508,49 @@ public class activityGameBlackJack extends AppCompatActivity {
     }
 
     private void newDeal() {
+        boolean playerNatural = false;
+        boolean dealerNatural = false;
         // Deal first cards
         dealer.dealCard(player, deck);
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         dealer.dealCard(dealer, deck);
         setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
 
-        // Deal second Player card
+        // Deal second cards
         dealer.dealCard(player,deck);
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-        // Check for Player BlackJack
-        if (player.getHand().getHandValue() == 21) {
-            saveRound();
-            endRound();
-        }
-        // Deal second Dealer card
+        if (player.getHand().getHandValue() == 21)
+            playerNatural = true;
         dealer.dealCard(dealer, deck);
-        // Check for Dealer BlackJack and show card if true
+        setImageResource('d', dealer.getHand().getNumOfCardsInHand(), cardFaceDown);
         if (dealer.getHand().getHandValue() == 21) {
+            dealerNatural = true;
             setImageResource('d', dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+        }
+
+        // Check for Dealer BlackJack and show card if true
+        if (dealerNatural || playerNatural) {
             saveRound();
             endRound();
         } else {
-            setImageResource('d', dealer.getHand().getNumOfCardsInHand(), cardFaceDown);
+    /*
+            //Remove below code after done debugging split hand functionality
+            DeckHandler.Card card1 = new DeckHandler.Card(1,2, "c1_2");
+            DeckHandler.Card card2 = new DeckHandler.Card(3,2, "c3_2");
+            player.getHand().clearHand();
+            player.getHand().addCard(card1);
+            player.getHand().addCard(card2);
+            setImageResource('p', 1, card1.getImageSource());
+            setImageResource('p', 2, card2.getImageSource());
+            //End of debug
+    */
+            // Enable split button if player has cards of same rank
+            if (player.getHand().getCard(0).getRank() == player.getHand().getCard(1).getRank())
+                splitButton.setEnabled(true);
+            // Enable double button if player score <= 11
+            if (player.getHand().getHandValue() < 12 && player.getBalance() > currentBet * 2)
+                doubleButton.setEnabled(true);
         }
-/*
-        //Remove below code after done debugging split hand functionality
-        DeckHandler.Card card1 = new DeckHandler.Card(1,2, "c1_2");
-        DeckHandler.Card card2 = new DeckHandler.Card(3,2, "c3_2");
-        player.getHand().clearHand();
-        player.getHand().addCard(card1);
-        player.getHand().addCard(card2);
-        setImageResource('p', 1, card1.getImageSource());
-        setImageResource('p', 2, card2.getImageSource());
-        //End of debug
-*/
-        // Enable split button if player has cards of same rank
-        if (player.getHand().getCard(0).getRank() == player.getHand().getCard(1).getRank())
-            splitButton.setEnabled(true);
-        // Enable double button if player score <= 11
-        if (player.getHand().getHandValue() < 12 && player.getBalance() > currentBet*2)
-            doubleButton.setEnabled(true);
     }
 
     private void endRound () {
