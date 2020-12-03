@@ -317,6 +317,14 @@ public class activityGameBlackJack extends AppCompatActivity {
                 case R.id.splitButton:
                     splitButton.setEnabled(false); // Disable after initial click
                     splitHand();
+                    if (player.getHand().getHandValue() == 21) {
+                        currRoundData.setPlayerNatural();
+                        saveRound();
+                        player.getHand().clearHand();
+                        player.setHand(player.getNextHand());
+                        playingSplit = true;
+                        hit();
+                    }
                     if (player.getHand().getHandValue() > 11)
                         doubleButton.setEnabled(false);
                     break;
@@ -672,9 +680,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         playerCardImages[1].setAlpha(transparent);
         setImageResource('s',1, splitCard.getImageSource());
         // Deal to current hand after split
-        dealer.dealCard(player, deck);
-        setImageResource('p', player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-        updateScore();
+        hit();
     }
 
     private gameResult checkWin(roundData thisRound) {
