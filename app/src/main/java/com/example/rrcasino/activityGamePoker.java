@@ -17,11 +17,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class activityGamePoker extends AppCompatActivity {
     //Custom popup for help button
@@ -35,7 +37,7 @@ public class activityGamePoker extends AppCompatActivity {
     private TextView playerBalance;
 
     //Buttons
-    private Button check;
+   // private Button check;
     private Button call;
     private Button bet;
     private Button fold;
@@ -49,11 +51,14 @@ public class activityGamePoker extends AppCompatActivity {
     private ImageView theriver;
     private ImageView pcard;
     private ImageView pcardone;
+    private ImageView compCard;
+    private ImageView compCardOne;
     private float transparent = 0;
     private float opaque = 1;
 
     //Array of Images for player and the table cards
     private ImageView[] playerCardImages;
+    private ImageView[] computerCardImages;
     private ImageView[] communityCardImages;
 
     //Game Variables
@@ -64,8 +69,16 @@ public class activityGamePoker extends AppCompatActivity {
     private int currentBet;
     private int buyIn = 50;
     private int minBet = buyIn;
+    private int computerBet;
+    private int potAmount;
+    private int round = 0;
     private int startingFunds = 10000;
     private String cardFaceDown = "b2fv";
+    private boolean playerInitialBuyin = false;
+    private boolean playerBetted = false;
+    private boolean computerBetted = false;
+    private boolean computerFolds = false;
+    private boolean playerFold = false;
     private Hand hand;
     private Hand temp;
     private enum gameResult { WIN, LOSE, TIE }
@@ -99,24 +112,27 @@ public class activityGamePoker extends AppCompatActivity {
         this.theriver = findViewById(R.id.theriver);
         this.pcard = findViewById(R.id.pcard);
         this.pcardone = findViewById(R.id.pcardone);
+        this.compCard = findViewById(R.id.ccard);
+        this.compCardOne = findViewById(R.id.ccard1);
         playerCardImages = new ImageView[] {pcard, pcardone};
+        computerCardImages = new ImageView[] {compCard, compCardOne};
         communityCardImages = new ImageView[] {theflop, theflopone, thefloptwo, theturn, theriver};
 
         //Initialize buttons
         this.fold = findViewById(R.id.fold);
-        this.check = findViewById(R.id.check);
+        //this.check = findViewById(R.id.check);
         this.call = findViewById(R.id.call);
         this.bet = findViewById(R.id.bet);
         this.deal = findViewById(R.id.deal);
         fold.setEnabled(false);
-        check.setEnabled(false);
+       // check.setEnabled(false);
         call.setEnabled(false);
-        bet.setEnabled(false);
+       // bet.setEnabled(false);
         betAmount.setEnabled(false);
 
         //Set button click handlers
         fold.setOnClickListener(clicked);
-        check.setOnClickListener(clicked);
+        //check.setOnClickListener(clicked);
         call.setOnClickListener(clicked);
         bet.setOnClickListener(clicked);
         deal.setOnClickListener(clicked);
@@ -126,6 +142,7 @@ public class activityGamePoker extends AppCompatActivity {
         this.deck = new DeckHandler.Deck();
         this.dealer = new PokerDealer("dealer", 0);
         this.player = new Player("player", startingFunds);
+        this.computer = new Player("computer", 10000);
         playerBalance.setText("Balance: $" + player.getBalance());
         playerBet.setMax(player.getBalance());
 
@@ -154,7 +171,7 @@ public class activityGamePoker extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                currentBet += progressChangedValue;
+                currentBet = progressChangedValue;
 
             }
         });
@@ -172,15 +189,28 @@ public class activityGamePoker extends AppCompatActivity {
                     //Disable the deal cards button
                     deal.setEnabled(false);
                     startGame();
+                    System.out.println(Check_win());
+                    System.out.println("DEAL was pressed");
 
                 case R.id.bet:
                     betAmount.setVisibility(View.VISIBLE);
                     playerBet.setVisibility(View.VISIBLE);
-                    pot.setText("$"+currentBet);
-                    dealTheFlop();
-                    dealTheTurn();
+                    potAmount += currentBet;
+                    pot.setText("$"+potAmount);
+                    playerInitialBuyin = true;
+                    playerBetted = true;
+                    System.out.println("BET was pressed");
+                    //Continue with game
+                    //dealTheFlop();
+                    //dealTheTurn();
                 case R.id.fold:
-                    endFold();
+                    playerFold = true;
+                    System.out.println("FOLD was pressed");
+                    endRound();
+
+                   // endFold();
+                    //end the round and update player balance if folded anywhere
+                    //after the first buy in
 
 
 
@@ -234,6 +264,20 @@ public class activityGamePoker extends AppCompatActivity {
             case 'c': {
                 switch (cardNum) {
                     case 1:
+                        computerCardImages[cardNum-1].setAlpha(opaque);
+                        compCard.setImageResource(resourceId);
+                        break;
+                    case 2:
+                        computerCardImages[cardNum-1].setAlpha(opaque);
+                        compCardOne.setImageResource(resourceId);
+                        break;
+
+                }
+                break;
+            }
+            case 'd': {
+                switch (cardNum) {
+                    case 1:
                         communityCardImages[cardNum-1].setAlpha(opaque);
                         theflop.setImageResource(resourceId);
                         break;
@@ -269,9 +313,10 @@ public class activityGamePoker extends AppCompatActivity {
          */
 
         // Update usable buttons
-        bet.setEnabled(true);
-        fold.setEnabled(true);
-        check.setEnabled(true);
+        //bet.setEnabled(true);
+        //fold.setEnabled(true);
+        //check.setEnabled(true);
+        round++;
         call.setEnabled(true);
         pot.setVisibility(View.VISIBLE);
         // Loop through participant hands and set to all cards to null card
@@ -279,10 +324,13 @@ public class activityGamePoker extends AppCompatActivity {
             setImageResource('p', i, cardFaceDown);
             playerCardImages[i-1].setAlpha(transparent);
 
+            setImageResource('c', i, cardFaceDown);
+            computerCardImages[i-1].setAlpha(transparent);
+
         }
         //Loop through community table cards and set to NUll
         for(int i = 1; i <= 5; i++) {
-            setImageResource('c', i, cardFaceDown);
+            setImageResource('d', i, cardFaceDown);
             communityCardImages[i-1].setAlpha(transparent);
         }
         // Check that hands are empty
@@ -290,18 +338,68 @@ public class activityGamePoker extends AppCompatActivity {
             player.returnCards();
         if (dealer.getHand().getHandValue()>0)
             dealer.returnCards();
+        if (computer.getHand().getHandValue()>0)
+            computer.returnCards();
 
         dealPlayerCards();
+        System.out.println("Start Game player initial: " + playerInitialBuyin);
+        System.out.println("Start Game player bet: " + playerBetted);
+        //Check the bettings for the initial round the deal the first three cards
+        if(playerBetted && round == 1) {
+            auto(computer);
+            dealTheFlop();
+            round++;
+        }
+        //Check the bettings for the flop then deal a card
+        else if (playerBetted && round == 2) {
+            auto(computer);
+            dealTheTurn();
+            round++;
+        }
+        //Check the bettings for the turn then deal a card
+        else if (playerBetted && round == 3) {
+            auto(computer);
+            dealTheRiver();
+            round++;
+        }
+        //Check the Final bettings
+        else if (playerBetted && round == 4)
+            auto(computer);
+
+        System.out.println("Current round: "+round);
+        System.out.println("Start Game end player bet: " + playerBetted);
+        System.out.println("Start Game player buy in: " + playerInitialBuyin);
+        endRound();
     }
     //Deal initial player cards
     private void dealPlayerCards() {
-        // First Player Card
+        // Deal First Player Card
         dealer.dealCard(player, deck);
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
 
-        // Deal Player Second card
+        // Deal Computer First card
+        dealer.dealCard(computer,deck);
+        setImageResource('c',computer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+
+        //Deal Second player card
         dealer.dealCard(player,deck);
-        setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+        setImageResource('p', player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+
+        //Deal Second computer card
+        dealer.dealCard(computer, deck);
+        setImageResource('c', computer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+
+        //Dealing all community cards to test CheckWin() function
+        dealer.dealCard(dealer,deck);
+        setImageResource('d', dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+        dealer.dealCard(dealer,deck);
+        setImageResource('d', dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+        dealer.dealCard(dealer,deck);
+        setImageResource('d', dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+        dealer.dealCard(dealer,deck);
+        setImageResource('d', dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+        dealer.dealCard(dealer,deck);
+        setImageResource('d', dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
 
     }
 
@@ -311,31 +409,36 @@ public class activityGamePoker extends AppCompatActivity {
     private void dealTheFlop() {
         //First Flop Card
         dealer.dealCard(dealer, deck);
-        setImageResource('c', 1,dealer.getLastDealtCard().getImageSource());
+        setImageResource('d', dealer.getHand().getNumOfCardsInHand(),dealer.getLastDealtCard().getImageSource());
         //Second Flop Card
         dealer.dealCard(dealer, deck);
-        setImageResource('c', 2,dealer.getLastDealtCard().getImageSource());
+        setImageResource('d', dealer.getHand().getNumOfCardsInHand(),dealer.getLastDealtCard().getImageSource());
         //Third Flop Card
         dealer.dealCard(dealer, deck);
-        setImageResource('c', 3,dealer.getLastDealtCard().getImageSource());
+        setImageResource('d', dealer.getHand().getNumOfCardsInHand(),dealer.getLastDealtCard().getImageSource());
     }
 
     private void dealTheTurn() {
         //Deal turn card
         dealer.dealCard(dealer, deck);
-        setImageResource('c', 4, dealer.getLastDealtCard().getImageSource());
+        setImageResource('d', dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
     }
 
     private void dealTheRiver() {
         //Deal the river card
         dealer.dealCard(dealer,deck);
-        setImageResource('c', dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
+        setImageResource('d', dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
 
     }
+
     private void endFold() {
+        /* Reset the current bet
+           *
+
+         */
         currentBet = 0;
         fold.setEnabled(false);
-        check.setEnabled(false);
+        //check.setEnabled(false);
         call.setEnabled(false);
         bet.setEnabled(false);
         betAmount.setVisibility(View.INVISIBLE);
@@ -374,9 +477,67 @@ public class activityGamePoker extends AppCompatActivity {
         boolean done = false;
         previousBet = currentBet;
 
+        if(playerBetted && computerBetted) {
+            //possible return bolean?
+        }
+
+    }
+    //Checking the second round of betting and then deal the turn
+    private void checkFlopBets() {
+
+    }
+    //Checking round of betting and then deal the river
+    private void checkTurnBets() {
+
+    }
+    //Checking final round of betting
+    //Then check to see who won the game
+    private void checkFinalBets() {
+
+    }
+    private void endRound () {
+        //bet.setEnabled(false);
+        //fold.setEnabled(false);
+        //call.setEnabled(false);
+        //check.setEnabled(false);
+        deal.setEnabled(true);
+        float cash = 0;
+        round = 0;
+        System.out.println("end round player buy: " + playerInitialBuyin);
+        if(playerFold && !playerInitialBuyin) {
+            //Player doesnt lose cash
+            player.addToBalance(cash);
+            //
+        } else {
+
+
+            switch (Check_win()) {
+                case WIN:
+                    cash += potAmount;
+                    player.addToBalance(cash);
+                    break;
+                case TIE:
+                    break;
+                case LOSE:
+                    cash -= currentBet;
+                    player.addToBalance(cash);
+                    break;
+            }
+        }
+
+        // Set mew maximum bet; Player cannot bet more than available funds
+        //reset booleans
+        playerInitialBuyin = false;
+        computerFolds = false;
+        playerFold = false;
+        potAmount = 0;
+        playerBet.setMax(player.getBalance());
+        playerBalance.setText("Balance: $"+player.getBalance());
+        // Update player balance TextView
     }
 
-/**Daniel's addition**/
+
+    /**Daniel's addition**/
     public void  Check_Hand (Player player) {
         // load hand combining hand
         this.hand = new Hand();
@@ -509,12 +670,28 @@ public class activityGamePoker extends AppCompatActivity {
             this.Check_Hand(player);
             if (player.highestHand() >= 5) {
                 // raise
+                //just bet the min amount
+                computerBet = minBet;
+                potAmount += computerBet;
+                computerBetted = true;
             } else if (player.highestHand() < 5 && player.highestHand() > 8) {
                 //call
+                //if player betted
+                //set the bet to that amount
+                if(playerBetted) {
+                    computerBet = currentBet;
+                    potAmount += computerBet;
+                }
 
             }else{
                 //fold
+                //Just end the round
+                //endround() as player wins
+                computerFolds = true;
+                endRound();
             }
+
+            playerBetted = false;
 
         }
 
