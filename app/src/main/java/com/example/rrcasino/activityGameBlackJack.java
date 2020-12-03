@@ -259,6 +259,8 @@ public class activityGameBlackJack extends AppCompatActivity {
                                 currRoundData.setPlayerNatural();
                                 endRound();
                             }
+                            if (player.getHand().getHandValue() < 12)
+                                doubleButton.setEnabled(true);
                         }
                     }
                     break;
@@ -556,7 +558,7 @@ public class activityGameBlackJack extends AppCompatActivity {
             saveRound();
             endRound();
         } else {
-    /*
+
             //Remove below code after done debugging split hand functionality
             DeckHandler.Card card1 = new DeckHandler.Card(1,2, "c1_2");
             DeckHandler.Card card2 = new DeckHandler.Card(3,2, "c3_2");
@@ -566,7 +568,7 @@ public class activityGameBlackJack extends AppCompatActivity {
             setImageResource('p', 1, card1.getImageSource());
             setImageResource('p', 2, card2.getImageSource());
             //End of debug
-    */
+
             // Enable split button if player has cards of same rank
             if (player.getHand().getCard(0).getRank() == player.getHand().getCard(1).getRank())
                 splitButton.setEnabled(true);
