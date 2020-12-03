@@ -29,9 +29,8 @@ public class activityGameBlackJack extends AppCompatActivity {
     Player player;
     ArrayList<roundData> roundDataArrayList;
     roundData currRoundData;
-    boolean dealerPlayed;
+    boolean dealerPlayed = false;
     boolean playingSplit = false;
-    boolean betDouble = false;
     int currentBet;
     final int minBet = 10;
     final String cardFaceDown = "b2fv";
@@ -40,19 +39,29 @@ public class activityGameBlackJack extends AppCompatActivity {
     static class roundData {
         private Integer handTotal;
         private Integer bet;
+        private boolean playerNatural;
+        private boolean dealerNatural;
 
         // constructor
         public roundData(Integer bet, Integer handTotal) {
             this.bet = bet;
             this.handTotal = handTotal;
+            this.dealerNatural = false;
+            this.playerNatural = false;
         }
 
         // getter
         public int getBet() { return bet; }
         public int getHandTotal() { return handTotal; }
+        public boolean isPlayerNatural() { return playerNatural; }
+        public boolean isDealerNatural() { return dealerNatural; }
         // setter
         public void setBet(int bet) { this.bet = bet; }
         public void setHandTotal(int handTotal) { this.handTotal = handTotal; }
+        public void setPlayerNatural() { this.playerNatural = true; }
+        public void resetPlayerNatural() { this.playerNatural = false; }
+        public void setDealerNatural() { this.dealerNatural = true; }
+        public void resetDealerNatural() { this.dealerNatural = false; }
     }
 
     // TextViews
@@ -508,8 +517,6 @@ public class activityGameBlackJack extends AppCompatActivity {
     }
 
     private void newDeal() {
-        boolean playerNatural = false;
-        boolean dealerNatural = false;
         // Deal first cards
         dealer.dealCard(player, deck);
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
@@ -520,16 +527,16 @@ public class activityGameBlackJack extends AppCompatActivity {
         dealer.dealCard(player,deck);
         setImageResource('p',player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         if (player.getHand().getHandValue() == 21)
-            playerNatural = true;
+            currRoundData.setPlayerNatural();
         dealer.dealCard(dealer, deck);
         setImageResource('d', dealer.getHand().getNumOfCardsInHand(), cardFaceDown);
         if (dealer.getHand().getHandValue() == 21) {
-            dealerNatural = true;
+            currRoundData.setDealerNatural();
             setImageResource('d', dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         }
 
         // Check for Dealer BlackJack and show card if true
-        if (dealerNatural || playerNatural) {
+        if (player.getHand().getHandValue() == 21 || dealer.getHand().getHandValue() == 21) {
             saveRound();
             endRound();
         } else {
@@ -568,7 +575,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         while (roundDataArrayList.size() > 0) {
             double cash = 0;
             thisRound = roundDataArrayList.remove(0);
-            roundResult = checkWin(thisRound.getHandTotal());
+            roundResult = checkWin(thisRound);
             switch (roundResult) {
                 case BLACKJACK:
                     cash = thisRound.getBet() * 1.5;
@@ -628,7 +635,7 @@ public class activityGameBlackJack extends AppCompatActivity {
             setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         }
         // Dealer hits if below 16
-        while (dealer.getHand().getHandValue() < 17 && dealer.getHand().getNumOfCardsInHand() < maxCardsInHand) {
+        while (dealer.getHand().getHandValue() < 17) {
             dealer.dealCard(dealer, deck);
             setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         }
@@ -662,7 +669,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         updateScore();
     }
 
-    private gameResult checkWin(int playerHandTotal) {
+    private gameResult checkWin(roundData thisRound) {
         /* Function checks for win conditions on current hand values
          * Checks for Player BlackJack and pays 1.5x bet amount, returns BLACKJACK
          * If player busts, returns LOSE
@@ -673,10 +680,11 @@ public class activityGameBlackJack extends AppCompatActivity {
 
         gameResult result;
 
-        int playerHandValue = playerHandTotal;
+        int playerHandValue = thisRound.getHandTotal();
         int dealerHandValue = dealer.getHand().getHandValue();
-
-        if (playerHandValue == 21 && dealer.getHand().getNumOfCardsInHand() == 1)
+        boolean playerNatural = thisRound.isPlayerNatural();
+        boolean dealerNatural = thisRound.isDealerNatural();
+        if (playerNatural && !dealerNatural)
             result = gameResult.BLACKJACK;
         else if (player.getHand().checkBust())
             result = gameResult.LOSE;
