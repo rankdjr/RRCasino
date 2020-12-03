@@ -60,12 +60,15 @@ public class activityGamePoker extends AppCompatActivity {
     private DeckHandler.Deck deck;
     private PokerDealer dealer;
     private Player player;
+    private Player computer;
     private int currentBet;
     private int buyIn = 50;
     private int minBet = buyIn;
     private int startingFunds = 10000;
     private String cardFaceDown = "b2fv";
-
+    private Hand hand;
+    private Hand temp;
+    private enum gameResult { WIN, LOSE, TIE }
 
     @SuppressLint("WrongViewCast")
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -372,4 +375,191 @@ public class activityGamePoker extends AppCompatActivity {
         previousBet = currentBet;
 
     }
-}
+
+/**Daniel's addition**/
+    public void  Check_Hand (Player player) {
+        // load hand combining hand
+        this.hand = new Hand();
+        // load hand for unique value for straight check
+        this.temp = new Hand();
+        // Flush flag
+        int suit [] = {0, 0, 0, 0};
+        // pairs flag
+        int pairs [] = {0,0,0,0,0,0,0,0,0,0,0,0,0};
+        // add players hand to temp hand
+        for (int i = 0; i < player.getHand().getNumOfCardsInHand(); i++) {
+        hand.addCard(player.getHand().getCard(i));
+        }
+        // add dealer hand to temp hand
+        for (int i = 0; i < dealer.getHand().getNumOfCardsInHand(); i++) {
+        hand.addCard(dealer.getHand().getCard(i));
+        }
+        //sort temp array use quick sort array is small
+        insertion_sort(hand);
+
+        //the 3 combine of 5 cards will be check for if flush 0123456
+        for(int i=0 ;i<7 ;i++) {
+        //   if royal flush
+        if (hand.getSuit(i) == 1 ) {
+        suit[0]+=1;
+        }
+        else if (hand.getSuit(i) == 1 ) {
+        suit[1]+=1;
+        }
+        else if (hand.getSuit(i) == 1 ) {
+        suit[2]+=1;
+        }
+        else if (hand.getSuit(i) == 1 ) {
+        suit[3]+=1;
+        }
+        }
+        int count = 0;
+        temp.addCard(hand.getCard(count));
+        if (temp.getCard(0).getRank() == 1){
+
+        }
+        for(int i=1;i<7;i++) {
+        //if match update array
+        if (hand.getCard(i).getValue() == temp.getCard(count).getValue()) {
+        if(player.getcondition(8) == 1 && (temp.getCard(count-1).getValue() != temp.getCard(count-2).getValue()))
+        {
+        player.setcondition(7);
+        }
+        pairs[hand.getCard(i).getValue()] += 1;
+        player.setcondition(8);
+        } //if card value != temp value +1 replace temp
+        else if(hand.getCard(i).getValue() != temp.getCard(count).getValue() + 1) {
+        temp.getHand().set(count, hand.getCard(i));
+        }else{
+        temp.addCard(hand.getCard(i));
+        count++;
+        }
+        }
+        //check flags
+        for (int i=0;i<4;i++)
+        {
+        if (suit[i] >= 5) {
+        player.setcondition(4);
+        }
+        }
+        if (temp.getNumOfCardsInHand() >= 5) {
+        player.setcondition(5);
+        }
+        //   if (royal flush)
+        if (temp.getAcesInHand() == 1 && temp.getCard(1).getRank() == 10 && temp.getCard(2).getRank() == 11 && temp.getCard(3).getRank() == 12 && temp.getCard(4).getRank() == 13 )
+        {
+        if (player.getcondition(4) == 1) {
+        player.setcondition(0);
+        }
+        }
+        //   if (straight Flush )
+        if (player.getcondition(4) == 1 && player.getcondition(5) == 1)
+        {
+        player.setcondition(1);
+        }
+        //if (four of a kind)
+        this.check_pairs(pairs);
+
+        //else if (Flush all suits are the same )
+        if(player.getcondition(4) == 1 && player.getcondition(5) != 1)
+        {
+        player.setcondition(4);
+        }
+        //   else if (straight)
+        if(player.getcondition(4) != 1 && player.getcondition(5) == 1)
+        {
+        player.setcondition(5);
+        }
+        }
+
+        private void check_pairs(int[] pairs) {
+        for(int i=12;i>0;i--)
+        {
+        if (pairs[i] == 3) {
+        player.setcondition(2);
+        } else if (pairs[i] == 2) {
+        player.setcondition(6);
+        } else if (pairs[i] == 1) {
+        player.setcondition(8);
+        }
+        }
+        if (player.getcondition(6) == 1 && player.getcondition(8) == 1 ) {
+        player.setcondition(3);
+        }
+
+        }
+        private void insertion_sort(Hand hand)
+        {
+        int n = player.getHand().getNumOfCardsInHand();
+        for(int i=1;i<n-1;i++)
+        {
+        DeckHandler.Card v = hand.getCard(i);
+        int j = i - 1;
+        while (j>=0 & hand.getCard(j).getValue() > v.getValue())
+        {
+        hand.getHand().set(j+1, hand.getHand().get(j));
+        j = j -1;
+        hand.getHand().set(j+1, v);
+        }
+
+        }
+        }
+
+        private void auto (Player player) {
+            this.Check_Hand(player);
+            if (player.highestHand() >= 5) {
+                // raise
+            } else if (player.highestHand() < 5 && player.highestHand() > 8) {
+                //call
+
+            }else{
+                //fold
+            }
+
+        }
+
+private gameResult Check_win () {
+        gameResult result = activityGamePoker.gameResult.WIN;
+        //2. compare highest win condition
+        //player wins
+        if (player.highestHand() < computer.highestHand()) {
+        result = activityGamePoker.gameResult.WIN;
+        return result;
+        //player loses
+        } else if (player.highestHand() > computer.highestHand()) {
+        result = activityGamePoker.gameResult.LOSE;
+        return result;
+        // player ties
+        } else if (player.highestHand() == computer.highestHand()) {
+        result = activityGamePoker.gameResult.TIE;
+        //check strong hand if tie
+        if (player.getHand().getHandValue() > computer.getHand().getHandValue()) {
+        result = activityGamePoker.gameResult.WIN;
+        return result;
+        //player loses
+        } else if (player.getHand().getHandValue() < computer.getHand().getHandValue()) {
+        result = activityGamePoker.gameResult.LOSE;
+        return result;
+        // player ties
+        } else if (player.getHand().getHandValue() == computer.getHand().getHandValue()) {
+        result = activityGamePoker.gameResult.TIE;
+        //check kicker
+        if (player.getHand().getCard(0).getValue() > (computer.getHand().getCard(0).getValue() | computer.getHand().getCard(1).getValue())) {
+        result = activityGamePoker.gameResult.WIN;
+        return result;
+        //player loses
+        } else if (player.getHand().getCard(1).getValue() > (computer.getHand().getCard(0).getValue() | computer.getHand().getCard(1).getValue())) {
+        result = activityGamePoker.gameResult.WIN;
+        return result;
+        // player ties
+        } else if (player.getHand().getHandValue() == computer.getHand().getHandValue()) {
+        result = activityGamePoker.gameResult.TIE;
+        return result;
+        } else {
+        result = activityGamePoker.gameResult.LOSE;
+        }
+        }
+        }
+        return result;
+        }
+        }

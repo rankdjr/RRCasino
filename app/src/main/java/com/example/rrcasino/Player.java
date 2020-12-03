@@ -79,6 +79,5 @@ private int condition [] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     public int getcondition (int index) {return condition[index];}
 
     public void setcondition (int index) {condition[index] = 1;}
-
 /**end daniel's addition**/
 }
