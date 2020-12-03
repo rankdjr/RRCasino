@@ -13,13 +13,17 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
     private Button gameSelectionButton;
+    private Button helpMenuButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.getSupportActionBar().hide();
 
-        gameSelectionButton = (Button) findViewById(R.id.playButton);
+        gameSelectionButton = findViewById(R.id.playButton);
+        helpMenuButton = findViewById(R.id.helpButton);
+
         gameSelectionButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -27,6 +31,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intentLoadGameSelection);
             }
         });
+        helpMenuButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent openHelpMenu = new Intent(MainActivity.this, helpMenu.class);
+                startActivity(openHelpMenu);
+            }
+        });
+
     }
 
     boolean isTouch = false;
