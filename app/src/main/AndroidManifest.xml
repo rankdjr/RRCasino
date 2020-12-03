@@ -11,6 +11,9 @@
         android:theme="@style/Theme.RRsCasino">
         <activity android:name=".activityGameBlackJack"></activity>
         <activity android:name=".activityGamePoker" android:theme="@style/Theme.AppCompat.Light.NoActionBar" android:screenOrientation="landscape"/>
+        <activity android:name=".helpMenu" />
+        <activity android:name=".pokerHelp"/>
+        <activity android:name=".bjackHelp"/>
         <activity android:name=".gameSelection" />
         <activity android:name=".MainActivity" />
         <activity android:name=".Splash">
