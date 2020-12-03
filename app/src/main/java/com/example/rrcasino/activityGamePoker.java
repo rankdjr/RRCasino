@@ -503,6 +503,7 @@ public class activityGamePoker extends AppCompatActivity {
         deal.setEnabled(true);
         float cash = 0;
         round = 0;
+        System.out.println("In endRound function");
         System.out.println("end round player buy: " + playerInitialBuyin);
         if(playerFold && !playerInitialBuyin) {
             //Player doesnt lose cash
