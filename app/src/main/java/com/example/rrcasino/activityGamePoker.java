@@ -151,7 +151,7 @@ public class activityGamePoker extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                currentBet = progressChangedValue;
+                currentBet += progressChangedValue;
 
             }
         });
@@ -176,6 +176,10 @@ public class activityGamePoker extends AppCompatActivity {
                     pot.setText("$"+currentBet);
                     dealTheFlop();
                     dealTheTurn();
+                case R.id.fold:
+                    endFold();
+
+
 
             }
 
@@ -318,15 +322,28 @@ public class activityGamePoker extends AppCompatActivity {
         dealer.dealCard(dealer, deck);
         setImageResource('c', 4, dealer.getLastDealtCard().getImageSource());
     }
-    /*
+
     private void dealTheRiver() {
         //Deal the river card
         dealer.dealCard(dealer,deck);
         setImageResource('c', dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
 
     }
+    private void endFold() {
+        currentBet = 0;
+        fold.setEnabled(false);
+        check.setEnabled(false);
+        call.setEnabled(false);
+        bet.setEnabled(false);
+        betAmount.setVisibility(View.INVISIBLE);
+        playerBet.setVisibility(View.INVISIBLE);
+        pot.setVisibility(View.INVISIBLE);
+        deal.setEnabled(true);
+        //Update cash if player betted before folding
 
-    */
+    }
+
+
     private void checkInitialBuyIn() {
         /*
             *Start with user player for initial buy in
