@@ -255,6 +255,10 @@ public class activityGameBlackJack extends AppCompatActivity {
                             player.setHand(player.getNextHand());
                             playingSplit = true;
                             hit();
+                            if (player.getHand().getHandValue() == 21) {
+                                currRoundData.setPlayerNatural();
+                                endRound();
+                            }
                         }
                     }
                     break;
@@ -273,6 +277,10 @@ public class activityGameBlackJack extends AppCompatActivity {
                         player.setHand(player.getNextHand());
                         playingSplit = true;
                         hit();
+                        if (player.getHand().getHandValue() == 21) {
+                            currRoundData.setPlayerNatural();
+                            endRound();
+                        }
                     }
                     break;
                 case R.id.confirmButton:
