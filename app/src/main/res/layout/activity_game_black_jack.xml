@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
     android:background="@drawable/blackjackbg"
-    android:paddingBottom="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp"
+    android:paddingBottom="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="5dp"
     tools:context=".activityGameBlackJack">
 
-    !-- Card Layouts -->
+    <!-- Card Layouts -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,7 +20,7 @@
 
         <!-- Dealer Score TextView -->
         <TextView
-            android:id="@+id/dealerScore"
+            android:id="@+id/tvDealerScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -30,50 +31,107 @@
 
         <!-- Dealer Cards -->
         <LinearLayout
+            android:id="@+id/dCardLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="0px"
             android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/dCard1"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/b2fv" />
-
-            <ImageView
-                android:id="@+id/dCard2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/b2fv" />
-
-            <ImageView
-                android:id="@+id/dCard3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/b2fv" />
-
-            <ImageView
-                android:id="@+id/dCard4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/b2fv" />
-
-            <ImageView
-                android:id="@+id/dCard5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/b2fv" />
-
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/dCard1"
+                    android:layout_marginLeft="0dp"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/b2fv" />
+                <ImageView
+                    android:id="@+id/dCard2"
+                    android:layout_toRightOf="@+id/dCard1"
+                    android:layout_marginLeft="-40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/b2fv" />
+                <ImageView
+                    android:id="@+id/dCard3"
+                    android:layout_toRightOf="@+id/dCard2"
+                    android:layout_marginLeft="-40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0"
+                    android:src="@drawable/b2fv" />
+                <ImageView
+                    android:id="@+id/dCard4"
+                    android:layout_toRightOf="@+id/dCard3"
+                    android:layout_marginLeft="-40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0"
+                    android:src="@drawable/b2fv" />
+                <ImageView
+                    android:id="@+id/dCard5"
+                    android:layout_toRightOf="@+id/dCard4"
+                    android:layout_marginLeft="-40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0"
+                    android:src="@drawable/b2fv" />
+                <ImageView
+                    android:id="@+id/dCard6"
+                    android:layout_toRightOf="@+id/dCard5"
+                    android:layout_marginLeft="-40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0"
+                    android:src="@drawable/b2fv" />
+                <ImageView
+                    android:id="@+id/dCard7"
+                    android:layout_toRightOf="@+id/dCard6"
+                    android:layout_marginLeft="-40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0"
+                    android:src="@drawable/b2fv" />
+                <ImageView
+                    android:id="@+id/dCard8"
+                    android:layout_toRightOf="@+id/dCard7"
+                    android:layout_marginLeft="-40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0"
+                    android:src="@drawable/b2fv" />
+                <ImageView
+                    android:id="@+id/dCard9"
+                    android:layout_toRightOf="@+id/dCard8"
+                    android:layout_marginLeft="-40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0"
+                    android:src="@drawable/b2fv" />
+                <ImageView
+                    android:id="@+id/dCard10"
+                    android:layout_toRightOf="@+id/dCard9"
+                    android:layout_marginLeft="-40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0"
+                    android:src="@drawable/b2fv" />
+                <ImageView
+                    android:id="@+id/dCard11"
+                    android:layout_toRightOf="@+id/dCard10"
+                    android:layout_marginLeft="-45dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0"
+                    android:src="@drawable/b2fv" />
+            </RelativeLayout>
         </LinearLayout>
 
         <!-- Player Split Hand Score TextView -->
         <TextView
-            android:id="@+id/playerSplitScore"
+            android:id="@+id/tvPlayerSplitScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -85,55 +143,109 @@
 
         <!-- Player Split Hand -->
         <LinearLayout
+            android:id="@+id/sCardLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="0px"
             android:orientation="horizontal">
-
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
             <ImageView
                 android:id="@+id/sCard1"
-                android:layout_width="match_parent"
+                android:layout_marginLeft="0dp"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:alpha="0"
-                app:srcCompat="@drawable/b2fv" />
-
+				android:src="@drawable/b2fv" />
             <ImageView
                 android:id="@+id/sCard2"
-                android:layout_width="match_parent"
+                android:layout_toRightOf="@+id/sCard1"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:alpha="0"
-                app:srcCompat="@drawable/b2fv" />
-
+                android:src="@drawable/b2fv" />
             <ImageView
                 android:id="@+id/sCard3"
-                android:layout_width="match_parent"
+                android:layout_toRightOf="@+id/sCard2"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:alpha="0"
-                app:srcCompat="@drawable/b2fv" />
-
+                android:src="@drawable/b2fv" />
             <ImageView
                 android:id="@+id/sCard4"
-                android:layout_width="match_parent"
+                android:layout_toRightOf="@+id/sCard3"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:alpha="0"
-                app:srcCompat="@drawable/b2fv" />
-
+                android:src="@drawable/b2fv" />
             <ImageView
                 android:id="@+id/sCard5"
-                android:layout_width="match_parent"
+                android:layout_toRightOf="@+id/sCard4"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:alpha="0"
-                app:srcCompat="@drawable/b2fv" />
-
+                android:src="@drawable/b2fv" />
+            <ImageView
+                android:id="@+id/sCard6"
+                android:layout_toRightOf="@+id/sCard5"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:src="@drawable/b2fv" />
+            <ImageView
+                android:id="@+id/sCard7"
+                android:layout_toRightOf="@+id/sCard6"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:src="@drawable/b2fv" />
+            <ImageView
+                android:id="@+id/sCard8"
+                android:layout_toRightOf="@+id/sCard7"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:src="@drawable/b2fv" />
+            <ImageView
+                android:id="@+id/sCard9"
+                android:layout_toRightOf="@+id/sCard8"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:src="@drawable/b2fv" />
+            <ImageView
+                android:id="@+id/sCard10"
+                android:layout_toRightOf="@+id/sCard9"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:src="@drawable/b2fv" />
+            <ImageView
+                android:id="@+id/sCard11"
+                android:layout_toRightOf="@+id/sCard10"
+                android:layout_marginLeft="-45dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:src="@drawable/b2fv" />
+            </RelativeLayout>
         </LinearLayout>
 
         <!-- Player Main Hand Score TextView -->
         <TextView
-            android:id="@+id/playerScore"
+            android:id="@+id/tvPlayerScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -141,59 +253,105 @@
             android:textColor="@color/white"
             android:layout_marginBottom="10dp"
             android:text="Score" />
-
         <!-- Player Main Hand -->
         <LinearLayout
+            android:id="@+id/pCardLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="0px"
             android:orientation="horizontal">
-
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
             <ImageView
                 android:id="@+id/pCard1"
-                android:layout_width="match_parent"
+                android:layout_marginLeft="0dp"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/b2fv" />
-
+				android:src="@drawable/b2fv" />
             <ImageView
                 android:id="@+id/pCard2"
-                android:layout_width="match_parent"
+                android:layout_toRightOf="@+id/pCard1"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/b2fv" />
-
+                android:src="@drawable/b2fv" />
             <ImageView
                 android:id="@+id/pCard3"
-                android:layout_width="match_parent"
+                android:layout_toRightOf="@+id/pCard2"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/b2fv" />
-
+                android:alpha="0"
+                android:src="@drawable/b2fv" />
             <ImageView
                 android:id="@+id/pCard4"
-                android:layout_width="match_parent"
+                android:layout_toRightOf="@+id/pCard3"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/b2fv" />
-
+                android:alpha="0"
+                android:src="@drawable/b2fv" />
             <ImageView
                 android:id="@+id/pCard5"
-                android:layout_width="match_parent"
+                android:layout_toRightOf="@+id/pCard4"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/b2fv" />
-
+                android:alpha="0"
+                android:src="@drawable/b2fv" />
+            <ImageView
+                android:id="@+id/pCard6"
+                android:layout_toRightOf="@+id/pCard5"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:src="@drawable/b2fv" />
+            <ImageView
+                android:id="@+id/pCard7"
+                android:layout_toRightOf="@+id/pCard6"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:src="@drawable/b2fv" />
+            <ImageView
+                android:id="@+id/pCard8"
+                android:layout_toRightOf="@+id/pCard7"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:src="@drawable/b2fv" />
+            <ImageView
+                android:id="@+id/pCard9"
+                android:layout_toRightOf="@+id/pCard8"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:src="@drawable/b2fv" />
+            <ImageView
+                android:id="@+id/pCard10"
+                android:layout_toRightOf="@+id/pCard9"
+                android:layout_marginLeft="-40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:src="@drawable/b2fv" />
+            <ImageView
+                android:id="@+id/pCard11"
+                android:layout_toRightOf="@+id/pCard10"
+                android:layout_marginLeft="-45dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:src="@drawable/b2fv" />
+            </RelativeLayout>
         </LinearLayout>
-
-        <!-- Debug TextViews
-            <TextView
-                android:id="@+id/inHand"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:background="@color/white"
-                android:text="LastCard" /> -->
-
     </LinearLayout>
 
     <!-- Button and Bet Layout-->
@@ -226,8 +384,8 @@
             <Button
                 android:id="@+id/doubleButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
+                android:layout_height="match_parent"
+                android:textSize="10dp"
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:text="Double" />
@@ -236,7 +394,7 @@
                 android:id="@+id/hitButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"
+                android:textSize="10dp"
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:text="Hit" />
@@ -245,7 +403,7 @@
                 android:id="@+id/stayButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"
+                android:textSize="10dp"
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:text="Stay" />
@@ -254,7 +412,7 @@
                 android:id="@+id/splitButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"
+                android:textSize="10dp"
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:text="Split" />

@@ -193,7 +193,6 @@
                 android:id="@+id/ccard1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginRight="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/linearLayout"
                 app:layout_constraintStart_toStartOf="parent"
