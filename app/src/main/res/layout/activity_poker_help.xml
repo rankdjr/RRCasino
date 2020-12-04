@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +8,7 @@
     tools:context=".bjackHelp">
 
     <LinearLayout
-        android:id="@+id/text"
+        android:id="@+id/headerText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -25,6 +24,7 @@
             android:textSize="40sp" />
 
         <TextView
+            android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -35,62 +35,56 @@
 
     </LinearLayout>
 
-    <ScrollView
+    <LinearLayout
+        android:layout_below="@+id/headerText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/text"
-        android:layout_margin="20dp">
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
         <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+            <Button
+                android:id="@+id/overviewBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Overview"
+                android:layout_marginRight="10dp"/>
+            <Button
+                android:id="@+id/actionsBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Actions"/>
+            <Button
+                android:id="@+id/winningBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/HowToWin"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/helpTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/overview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:layout_gravity="center"
-                android:text="@string/Overview"
-                android:textSize="25dp"
-                android:textStyle="bold"
-                android:textColor="@color/white"/>
-            <TextView
-                android:id="@+id/overviewDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:text="@string/pOverviewDescription"/>
-            <TextView
-                android:id="@+id/actions"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:layout_gravity="center"
-                android:text="@string/Actions"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"/>
-            <TextView
-                android:id="@+id/actionsDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:id="@+id/howtowin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:layout_gravity="center"
-                android:text="@string/HowToWin"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"/>
-            <TextView
-                android:id="@+id/winDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-    </ScrollView>
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:text="@string/Overview"
+            android:visibility="invisible"
+            android:textSize="35dp"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
+        <TextView
+            android:id="@+id/helpDescription"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp"
+            android:autoSizeTextType="uniform"
+            android:textColor="@color/white"
+            android:text="@string/pOverviewDescription"/>
 
 
+    </LinearLayout>
 </RelativeLayout>
