@@ -101,8 +101,8 @@ public class activityGamePoker extends AppCompatActivity {
 
         //Initialize buttons
         this.fold = findViewById(R.id.fold);
-        this.check = findViewById(R.id.check);
-        this.call = findViewById(R.id.call);
+        //this.check = findViewById(R.id.check);
+        //this.call = findViewById(R.id.call);
         this.bet = findViewById(R.id.bet);
         this.deal = findViewById(R.id.deal);
         fold.setEnabled(false);
