@@ -156,7 +156,7 @@ public class activityGamePoker extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
-                betAmount.setText("$"+progressChangedValue);
+                betAmount.setText("Current Bet: $"+progressChangedValue);
                 bet.setText("BET");
                 if(progressChangedValue == player.getBalance()){
                     bet.setText("ALL IN");
