@@ -6,10 +6,10 @@
     android:layout_height="wrap_content"
     android:layout_weight="1"
     android:background="@drawable/blackjackbg"
-    android:paddingBottom="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp"
+    android:paddingBottom="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="5dp"
     tools:context=".activityGameBlackJack">
 
     <!-- Card Layouts -->
@@ -384,8 +384,8 @@
             <Button
                 android:id="@+id/doubleButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
+                android:layout_height="match_parent"
+                android:textSize="10dp"
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:text="Double" />
@@ -394,7 +394,7 @@
                 android:id="@+id/hitButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"
+                android:textSize="10dp"
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:text="Hit" />
@@ -403,7 +403,7 @@
                 android:id="@+id/stayButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"
+                android:textSize="10dp"
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:text="Stay" />
@@ -412,7 +412,7 @@
                 android:id="@+id/splitButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"
+                android:textSize="10dp"
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:text="Split" />

@@ -364,7 +364,7 @@ public class activityGameBlackJack extends AppCompatActivity {
                 for (int i = 0; i < cardNum; i++)
                     leftMargin -= 50;
                 param.setMargins(leftMargin, 0, 0, 0);
-                sCardsLayout.setLayoutParams(param);
+                pCardsLayout.setLayoutParams(param);
                 switch (cardNum) {
                     case 1:
                         playerCardImages[cardNum-1].setAlpha(opaque);
@@ -470,7 +470,7 @@ public class activityGameBlackJack extends AppCompatActivity {
                 for (int i = 0; i < cardNum; i++)
                     leftMargin -= 50;
                 param.setMargins(leftMargin, 0, 0, 0);
-                pCardsLayout.setLayoutParams(param);
+                sCardsLayout.setLayoutParams(param);
                 switch (cardNum) {
                     case 1:
                         playerSplitCardImages[cardNum-1].setAlpha(opaque);
@@ -686,6 +686,7 @@ public class activityGameBlackJack extends AppCompatActivity {
             setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         }
         dealerPlayed = true;
+        updateScore();
     }
 
     private void hit() {
@@ -754,7 +755,7 @@ public class activityGameBlackJack extends AppCompatActivity {
             tvPlayerSplitScore.setText(playerHandValue);
         }
         // Update dealer score
-        if (dealer.getHand().getNumOfCardsInHand() > 2 || dealerPlayed || dealer.getHand().getHandValue() == 21)
+        if (dealerPlayed || currRoundData.isDealerNatural())
             dealerHandValue = "Dealer Score: " + dealer.getHand().getHandValue();
         else
             dealerHandValue = "Dealer Score: " + dealer.getHand().getCard(0).getValue();
