@@ -77,8 +77,9 @@ public class Player {
     }
 
     /** Daniel's addition**/
-    //0  1  2  3  4  5  6  7  8  9
+                              //0  1  2  3  4  5  6  7  8  9
     private int condition [] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
     public int highestHand() {
         int result = 9;
         for(int i=0;i<10;i++)
@@ -97,5 +98,4 @@ public class Player {
     /**end daniel's addition**/
 
 }
-
 
