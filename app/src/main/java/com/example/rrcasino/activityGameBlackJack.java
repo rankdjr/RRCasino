@@ -11,10 +11,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -343,6 +346,13 @@ public class activityGameBlackJack extends AppCompatActivity {
          * Third parameter takes in a Card object (usually the last dealt card) that holds the image source
          * as a string
          */
+        // Display metrics to adjust left margin of first card; Used to center hand in screen
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        float viewableCardWidth = (71*cardNum) - cardNum*40*dm.density;
+        float dpWidth = (dm.widthPixels-30)/dm.density;
+        float viewWidth = dm.widthPixels-15;
+        int playerHandLeftMargin;
+        RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         Resources resources = getResources();
         final int resourceId = resources.getIdentifier(imageSource,"drawable",getPackageName());
@@ -352,6 +362,12 @@ public class activityGameBlackJack extends AppCompatActivity {
                     case 1:
                         playerCardImages[cardNum-1].setAlpha(opaque);
                         pCard1.setImageResource(resourceId);
+                        /* TODO Center cards in screen and adjust margin each hand
+                        playerHandLeftMargin = (int)viewWidth/2 - (int)viewableCardWidth/2;
+                        Toast.makeText(activityGameBlackJack.this, playerHandLeftMargin+"px", Toast.LENGTH_SHORT).show();
+                        param.setMargins(playerHandLeftMargin, 0, 0, 0);
+                        pCard1.setLayoutParams(param);
+                         */
                         break;
                     case 2:
                         playerCardImages[cardNum-1].setAlpha(opaque);
