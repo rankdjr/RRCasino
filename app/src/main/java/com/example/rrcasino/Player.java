@@ -63,7 +63,7 @@ public class Player {
         return balance;
     }
 
-    public void addToBalance(double cash) {
+    public void addToBalance(float cash) {
         balance += cash;
     }
 

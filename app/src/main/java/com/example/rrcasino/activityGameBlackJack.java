@@ -619,12 +619,12 @@ public class activityGameBlackJack extends AppCompatActivity {
         roundData thisRound;
         gameResult roundResult;
         while (roundDataArrayList.size() > 0) {
-            double cash = 0;
+            float cash = 0;
             thisRound = roundDataArrayList.remove(0);
             roundResult = checkWin(thisRound);
             switch (roundResult) {
                 case BLACKJACK:
-                    cash = thisRound.getBet() * 1.5;
+                    cash = (float) (thisRound.getBet() * 1.5);
                     player.addToBalance(cash);
                     gameMsg = Toast.makeText(activityGameBlackJack.this, "Player BlackJack", Toast.LENGTH_SHORT);
                     gameMsg.setGravity(Gravity.CENTER, 0, 0);
