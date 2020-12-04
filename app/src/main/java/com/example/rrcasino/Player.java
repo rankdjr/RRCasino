@@ -82,17 +82,14 @@ public class Player {
 
     public int highestHand() {
         int result = 0;
-        for(int i = 0; i<10; i++)
+        for(int i : this.condition)
         {
-            if(condition[i] == 1)
+            if(i == 1)
             {
-                result = 1;
                 return result;
             }
-            System.out.println(i);
-            System.out.println("result is");
-            System.out.println(result);
-
+         System.out.println(result);
+           result++;
         }
         return result;
     }

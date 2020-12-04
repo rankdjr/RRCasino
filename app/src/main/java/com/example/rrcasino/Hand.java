@@ -25,6 +25,16 @@ public class Hand {
         return hand;
     }
 
+    public int getHandPokerValue()
+    {
+        int total = 0;
+        for (DeckHandler.Card currCard : this.hand) {
+            total += currCard.getValue();
+        }
+
+        return total;
+    }
+
     public int getHandValue()
     {
         /*Calculates values of cards in hand:

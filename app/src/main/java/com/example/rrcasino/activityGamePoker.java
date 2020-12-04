@@ -576,15 +576,18 @@ public class activityGamePoker extends AppCompatActivity {
         if (hand.getCard(i).getRank() == temp.getCard(count).getRank()) {
             //check 3 of a king
             //if pair and not three of a kind
-        if(player.getcondition(8) == 1 && (temp.getCard(count-1).getValue() != temp.getCard(count-2).getValue()))
+       /*if((player.getcondition(8) == 1) && ((temp.getCard(count-1).getValue() != temp.getCard(count-2).getValue()) && (temp.getCard(count-3).getValue() == temp.getCard(count-2).getValue()) ))
         {
             player.setcondition(7);
         }
+
+        */
         //Flag pairs
             player.setcondition(8);
+            pairs[hand.getCard(i).getRank()-1] += 1;
         }
         //track how many of each card ar ein the hand
-        pairs[hand.getCard(i).getRank()-1] += 1;
+
         //if card value != temp value +1 replace temp
         //don't increase hand unless next part of rank
         if(hand.getCard(i).getValue() != temp.getCard(count).getValue() + 1) {
@@ -716,24 +719,26 @@ public class activityGamePoker extends AppCompatActivity {
         }
 
 private gameResult Check_win () {
+
         gameResult result = activityGamePoker.gameResult.TIE;
         //2. compare highest win condition
-        System.out.println(player.highestHand());
-        System.out.println(computer.highestHand());
-
+        this.Check_Hand(player);
+        this.Check_Hand(computer);
+        int PH = player.highestHand();
+        int CH = computer.highestHand();
     //win by hand
-        if (player.highestHand() < computer.highestHand()) {
+        if (PH < CH) {
             result = activityGamePoker.gameResult.WIN;
             return result;
-        } else if (player.highestHand() > computer.highestHand()) {
+        } else if (PH > CH) {
             result = activityGamePoker.gameResult.LOSE;
             return result;
         } else {
             //check strength of hand if tie
-            if (player.getHand().getHandValue() > computer.getHand().getHandValue()) {
+            if (player.getHand().getHandPokerValue() > computer.getHand().getHandPokerValue()) {
                 result = activityGamePoker.gameResult.WIN;
                 return result;
-            } else if (player.getHand().getHandValue() < computer.getHand().getHandValue()) {
+            } else if (player.getHand().getHandPokerValue() < computer.getHand().getHandPokerValue()) {
                 result = activityGamePoker.gameResult.LOSE;
                 return result;
             } else {
