@@ -11,10 +11,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -121,6 +124,9 @@ public class activityGameBlackJack extends AppCompatActivity {
     private ImageView[] dealerCardImages;
     private final float transparent = 0;
     private final float opaque = 1;
+    private LinearLayout pCardsLayout;
+    private LinearLayout dCardsLayout;
+    private LinearLayout sCardsLayout;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -151,6 +157,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         this.pCard11 = findViewById(R.id.pCard11);
         playerCardImages = new ImageView[] { pCard1, pCard2, pCard3, pCard4, pCard5, pCard6,
                 pCard7, pCard8, pCard9, pCard10, pCard11 };
+        this.pCardsLayout = findViewById(R.id.pCardLayout);
         this.sCard1 = findViewById(R.id.sCard1);
         this.sCard2 = findViewById(R.id.sCard2);
         this.sCard3 = findViewById(R.id.sCard3);
@@ -164,6 +171,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         this.sCard11 = findViewById(R.id.sCard11);
         playerSplitCardImages = new ImageView[] {sCard1, sCard2, sCard3, sCard4, sCard5, sCard6,
                 sCard7, sCard8, sCard9, sCard10, sCard11 };
+        this.sCardsLayout = findViewById(R.id.sCardLayout);
         this.dCard1 = findViewById(R.id.dCard1);
         this.dCard2 = findViewById(R.id.dCard2);
         this.dCard3 = findViewById(R.id.dCard3);
@@ -177,6 +185,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         this.dCard11 = findViewById(R.id.dCard11);
         dealerCardImages = new ImageView[] {dCard1, dCard2, dCard3, dCard4, dCard5, dCard6,
                 dCard7, dCard8, dCard9, dCard10, dCard11 };
+        this.dCardsLayout = findViewById(R.id.dCardLayout);
         // Initialize button IDs and set onclick Listeners
         this.hitButton = findViewById(R.id.hitButton);
         this.stayButton = findViewById(R.id.stayButton);
@@ -260,6 +269,8 @@ public class activityGameBlackJack extends AppCompatActivity {
                                 currRoundData.setPlayerNatural();
                                 endRound();
                             }
+                            if (player.getHand().getHandValue() < 12)
+                                doubleButton.setEnabled(true);
                         }
                     }
                     break;
@@ -318,6 +329,14 @@ public class activityGameBlackJack extends AppCompatActivity {
                 case R.id.splitButton:
                     splitButton.setEnabled(false); // Disable after initial click
                     splitHand();
+                    if (player.getHand().getHandValue() == 21) {
+                        currRoundData.setPlayerNatural();
+                        saveRound();
+                        player.getHand().clearHand();
+                        player.setHand(player.getNextHand());
+                        playingSplit = true;
+                        hit();
+                    }
                     if (player.getHand().getHandValue() > 11)
                         doubleButton.setEnabled(false);
                     break;
@@ -334,11 +353,19 @@ public class activityGameBlackJack extends AppCompatActivity {
          * Third parameter takes in a Card object (usually the last dealt card) that holds the image source
          * as a string
          */
-
+        // Display metrics to adjust left margin of first card; Used to center hand in screen
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        int leftMargin = 0;
+        // Card Image resources
         Resources resources = getResources();
         final int resourceId = resources.getIdentifier(imageSource,"drawable",getPackageName());
         switch (participant) {
             case 'p': {
+                for (int i = 0; i < cardNum; i++)
+                    leftMargin -= 50;
+                param.setMargins(leftMargin, 0, 0, 0);
+                pCardsLayout.setLayoutParams(param);
                 switch (cardNum) {
                     case 1:
                         playerCardImages[cardNum-1].setAlpha(opaque);
@@ -388,6 +415,10 @@ public class activityGameBlackJack extends AppCompatActivity {
                 break;
             }
             case 'd': {
+                for (int i = 0; i < cardNum; i++)
+                    leftMargin -= 50;
+                param.setMargins(leftMargin, 0, 0, 0);
+                dCardsLayout.setLayoutParams(param);
                 switch (cardNum) {
                     case 1:
                         dealerCardImages[cardNum-1].setAlpha(opaque);
@@ -437,6 +468,10 @@ public class activityGameBlackJack extends AppCompatActivity {
                 break;
             }
             case 's': {
+                for (int i = 0; i < cardNum; i++)
+                    leftMargin -= 50;
+                param.setMargins(leftMargin, 0, 0, 0);
+                sCardsLayout.setLayoutParams(param);
                 switch (cardNum) {
                     case 1:
                         playerSplitCardImages[cardNum-1].setAlpha(opaque);
@@ -520,9 +555,9 @@ public class activityGameBlackJack extends AppCompatActivity {
             dealer.returnCards();
 
         // Deal cards, update score, and create instance for current round data
+        currRoundData = new roundData(currentBet, player.getHand().getHandValue());
         newDeal();
         updateScore();
-        currRoundData = new roundData(currentBet, player.getHand().getHandValue());
     }
 
     private void newDeal() {
@@ -549,17 +584,7 @@ public class activityGameBlackJack extends AppCompatActivity {
             saveRound();
             endRound();
         } else {
-    /*
-            //Remove below code after done debugging split hand functionality
-            DeckHandler.Card card1 = new DeckHandler.Card(1,2, "c1_2");
-            DeckHandler.Card card2 = new DeckHandler.Card(3,2, "c3_2");
-            player.getHand().clearHand();
-            player.getHand().addCard(card1);
-            player.getHand().addCard(card2);
-            setImageResource('p', 1, card1.getImageSource());
-            setImageResource('p', 2, card2.getImageSource());
-            //End of debug
-    */
+            //debugSplitHand();
             // Enable split button if player has cards of same rank
             if (player.getHand().getCard(0).getRank() == player.getHand().getCard(1).getRank())
                 splitButton.setEnabled(true);
@@ -567,6 +592,18 @@ public class activityGameBlackJack extends AppCompatActivity {
             if (player.getHand().getHandValue() < 12 && player.getBalance() > currentBet * 2)
                 doubleButton.setEnabled(true);
         }
+    }
+
+    private void debugSplitHand() {
+        //Remove below code after done debugging split hand functionality
+        DeckHandler.Card card1 = new DeckHandler.Card(1,2, "c1_2");
+        DeckHandler.Card card2 = new DeckHandler.Card(3,2, "c3_2");
+        player.getHand().clearHand();
+        player.getHand().addCard(card1);
+        player.getHand().addCard(card2);
+        setImageResource('p', 1, card1.getImageSource());
+        setImageResource('p', 2, card2.getImageSource());
+        //End of debug
     }
 
     private void endRound () {
@@ -578,16 +615,17 @@ public class activityGameBlackJack extends AppCompatActivity {
         playingSplit = false;
 
         // TODO: Set messages to display in center of screen
+        String toastText = "HELLO";
         Toast gameMsg;
         roundData thisRound;
         gameResult roundResult;
         while (roundDataArrayList.size() > 0) {
-            double cash = 0;
+            float cash = 0;
             thisRound = roundDataArrayList.remove(0);
             roundResult = checkWin(thisRound);
             switch (roundResult) {
                 case BLACKJACK:
-                    cash = thisRound.getBet() * 1.5;
+                    cash = (float) (thisRound.getBet() * 1.5);
                     player.addToBalance(cash);
                     gameMsg = Toast.makeText(activityGameBlackJack.this, "Player BlackJack", Toast.LENGTH_SHORT);
                     gameMsg.setGravity(Gravity.CENTER, 0, 0);
@@ -649,6 +687,7 @@ public class activityGameBlackJack extends AppCompatActivity {
             setImageResource('d',dealer.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
         }
         dealerPlayed = true;
+        updateScore();
     }
 
     private void hit() {
@@ -673,9 +712,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         playerCardImages[1].setAlpha(transparent);
         setImageResource('s',1, splitCard.getImageSource());
         // Deal to current hand after split
-        dealer.dealCard(player, deck);
-        setImageResource('p', player.getHand().getNumOfCardsInHand(), dealer.getLastDealtCard().getImageSource());
-        updateScore();
+        hit();
     }
 
     private gameResult checkWin(roundData thisRound) {
@@ -719,7 +756,7 @@ public class activityGameBlackJack extends AppCompatActivity {
             tvPlayerSplitScore.setText(playerHandValue);
         }
         // Update dealer score
-        if (dealer.getHand().getNumOfCardsInHand() > 2 || dealerPlayed || dealer.getHand().getHandValue() == 21)
+        if (dealerPlayed || currRoundData.isDealerNatural())
             dealerHandValue = "Dealer Score: " + dealer.getHand().getHandValue();
         else
             dealerHandValue = "Dealer Score: " + dealer.getHand().getCard(0).getValue();

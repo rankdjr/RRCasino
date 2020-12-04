@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
     android:background="@drawable/blackjackbg"
-    android:paddingBottom="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp"
+    android:paddingBottom="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="5dp"
     tools:context=".activityGameBlackJack">
 
-    !-- Card Layouts -->
+    <!-- Card Layouts -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,8 +31,10 @@
 
         <!-- Dealer Cards -->
         <LinearLayout
+            android:id="@+id/dCardLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="0px"
             android:orientation="horizontal">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -39,7 +42,8 @@
                 android:layout_weight="1">
                 <ImageView
                     android:id="@+id/dCard1"
-                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="0dp"
+                    android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/b2fv" />
@@ -139,8 +143,10 @@
 
         <!-- Player Split Hand -->
         <LinearLayout
+            android:id="@+id/sCardLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="0px"
             android:orientation="horizontal">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -148,7 +154,8 @@
                 android:layout_weight="1">
             <ImageView
                 android:id="@+id/sCard1"
-                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="0dp"
+                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0"
@@ -248,8 +255,10 @@
             android:text="Score" />
         <!-- Player Main Hand -->
         <LinearLayout
+            android:id="@+id/pCardLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="0px"
             android:orientation="horizontal">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -257,7 +266,8 @@
                 android:layout_weight="1">
             <ImageView
                 android:id="@+id/pCard1"
-                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="0dp"
+                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 				android:src="@drawable/b2fv" />
@@ -374,8 +384,8 @@
             <Button
                 android:id="@+id/doubleButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
+                android:layout_height="match_parent"
+                android:textSize="10dp"
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:text="Double" />
@@ -384,7 +394,7 @@
                 android:id="@+id/hitButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"
+                android:textSize="10dp"
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:text="Hit" />
@@ -393,7 +403,7 @@
                 android:id="@+id/stayButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"
+                android:textSize="10dp"
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:text="Stay" />
@@ -402,7 +412,7 @@
                 android:id="@+id/splitButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"
+                android:textSize="10dp"
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:text="Split" />

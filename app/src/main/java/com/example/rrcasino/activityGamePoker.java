@@ -124,7 +124,7 @@ public class activityGamePoker extends AppCompatActivity {
         this.dealer = new PokerDealer("dealer", 0);
         this.player = new Player("player", startingFunds);
         playerBalance.setText("Balance: $" + player.getBalance());
-        playerBet.setMax((int) player.getBalance());
+        playerBet.setMax(player.getBalance());
 
 
         //Handle All Listeners

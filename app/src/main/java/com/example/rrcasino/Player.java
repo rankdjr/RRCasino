@@ -9,7 +9,7 @@ package com.example.rrcasino;
 import java.util.ArrayList;
 
 public class Player {
-    private double balance;
+    private int balance;
     private String playerName;
     private Hand hand;
     private ArrayList<Hand> splitHands;
@@ -59,11 +59,11 @@ public class Player {
         return splitCard;
     }
 
-    public double getBalance() {
+    public int getBalance() {
         return balance;
     }
 
-    public void addToBalance(double cash) {
+    public void addToBalance(float cash) {
         balance += cash;
     }
 
@@ -76,4 +76,26 @@ public class Player {
         this.hand.clearHand();
     }
 
+    /** Daniel's addition**/
+    //0  1  2  3  4  5  6  7  8  9
+    private int condition [] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    public int highestHand() {
+        int result = 9;
+        for(int i=0;i<10;i++)
+        {
+            if(this.getcondition(i) == 1)
+            {
+                result = i;
+                break;
+            }
+        }
+        return result;
+    }
+    public int getcondition (int index) {return condition[index];}
+
+    public void setcondition (int index) {condition[index] = 1;}
+    /**end daniel's addition**/
+
 }
+
+

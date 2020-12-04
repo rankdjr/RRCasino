@@ -131,6 +131,8 @@
                 android:text="Fold"
                 android:backgroundTint="#EE2008"/>
 
+            <!-- Check button only needed if starting bets from other players
+                may implement later with time
             <Button
                 android:id="@+id/check"
                 android:layout_width="wrap_content"
@@ -147,7 +149,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight=".5"
                 android:text="Call"
-                android:backgroundTint="#16c902"/>
+                android:backgroundTint="#16c902"/> -->
 
             <Button
                 android:id="@+id/bet"
@@ -185,7 +187,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/linearLayout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/b2fh" />
+                app:srcCompat="@drawable/b2fh"
+                />
 
             <ImageView
                 android:id="@+id/ccard1"
@@ -196,7 +199,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/linearLayout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/b2fh" />
+                app:srcCompat="@drawable/b2fh"
+                />
 
 
         </LinearLayout>
@@ -338,7 +342,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#9600ed"
-            android:text="Help" />
+            android:text="Hands" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
