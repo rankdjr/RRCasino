@@ -76,18 +76,9 @@ public class Player {
         this.hand.clearHand();
     }
 
-    public void splitHand(Hand hand) {
-        //DeckHandler.Card nullCard = new DeckHandler.Card(0,0,"b2fv");
-        DeckHandler.Card splitCard = hand.getHand().get(0);
-        splitHand = new Hand();
-        splitHand.addCard(splitCard);
-        hand.getHand().remove(1);
-    }
-
-
-/** Daniel's addition**/
-                          //0  1  2  3  4  5  6  7  8  9
-private int condition [] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    /** Daniel's addition**/
+    //0  1  2  3  4  5  6  7  8  9
+    private int condition [] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     public int highestHand() {
         int result = 9;
         for(int i=0;i<10;i++)
@@ -103,5 +94,6 @@ private int condition [] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     public int getcondition (int index) {return condition[index];}
 
     public void setcondition (int index) {condition[index] = 1;}
-/**end daniel's addition**/
+    /**end daniel's addition**/
+
 }
