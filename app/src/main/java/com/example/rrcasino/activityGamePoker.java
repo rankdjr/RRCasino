@@ -468,8 +468,11 @@ public class activityGamePoker extends AppCompatActivity {
         float cash = 0;
         Toast gameMesage;
         if(round == 5) {
-            setImageResource('c',0,computer.getHand().getCard(0).getImageSource());
-            setImageResource('c',1,computer.getHand().getCard(1).getImageSource());
+            System.out.println("Revealing computer cards");
+            setImageResource('c',1 ,computer.getHand().getCard(0).getImageSource());
+            setImageResource('c', 2,computer.getHand().getCard(1).getImageSource());
+
+
             round = 0;
         }
         if(playerFold && !playerInitialBuyin) {
