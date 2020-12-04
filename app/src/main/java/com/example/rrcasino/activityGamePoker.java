@@ -67,12 +67,12 @@ public class activityGamePoker extends AppCompatActivity {
     private Player player;
     private Player computer;
     private int currentBet;
-    private int buyIn = 50;
+    private int buyIn = 10;
     private int minBet = buyIn;
     private int computerBet;
     private int potAmount;
     private int round = 0;
-    private int startingFunds = 10000;
+    private int startingFunds = 500;
     private String cardFaceDown = "b2fv";
     private int playerBetAmount = 0;
     private boolean playerInitialBuyin = false;
@@ -144,7 +144,7 @@ public class activityGamePoker extends AppCompatActivity {
         this.deck = new DeckHandler.Deck();
         this.dealer = new PokerDealer("dealer", 0);
         this.player = new Player("player", startingFunds);
-        this.computer = new Player("computer", 10000);
+        this.computer = new Player("computer", 1000);
         playerBalance.setText("Balance: $" + player.getBalance());
         playerBet.setMax(player.getBalance());
 
