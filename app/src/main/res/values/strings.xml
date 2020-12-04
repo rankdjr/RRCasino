@@ -1,4 +1,6 @@
 <resources>
+
+    <!--Written by Kanayo-->
     <!--User Visible Titles-->
     <string name="app_name">RRsCasino</string>
     <string name="helpTitle">Help Menu</string>
@@ -39,8 +41,8 @@
                 your hand in two.
     </string>
 
-    <string name="bjWinningDescription">
-        The goal of the game is to achieve a hand score of 21, or at least a score better than the
+    <string name="bjWinningDescription">The goal of the game is to achieve a hand score of 21, or at
+        least a score better than the
         dealer. All <b>numerical cards</b> values are equal to their actual worth in-game.
         All <b>face cards</b> are worth 10. The odd card out is the <b>Ace</b>, it has a value of
         both 1 and 11. It\'s value is automatically adjusted during the game. That means if you have
@@ -48,13 +50,26 @@
         <b>Blackjack</b> is ultimately a game of chance but with a bit of luck on your side
         victories will be normal place.
     </string>
-    <string name="pOverviewDescription">
-        Clicking on the poker app shows the main poker screen.
+    <string name="pOverviewDescription">To start playing <b>Poker</b>, navigate to the main menu, click play, then the
+        Poker icon. The layout simulates a casino table.
+        The cards on the bottom of the screen are <b>your cards</b>. The cards
+        on the left are <b>your opponents cards</b>.
+        To the right of the screen you will find our <b>Betting UI </b>.
+        In the center of the screen are the <b>community cards</b>.
+        Throughout the playing field are <b>action buttons</b>. These action buttons are the
+        way you interact with your opponent.
     </string>
-    <string name="pActionsDescription">
-
+    <string name="pActionsDescription">There are 5 main actions within Poker. The first is <b>Deal Cards</b>
+        found in the top right of the screen. Pressing this button will start the game, dealing two
+        cards to you and the computer. The next button is the <b>Bet/All In</b> button found in the bottom right.
+        This button will place your current bet, controlled with the slider to the right of the screen.
+        <b>Fold</b> is found to the immediate left of this button. When it is time to call it quits, slam
+        this button.<b>Hands</b> is the final button. This will show a cheat sheet of possible hands.
     </string>
-    <string name="pWinningDescription">
-
-    </string>
+    <string name="pWinningDescription">To win Poker is quite simple. Just have a better hand than your
+    opponent. In this game the computer will always call, no matter the situation. It is up to you
+    to feel for the odds of you winning this and with your current hand and the community cards. 5 of
+    your cards will go towards your "submitted" hand. The other two cards will become "kickers". The
+    best combination of cards are then compared to the computers best combination of cards. Who ever
+        has the highest value hand wins! <b>Good Luck!</b></string>
 </resources>
