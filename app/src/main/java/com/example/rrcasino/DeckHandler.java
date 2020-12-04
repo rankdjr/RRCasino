@@ -3,7 +3,7 @@ package com.example.rrcasino;
 import java.util.Collections;
 import java.util.ArrayList;
 
-//Created By Kanayo Emenike edited by Doug
+//Created By Kanayo Emenike
 /*Description: This file will handle all card based inquiries.
   This includes:
     - Creating the cards and decks.

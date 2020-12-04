@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:padding="16dp"
+    tools:context=".bjackHelp">
+
+  <LinearLayout
+      android:id="@+id/text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/Overview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/topics"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="40sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/bjackHelpDescription"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+  </LinearLayout>
+
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@+id/text"
+      android:layout_margin="20dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+      <TextView
+          android:id="@+id/overview"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textAlignment="center"
+          android:layout_gravity="center"
+          android:text="@string/Overview"
+          android:textSize="25dp"
+          android:textStyle="bold"
+          android:textColor="@color/white"/>
+      <TextView
+          android:id="@+id/overviewDescription"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textColor="@color/white"
+          android:text="@string/bjOverviewDescription"/>
+      <TextView
+          android:id="@+id/actions"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textAlignment="center"
+          android:layout_gravity="center"
+          android:text="@string/Actions"
+          android:textSize="25sp"
+          android:textStyle="bold"
+          android:textColor="@color/white"/>
+
+      <TextView
+          android:id="@+id/actionsDescription"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/bjActionsDescription"
+          android:textColor="@color/white" />
+
+      <TextView
+          android:id="@+id/howtowin"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textAlignment="center"
+          android:layout_gravity="center"
+          android:text="@string/HowToWin"
+          android:textSize="25sp"
+          android:textStyle="bold"
+          android:textColor="@color/white"/>
+      <TextView
+          android:id="@+id/winDescription"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textColor="@color/white"
+          android:text="@string/bjWinningDescription"/>
+
+    </LinearLayout>
+  </ScrollView>
+
+
+</RelativeLayout>
