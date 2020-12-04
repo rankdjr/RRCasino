@@ -486,19 +486,19 @@ public class activityGamePoker extends AppCompatActivity {
                     cash += potAmount;
                     player.addToBalance(cash);
                     gameMesage = Toast.makeText(activityGamePoker.this, "Player Wins", Toast.LENGTH_SHORT);
-                    gameMesage.setGravity(Gravity.CENTER,0,0);
+                    //gameMesage.setGravity(Gravity.CENTER,0,0);
                     gameMesage.show();
                     break;
                 case TIE:
                     gameMesage = Toast.makeText(activityGamePoker.this, "TIE", Toast.LENGTH_SHORT);
-                    gameMesage.setGravity(Gravity.CENTER,0,0);
+                    //gameMesage.setGravity(Gravity.CENTER,0,0);
                     gameMesage.show();
                     break;
                 case LOSE:
                     cash -= playerBetAmount;
                     player.addToBalance(cash);
                     gameMesage = Toast.makeText(activityGamePoker.this, "Computer Wins", Toast.LENGTH_SHORT);
-                    gameMesage.setGravity(Gravity.CENTER,0,0);
+                    //gameMesage.setGravity(Gravity.CENTER,0,0);
                     gameMesage.show();
                     break;
             }
@@ -685,7 +685,7 @@ public class activityGamePoker extends AppCompatActivity {
                 potAmount += computerBet;
                 computerBetted = true;
                 computerMessage = Toast.makeText(activityGamePoker.this, "Computer Called", Toast.LENGTH_SHORT);
-                computerMessage.setGravity(Gravity.CENTER,0,0);
+                //computerMessage.setGravity(Gravity.CENTER,0,0);
                 computerMessage.show();
             }
             else {
@@ -693,7 +693,7 @@ public class activityGamePoker extends AppCompatActivity {
                 potAmount += computerBet;
                 computerBetted = true;
                 computerMessage = Toast.makeText(activityGamePoker.this, "Computer Called", Toast.LENGTH_SHORT);
-                computerMessage.setGravity(Gravity.CENTER,0,0);
+                //computerMessage.setGravity(Gravity.CENTER,0,0);
                 computerMessage.show();
             }
 
