@@ -587,7 +587,7 @@ public class activityGamePoker extends AppCompatActivity {
         pairs[hand.getCard(i).getRank()-1] += 1;
         //if card value != temp value +1 replace temp
         //don't increase hand unless next part of rank
-        else if(hand.getCard(i).getValue() != temp.getCard(count).getValue() + 1) {
+        if(hand.getCard(i).getValue() != temp.getCard(count).getValue() + 1) {
             temp.getHand().set(count, hand.getCard(i));
         }else{
             temp.addCard(hand.getCard(i));

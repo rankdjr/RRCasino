@@ -1,4 +1,6 @@
 <resources>
+
+    <!--Written by Kanayo-->
     <!--User Visible Titles-->
     <string name="app_name">RRsCasino</string>
     <string name="helpTitle">Help Menu</string>
