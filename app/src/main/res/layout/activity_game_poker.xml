@@ -299,7 +299,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="monospace"
             android:text="Bet"
-            android:textColor="#FF0000"
+            android:textColor="@color/white"
             android:textColorHighlight="#0C0C0C"
             android:textColorLink="#050505"
             android:textSize="13sp"
