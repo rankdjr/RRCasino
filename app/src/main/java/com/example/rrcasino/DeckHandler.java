@@ -3,11 +3,8 @@ package com.example.rrcasino;
 import java.util.Collections;
 import java.util.ArrayList;
 
-<<<<<<<<< Temporary merge branch 1
-//Created By Doug Rank
-=========
-//Created By Kanayo Emenike edited by Doug
->>>>>>>>> Temporary merge branch 2
+
+//Created By Kanayo Emenike
 /*Description: This file will handle all card based inquiries.
   This includes:
     - Creating the cards and decks.
