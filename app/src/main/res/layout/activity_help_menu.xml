@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp"
+    android:visibility="visible"
+    tools:context=".helpMenu">
+
+    <LinearLayout
+        android:id="@+id/helpTextMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/helpMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:text="@string/helpTitle"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="40sp" />
+
+        <TextView
+            style="@style/DescriptionHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/helpDescription"
+            android:textAlignment="center" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/helpTextMain"
+        android:paddingTop="20dp"
+        android:paddingBottom="16dp">
+
+        <ImageButton
+            android:id="@+id/pokerHelp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="30dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:contentDescription="@string/pokerImgButtonDesc"
+            android:scaleType="fitCenter"
+            android:src="@drawable/pokerlogo" />
+
+        <ImageButton
+            android:id="@+id/blackjackHelp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:contentDescription="@string/bjackImgButtonDesc"
+            android:scaleType="fitCenter"
+            android:src="@drawable/bjacklogo" />
+
+    </LinearLayout>
+
+</RelativeLayout>

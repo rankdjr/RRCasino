@@ -15,8 +15,9 @@ public class gameSelection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_selection);
+        this.getSupportActionBar().hide();
 
-        bJackImageButton = (ImageButton) findViewById(R.id.bJackImageButton);
+        bJackImageButton = findViewById(R.id.bJackImageButton);
         bJackImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

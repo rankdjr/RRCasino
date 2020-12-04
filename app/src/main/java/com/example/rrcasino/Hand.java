@@ -2,7 +2,7 @@ package com.example.rrcasino;
 
 import java.util.ArrayList;
 
-/**
+/*
  * Created by Doug
  * Encompasses all data for cards held in any hand
  * Functions return values of cards held in hand, as well as add and remove cards from hand

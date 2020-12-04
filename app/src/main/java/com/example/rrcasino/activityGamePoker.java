@@ -521,7 +521,6 @@ public class activityGamePoker extends AppCompatActivity {
         // Update player balance TextView
     }
 
-
     /**Daniel's addition**/
     public void  Check_Hand (Player player) {
         // load hand combining hand
@@ -543,9 +542,9 @@ public class activityGamePoker extends AppCompatActivity {
         //sort temp array use quick sort array is small
         insertion_sort(hand);
 
-        //the 3 combine of 5 cards will be check for if flush 0123456
+        //check for hand Flush
         for(int i=0 ;i<7 ;i++) {
-        //   if royal flush
+
         if (hand.getSuit(i) == 1 ) {
         suit[0]+=1;
         }
@@ -559,39 +558,47 @@ public class activityGamePoker extends AppCompatActivity {
         suit[3]+=1;
         }
         }
-        int count = 0;
-        temp.addCard(hand.getCard(count));
-        if (temp.getCard(0).getRank() == 1){
-
-        }
-        for(int i=1;i<7;i++) {
-        //if match update array
-        if (hand.getCard(i).getValue() == temp.getCard(count).getValue()) {
-        if(player.getcondition(8) == 1 && (temp.getCard(count-1).getValue() != temp.getCard(count-2).getValue()))
-        {
-        player.setcondition(7);
-        }
-        pairs[hand.getCard(i).getValue()] += 1;
-        player.setcondition(8);
-        } //if card value != temp value +1 replace temp
-        else if(hand.getCard(i).getValue() != temp.getCard(count).getValue() + 1) {
-        temp.getHand().set(count, hand.getCard(i));
-        }else{
-        temp.addCard(hand.getCard(i));
-        count++;
-        }
-        }
-        //check flags
+        //flag for Flush
         for (int i=0;i<4;i++)
         {
-        if (suit[i] >= 5) {
-        player.setcondition(4);
+            if (suit[i] >= 5) {
+                player.setcondition(4);
+            }
+        }
+
+        int count = 0;
+        temp.addCard(hand.getCard(count));
+        for(int i=1;i<7;i++) {
+        //if match update array
+        if (hand.getCard(i).getRank() == temp.getCard(count).getRank()) {
+            //check 3 of a king
+            //if pair and not three of a kind
+        if(player.getcondition(8) == 1 && (temp.getCard(count-1).getValue() != temp.getCard(count-2).getValue()))
+        {
+            player.setcondition(7);
+        }
+        //Flag pairs
+            player.setcondition(8);
+        }
+        //track how many of each card ar ein the hand
+        pairs[hand.getCard(i).getRank()-1] += 1;
+        //if card value != temp value +1 replace temp
+        //don't increase hand unless next part of rank
+        else if(hand.getCard(i).getValue() != temp.getCard(count).getValue() + 1) {
+            temp.getHand().set(count, hand.getCard(i));
+        }else{
+            temp.addCard(hand.getCard(i));
+            count++;
         }
         }
+        //if temp hand has 5 cards then hand is straight
+        // flag straight
         if (temp.getNumOfCardsInHand() >= 5) {
         player.setcondition(5);
         }
-        //   if (royal flush)
+        // if (royal flush)
+        // search highest possible straight manually
+        // and is Flush
         if (temp.getAcesInHand() == 1 && temp.getCard(1).getRank() == 10 && temp.getCard(2).getRank() == 11 && temp.getCard(3).getRank() == 12 && temp.getCard(4).getRank() == 13 )
         {
         if (player.getcondition(4) == 1) {
@@ -604,9 +611,10 @@ public class activityGamePoker extends AppCompatActivity {
         player.setcondition(1);
         }
         //if (four of a kind)
+        // flags for pairs in hands
         this.check_pairs(pairs);
 
-        //else if (Flush all suits are the same )
+        //else if (Flush)
         if(player.getcondition(4) == 1 && player.getcondition(5) != 1)
         {
         player.setcondition(4);
@@ -621,19 +629,23 @@ public class activityGamePoker extends AppCompatActivity {
         private void check_pairs(int[] pairs) {
         for(int i=12;i>0;i--)
         {
-        if (pairs[i] == 3) {
-        player.setcondition(2);
-        } else if (pairs[i] == 2) {
-        player.setcondition(6);
-        } else if (pairs[i] == 1) {
-        player.setcondition(8);
+            //flag 4 of a kind
+            if (pairs[i] == 3) {
+                player.setcondition(2);
+        //flag three of a kind
+            } else if (pairs[i] == 2) {
+                player.setcondition(6);
+        // flag pair
+            } else if (pairs[i] == 1) {
+                player.setcondition(8);
+            }
         }
-        }
+        //if 3ofakind and pair are Flagged then flag fullhouse
         if (player.getcondition(6) == 1 && player.getcondition(8) == 1 ) {
-        player.setcondition(3);
+            player.setcondition(3);
         }
-
         }
+        //Quick sort for small array
         private void insertion_sort(Hand hand)
         {
         int n = player.getHand().getNumOfCardsInHand();
@@ -701,47 +713,42 @@ public class activityGamePoker extends AppCompatActivity {
         }
 
 private gameResult Check_win () {
-        gameResult result = activityGamePoker.gameResult.WIN;
+        gameResult result = activityGamePoker.gameResult.TIE;
         //2. compare highest win condition
-        //player wins
+
+    //win by hand
         if (player.highestHand() < computer.highestHand()) {
-        result = activityGamePoker.gameResult.WIN;
-        return result;
-        //player loses
+            result = activityGamePoker.gameResult.WIN;
+            return result;
         } else if (player.highestHand() > computer.highestHand()) {
-        result = activityGamePoker.gameResult.LOSE;
-        return result;
-        // player ties
+            result = activityGamePoker.gameResult.LOSE;
+            return result;
         } else if (player.highestHand() == computer.highestHand()) {
-        result = activityGamePoker.gameResult.TIE;
-        //check strong hand if tie
-        if (player.getHand().getHandValue() > computer.getHand().getHandValue()) {
-        result = activityGamePoker.gameResult.WIN;
+            //check strength of hand if tie
+            }else if (player.getHand().getHandValue() > computer.getHand().getHandValue()) {
+                result = activityGamePoker.gameResult.WIN;
+                return result;
+            } else if (player.getHand().getHandValue() < computer.getHand().getHandValue()) {
+                result = activityGamePoker.gameResult.LOSE;
+                return result;
+            } else if (player.getHand().getHandValue() == computer.getHand().getHandValue()) {
+                //check kicker
+                //check if the first card in player hand is the kicker
+                }else if (player.getHand().getCard(0).getValue() > (computer.getHand().getCard(0).getValue() | computer.getHand().getCard(1).getValue())) {
+                     result = activityGamePoker.gameResult.WIN;
+                     return result;
+                //check if the second card in player hand is the kicker
+                } else if (player.getHand().getCard(1).getValue() > (computer.getHand().getCard(0).getValue() | computer.getHand().getCard(1).getValue())) {
+                     result = activityGamePoker.gameResult.WIN;
+                     return result;
+                    // player ties
+                    } else if (player.getHand().getHandValue() == computer.getHand().getHandValue()) {
+                        result = activityGamePoker.gameResult.TIE;
+                        return result;
+                    } else {
+                     result = activityGamePoker.gameResult.LOSE;
+                    }
         return result;
-        //player loses
-        } else if (player.getHand().getHandValue() < computer.getHand().getHandValue()) {
-        result = activityGamePoker.gameResult.LOSE;
-        return result;
-        // player ties
-        } else if (player.getHand().getHandValue() == computer.getHand().getHandValue()) {
-        result = activityGamePoker.gameResult.TIE;
-        //check kicker
-        if (player.getHand().getCard(0).getValue() > (computer.getHand().getCard(0).getValue() | computer.getHand().getCard(1).getValue())) {
-        result = activityGamePoker.gameResult.WIN;
-        return result;
-        //player loses
-        } else if (player.getHand().getCard(1).getValue() > (computer.getHand().getCard(0).getValue() | computer.getHand().getCard(1).getValue())) {
-        result = activityGamePoker.gameResult.WIN;
-        return result;
-        // player ties
-        } else if (player.getHand().getHandValue() == computer.getHand().getHandValue()) {
-        result = activityGamePoker.gameResult.TIE;
-        return result;
-        } else {
-        result = activityGamePoker.gameResult.LOSE;
-        }
-        }
-        }
-        return result;
-        }
-        }
+    }
+}
+
