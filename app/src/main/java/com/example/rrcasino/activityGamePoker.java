@@ -576,12 +576,10 @@ public class activityGamePoker extends AppCompatActivity {
         if (hand.getCard(i).getRank() == temp.getCard(count).getRank()) {
             //check 3 of a king
             //if pair and not three of a kind
-       /*if((player.getcondition(8) == 1) && ((temp.getCard(count-1).getValue() != temp.getCard(count-2).getValue()) && (temp.getCard(count-3).getValue() == temp.getCard(count-2).getValue()) ))
+       if((player.getcondition(8) == 1) && ((temp.getCard(count-1).getValue() != temp.getCard(count-2).getValue()) && (temp.getCard(count-3).getValue() == temp.getCard(count-2).getValue()) ))
         {
             player.setcondition(7);
         }
-
-        */
         //Flag pairs
             player.setcondition(8);
             pairs[hand.getCard(i).getRank()-1] += 1;
@@ -726,6 +724,8 @@ private gameResult Check_win () {
         this.Check_Hand(computer);
         int PH = player.highestHand();
         int CH = computer.highestHand();
+        System.out.println(PH);
+        System.out.println(CH);
     //win by hand
         if (PH < CH) {
             result = activityGamePoker.gameResult.WIN;

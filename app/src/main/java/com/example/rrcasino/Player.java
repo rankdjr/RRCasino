@@ -88,7 +88,6 @@ public class Player {
             {
                 return result;
             }
-         System.out.println(result);
            result++;
         }
         return result;
