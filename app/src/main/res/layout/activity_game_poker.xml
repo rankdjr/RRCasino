@@ -140,7 +140,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight=".5"
                 android:text="Check"
-                android:backgroundTint="#2b79ff"/>   -->
+                android:backgroundTint="#2b79ff"/>
 
             <Button
                 android:id="@+id/call"
@@ -149,7 +149,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight=".5"
                 android:text="Call"
-                android:backgroundTint="#16c902"/>
+                android:backgroundTint="#16c902"/> -->
 
             <Button
                 android:id="@+id/bet"
