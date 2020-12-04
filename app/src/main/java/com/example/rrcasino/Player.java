@@ -81,18 +81,18 @@ public class Player {
     private int condition [] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     public int highestHand() {
-        int result = 9;
-        for(int i=0;i<10;i++)
+        int result = 0;
+        for(int i = 0; i<10; i++)
         {
-            System.out.println("if for loop");
-            System.out.println(condition[i]);
-
             if(condition[i] == 1)
             {
-                System.out.println("if condition");
-                result = i;
-                break;
+                result = 1;
+                return result;
             }
+            System.out.println(i);
+            System.out.println("result is");
+            System.out.println(result);
+
         }
         return result;
     }
