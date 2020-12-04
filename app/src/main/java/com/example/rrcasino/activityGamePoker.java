@@ -74,6 +74,7 @@ public class activityGamePoker extends AppCompatActivity {
     private int round = 0;
     private int startingFunds = 10000;
     private String cardFaceDown = "b2fv";
+    private int playerBetAmount = 0;
     private boolean playerInitialBuyin = false;
     private boolean playerBetted = false;
     private boolean computerBetted = false;
@@ -173,6 +174,7 @@ public class activityGamePoker extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 currentBet = progressChangedValue;
+                playerBetAmount += currentBet;
 
             }
         });
@@ -192,6 +194,7 @@ public class activityGamePoker extends AppCompatActivity {
                     cardsDealt = true;
                     playerBet.setVisibility(View.VISIBLE);
                     betAmount.setVisibility(View.VISIBLE);
+                    pot.setText("POT");
                     startGame();
                     //System.out.println(Check_win());
                     System.out.println("DEAL was pressed");
@@ -357,6 +360,7 @@ public class activityGamePoker extends AppCompatActivity {
         // Deal Computer First card
         dealer.dealCard(computer,deck);
         setImageResource('c', computer.getHand().getNumOfCardsInHand(), cardFaceDown);
+        compCard.setRotation(270);
 
         //Deal Second player card
         dealer.dealCard(player,deck);
@@ -365,6 +369,7 @@ public class activityGamePoker extends AppCompatActivity {
         //Deal Second computer card
         dealer.dealCard(computer, deck);
         setImageResource('c', computer.getHand().getNumOfCardsInHand(), cardFaceDown);
+        compCardOne.setRotation(270);
 
         //Dealing all community cards to test CheckWin() function
         /*
@@ -448,6 +453,7 @@ public class activityGamePoker extends AppCompatActivity {
         if(round == 5) {
             System.out.println("About to call end round");
             endRound();
+            round = 0;
         }
     }
 
@@ -460,6 +466,7 @@ public class activityGamePoker extends AppCompatActivity {
         //check.setEnabled(false);
         deal.setEnabled(true);
         float cash = 0;
+        Toast gameMesage;
         if(round == 5) {
             setImageResource('c',0,computer.getHand().getCard(0).getImageSource());
             setImageResource('c',1,computer.getHand().getCard(1).getImageSource());
@@ -469,6 +476,7 @@ public class activityGamePoker extends AppCompatActivity {
             //Player doesnt lose cash
             player.addToBalance(cash);
             round = 0;
+
             //
         } else {
 
@@ -477,12 +485,21 @@ public class activityGamePoker extends AppCompatActivity {
                 case WIN:
                     cash += potAmount;
                     player.addToBalance(cash);
+                    gameMesage = Toast.makeText(activityGamePoker.this, "Player Wins", Toast.LENGTH_SHORT);
+                    gameMesage.setGravity(Gravity.CENTER,0,0);
+                    gameMesage.show();
                     break;
                 case TIE:
+                    gameMesage = Toast.makeText(activityGamePoker.this, "TIE", Toast.LENGTH_SHORT);
+                    gameMesage.setGravity(Gravity.CENTER,0,0);
+                    gameMesage.show();
                     break;
                 case LOSE:
-                    cash -= currentBet;
+                    cash -= playerBetAmount;
                     player.addToBalance(cash);
+                    gameMesage = Toast.makeText(activityGamePoker.this, "Computer Wins", Toast.LENGTH_SHORT);
+                    gameMesage.setGravity(Gravity.CENTER,0,0);
+                    gameMesage.show();
                     break;
             }
 
@@ -495,6 +512,7 @@ public class activityGamePoker extends AppCompatActivity {
         computerFolds = false;
         playerFold = false;
         potAmount = 0;
+        round = 0;
 
         System.out.println("end round player buy: " + playerInitialBuyin);
         playerBet.setMax(player.getBalance());
@@ -660,16 +678,23 @@ public class activityGamePoker extends AppCompatActivity {
                 endRound();
             }
             */
-            System.out.println("Player bet boolean: "+playerBetted);
+            Toast computerMessage;
+           // System.out.println("Player bet boolean: "+playerBetted);
             if(playerInitialBuyin && round == 1) {
                 computerBet = currentBet;
                 potAmount += computerBet;
                 computerBetted = true;
+                computerMessage = Toast.makeText(activityGamePoker.this, "Computer Called", Toast.LENGTH_SHORT);
+                computerMessage.setGravity(Gravity.CENTER,0,0);
+                computerMessage.show();
             }
             else {
                 computerBet = currentBet;
                 potAmount += computerBet;
                 computerBetted = true;
+                computerMessage = Toast.makeText(activityGamePoker.this, "Computer Called", Toast.LENGTH_SHORT);
+                computerMessage.setGravity(Gravity.CENTER,0,0);
+                computerMessage.show();
             }
 
 
