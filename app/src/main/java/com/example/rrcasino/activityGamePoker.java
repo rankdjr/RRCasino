@@ -145,7 +145,7 @@ public class activityGamePoker extends AppCompatActivity {
         this.player = new Player("player", startingFunds);
         this.computer = new Player("computer", 10000);
         playerBalance.setText("Balance: $" + player.getBalance());
-        playerBet.setMax(player.getBalance());
+        playerBet.setMax((int)player.getBalance());
 
 
         //Handle All Listeners
@@ -495,7 +495,7 @@ public class activityGamePoker extends AppCompatActivity {
         playerFold = false;
         potAmount = 0;
         System.out.println("end round player buy: " + playerInitialBuyin);
-        playerBet.setMax(player.getBalance());
+        playerBet.setMax((int)player.getBalance());
         playerBalance.setText("Balance: $"+player.getBalance());
         // Update player balance TextView
     }

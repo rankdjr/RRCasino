@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_weight="1"
-    android:background="@drawable/background"
+    android:background="@drawable/blackjackbg"
     android:paddingBottom="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="16dp"
     tools:context=".activityGameBlackJack">
 
-    !-- Card Layouts -->
+    <!-- Card Layouts -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,8 +31,10 @@
 
         <!-- Dealer Cards -->
         <LinearLayout
+            android:id="@+id/dCardLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="0px"
             android:orientation="horizontal">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -40,8 +42,8 @@
                 android:layout_weight="1">
                 <ImageView
                     android:id="@+id/dCard1"
-                    android:layout_alignParentLeft="false"
                     android:layout_marginLeft="0dp"
+                    android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/b2fv" />
@@ -141,8 +143,10 @@
 
         <!-- Player Split Hand -->
         <LinearLayout
+            android:id="@+id/sCardLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="0px"
             android:orientation="horizontal">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -150,8 +154,8 @@
                 android:layout_weight="1">
             <ImageView
                 android:id="@+id/sCard1"
-                android:layout_alignParentLeft="true"
                 android:layout_marginLeft="0dp"
+                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0"
@@ -251,8 +255,10 @@
             android:text="Score" />
         <!-- Player Main Hand -->
         <LinearLayout
+            android:id="@+id/pCardLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="0px"
             android:orientation="horizontal">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -261,7 +267,7 @@
             <ImageView
                 android:id="@+id/pCard1"
                 android:layout_marginLeft="0dp"
-                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 				android:src="@drawable/b2fv" />

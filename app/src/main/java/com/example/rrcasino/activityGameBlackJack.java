@@ -124,6 +124,9 @@ public class activityGameBlackJack extends AppCompatActivity {
     private ImageView[] dealerCardImages;
     private final float transparent = 0;
     private final float opaque = 1;
+    private LinearLayout pCardsLayout;
+    private LinearLayout dCardsLayout;
+    private LinearLayout sCardsLayout;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -153,6 +156,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         this.pCard11 = findViewById(R.id.pCard11);
         playerCardImages = new ImageView[] { pCard1, pCard2, pCard3, pCard4, pCard5, pCard6,
                 pCard7, pCard8, pCard9, pCard10, pCard11 };
+        this.pCardsLayout = findViewById(R.id.pCardLayout);
         this.sCard1 = findViewById(R.id.sCard1);
         this.sCard2 = findViewById(R.id.sCard2);
         this.sCard3 = findViewById(R.id.sCard3);
@@ -166,6 +170,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         this.sCard11 = findViewById(R.id.sCard11);
         playerSplitCardImages = new ImageView[] {sCard1, sCard2, sCard3, sCard4, sCard5, sCard6,
                 sCard7, sCard8, sCard9, sCard10, sCard11 };
+        this.sCardsLayout = findViewById(R.id.sCardLayout);
         this.dCard1 = findViewById(R.id.dCard1);
         this.dCard2 = findViewById(R.id.dCard2);
         this.dCard3 = findViewById(R.id.dCard3);
@@ -179,6 +184,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         this.dCard11 = findViewById(R.id.dCard11);
         dealerCardImages = new ImageView[] {dCard1, dCard2, dCard3, dCard4, dCard5, dCard6,
                 dCard7, dCard8, dCard9, dCard10, dCard11 };
+        this.dCardsLayout = findViewById(R.id.dCardLayout);
         // Initialize button IDs and set onclick Listeners
         this.hitButton = findViewById(R.id.hitButton);
         this.stayButton = findViewById(R.id.stayButton);
@@ -348,26 +354,21 @@ public class activityGameBlackJack extends AppCompatActivity {
          */
         // Display metrics to adjust left margin of first card; Used to center hand in screen
         DisplayMetrics dm = getResources().getDisplayMetrics();
-        float viewableCardWidth = (71*cardNum) - cardNum*40*dm.density;
-        float dpWidth = (dm.widthPixels-30)/dm.density;
-        float viewWidth = dm.widthPixels-15;
-        int playerHandLeftMargin;
-        RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        int leftMargin = 0;
+        // Card Image resources
         Resources resources = getResources();
         final int resourceId = resources.getIdentifier(imageSource,"drawable",getPackageName());
         switch (participant) {
             case 'p': {
+                for (int i = 0; i < cardNum; i++)
+                    leftMargin -= 50;
+                param.setMargins(leftMargin, 0, 0, 0);
+                sCardsLayout.setLayoutParams(param);
                 switch (cardNum) {
                     case 1:
                         playerCardImages[cardNum-1].setAlpha(opaque);
                         pCard1.setImageResource(resourceId);
-                        /* TODO Center cards in screen and adjust margin each hand
-                        playerHandLeftMargin = (int)viewWidth/2 - (int)viewableCardWidth/2;
-                        Toast.makeText(activityGameBlackJack.this, playerHandLeftMargin+"px", Toast.LENGTH_SHORT).show();
-                        param.setMargins(playerHandLeftMargin, 0, 0, 0);
-                        pCard1.setLayoutParams(param);
-                         */
                         break;
                     case 2:
                         playerCardImages[cardNum-1].setAlpha(opaque);
@@ -413,6 +414,10 @@ public class activityGameBlackJack extends AppCompatActivity {
                 break;
             }
             case 'd': {
+                for (int i = 0; i < cardNum; i++)
+                    leftMargin -= 50;
+                param.setMargins(leftMargin, 0, 0, 0);
+                dCardsLayout.setLayoutParams(param);
                 switch (cardNum) {
                     case 1:
                         dealerCardImages[cardNum-1].setAlpha(opaque);
@@ -462,6 +467,10 @@ public class activityGameBlackJack extends AppCompatActivity {
                 break;
             }
             case 's': {
+                for (int i = 0; i < cardNum; i++)
+                    leftMargin -= 50;
+                param.setMargins(leftMargin, 0, 0, 0);
+                pCardsLayout.setLayoutParams(param);
                 switch (cardNum) {
                     case 1:
                         playerSplitCardImages[cardNum-1].setAlpha(opaque);
@@ -545,9 +554,9 @@ public class activityGameBlackJack extends AppCompatActivity {
             dealer.returnCards();
 
         // Deal cards, update score, and create instance for current round data
+        currRoundData = new roundData(currentBet, player.getHand().getHandValue());
         newDeal();
         updateScore();
-        currRoundData = new roundData(currentBet, player.getHand().getHandValue());
     }
 
     private void newDeal() {
@@ -605,6 +614,7 @@ public class activityGameBlackJack extends AppCompatActivity {
         playingSplit = false;
 
         // TODO: Set messages to display in center of screen
+        String toastText = "HELLO";
         Toast gameMsg;
         roundData thisRound;
         gameResult roundResult;
