@@ -45,6 +45,8 @@ public class Hand {
         return total;
     }
 
+   /*dq*/ public int getSuit (int index) { return this.getCard(index).getSuit();}
+
     public int getNumOfCardsInHand()
     {
         return this.hand.size();
@@ -61,6 +63,8 @@ public class Hand {
         if (card.getRank() == 1)
             acesInHand++;
     }
+
+
 
     public DeckHandler.Card getCard(Integer index)
     {
