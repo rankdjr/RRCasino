@@ -84,8 +84,12 @@ public class Player {
         int result = 9;
         for(int i=0;i<10;i++)
         {
-            if(this.getcondition(i) == 1)
+            System.out.println("if for loop");
+            System.out.println(condition[i]);
+
+            if(condition[i] == 1)
             {
+                System.out.println("if condition");
                 result = i;
                 break;
             }

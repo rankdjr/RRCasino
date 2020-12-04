@@ -587,7 +587,7 @@ public class activityGamePoker extends AppCompatActivity {
         pairs[hand.getCard(i).getRank()-1] += 1;
         //if card value != temp value +1 replace temp
         //don't increase hand unless next part of rank
-        else if(hand.getCard(i).getValue() != temp.getCard(count).getValue() + 1) {
+        if(hand.getCard(i).getValue() != temp.getCard(count).getValue() + 1) {
             temp.getHand().set(count, hand.getCard(i));
         }else{
             temp.addCard(hand.getCard(i));
@@ -718,6 +718,8 @@ public class activityGamePoker extends AppCompatActivity {
 private gameResult Check_win () {
         gameResult result = activityGamePoker.gameResult.TIE;
         //2. compare highest win condition
+        System.out.println(player.highestHand());
+        System.out.println(computer.highestHand());
 
     //win by hand
         if (player.highestHand() < computer.highestHand()) {
@@ -726,32 +728,32 @@ private gameResult Check_win () {
         } else if (player.highestHand() > computer.highestHand()) {
             result = activityGamePoker.gameResult.LOSE;
             return result;
-        } else if (player.highestHand() == computer.highestHand()) {
+        } else {
             //check strength of hand if tie
-            }else if (player.getHand().getHandValue() > computer.getHand().getHandValue()) {
+            if (player.getHand().getHandValue() > computer.getHand().getHandValue()) {
                 result = activityGamePoker.gameResult.WIN;
                 return result;
             } else if (player.getHand().getHandValue() < computer.getHand().getHandValue()) {
                 result = activityGamePoker.gameResult.LOSE;
                 return result;
-            } else if (player.getHand().getHandValue() == computer.getHand().getHandValue()) {
+            } else {
                 //check kicker
                 //check if the first card in player hand is the kicker
-                }else if (player.getHand().getCard(0).getValue() > (computer.getHand().getCard(0).getValue() | computer.getHand().getCard(1).getValue())) {
-                     result = activityGamePoker.gameResult.WIN;
-                     return result;
-                //check if the second card in player hand is the kicker
+                if (player.getHand().getCard(0).getValue() > (computer.getHand().getCard(0).getValue() | computer.getHand().getCard(1).getValue())) {
+                    result = activityGamePoker.gameResult.WIN;
+                    return result;
+                    //check if the second card in player hand is the kicker
                 } else if (player.getHand().getCard(1).getValue() > (computer.getHand().getCard(0).getValue() | computer.getHand().getCard(1).getValue())) {
-                     result = activityGamePoker.gameResult.WIN;
-                     return result;
+                    result = activityGamePoker.gameResult.WIN;
+                    return result;
                     // player ties
-                    } else if (player.getHand().getHandValue() == computer.getHand().getHandValue()) {
-                        result = activityGamePoker.gameResult.TIE;
-                        return result;
-                    } else {
-                     result = activityGamePoker.gameResult.LOSE;
-                    }
-        return result;
+                } else {
+                    result = activityGamePoker.gameResult.TIE;
+                    return result;
+                }
+            }
+        }
+
     }
 }
 
